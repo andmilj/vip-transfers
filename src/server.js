@@ -7,6 +7,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/server';
 import Router from './routes';
 import Html from './components/Html';
+import Db from './models/db';
 
 const server = global.server = express();
 
@@ -17,6 +18,7 @@ server.use(express.static(path.join(__dirname, 'public')));
 // Register API middleware
 // -----------------------------------------------------------------------------
 server.use('/api/content', require('./api/content'));
+server.use('/api/cars', require('./api/cars'));
 
 //
 // Register server-side rendering middleware

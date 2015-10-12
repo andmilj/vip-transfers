@@ -7,6 +7,10 @@ import withStyles from '../../decorators/withStyles';
 @withStyles(styles)
 class ContactPage extends Component {
 
+  static propTypes = {
+    cars: PropTypes.array,
+  };
+
   static contextTypes = {
     onSetTitle: PropTypes.func.isRequired,
   };
@@ -14,6 +18,7 @@ class ContactPage extends Component {
   render() {
     const title = 'Contact Us';
     this.context.onSetTitle(title);
+    console.log(this.props.cars);
     return (
       <div className="ContactPage">
         <div className="ContactPage-container">

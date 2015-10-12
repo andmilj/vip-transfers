@@ -17,7 +17,10 @@ const router = new Router(on => {
     return component && <App context={state.context}>{component}</App>;
   });
 
-  on('/contact', async () => <ContactPage />);
+  on('/contact', async () => {
+    const cars = await http.get('/api/cars');
+    return <ContactPage cars={cars}/>;
+  });
 
   on('/login', async () => <LoginPage />);
 
