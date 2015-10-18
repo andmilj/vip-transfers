@@ -50,6 +50,7 @@
     "postcss-import": "^7.0.0",
     "postcss-loader": "^0.6.0",
     "postcss-nested": "^1.0.0",
+    "postcss-url": "^5.0.2",
     "psi": "^1.0.6",
     "react-transform-catch-errors": "^1.0.0",
     "react-transform-hmr": "^1.0.1",

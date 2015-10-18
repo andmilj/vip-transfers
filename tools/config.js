@@ -94,6 +94,9 @@ const config = {
       require('postcss-import')({
         onImport: files => files.forEach(this.addDependency),
       }),
+      require('postcss-url')({
+        copy: 'rebase',
+      }),
       require('postcss-nested')(),
       require('postcss-cssnext')({ autoprefixer: AUTOPREFIXER_BROWSERS }),
     ];
