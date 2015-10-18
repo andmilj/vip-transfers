@@ -1,9 +1,7 @@
-/*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
-
 import React, { Component } from 'react';
 import styles from './Header.css';
 import withStyles from '../../decorators/withStyles';
-import Link from '../Link';
+// import Link from '../Link';
 import Navigation from '../Navigation';
 
 @withStyles(styles)
@@ -11,19 +9,28 @@ class Header extends Component {
 
   render() {
     return (
-      <div className="Header">
-        <div className="Header-container">
-          <a className="Header-brand" href="/" onClick={Link.handleClick}>
-            <img className="Header-brandImg" src={require('./logo-small.png')} width="38" height="38" alt="React" />
-            <span className="Header-brandTxt">Your Company</span>
-          </a>
-          <Navigation className="Header-nav" />
-          <div className="Header-banner">
-            <h1 className="Header-bannerTitle">React</h1>
-            <p className="Header-bannerDesc">Complex web apps made easy</p>
+        <div className="navbar default">
+          <div className="navbar-header">
+            <div className="container">
+              <div className="basic-wrapper">
+                  <a className="btn responsive-menu pull-right"
+                     data-toggle="collapse"
+                     data-target=".navbar-collapse">
+                      <i className="icon-menu-1"></i>
+                  </a>
+                  <a className="navbar-brand"
+                      href="">
+                       <img src={require('./logo.png')}
+                           alt=""
+                           data-src={require('./logo.png')}
+                           data-ret={require('./logo@2x.png')}
+                           className="retina" />
+                  </a>
+              </div>
+              <Navigation />
+            </div>
           </div>
         </div>
-      </div>
     );
   }
 

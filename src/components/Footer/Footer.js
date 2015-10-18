@@ -1,41 +1,25 @@
-/*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
+import React, { Component } from 'react';
+// import withViewport from '../../decorators/withViewport';
+// import Link from '../Link';
 
-import React, { PropTypes, Component } from 'react';
-import styles from './Footer.css';
-import withViewport from '../../decorators/withViewport';
-import withStyles from '../../decorators/withStyles';
-import Link from '../Link';
-
-@withViewport
-@withStyles(styles)
+// @withViewport
 class Footer extends Component {
-
-  static propTypes = {
-    viewport: PropTypes.shape({
-      width: PropTypes.number.isRequired,
-      height: PropTypes.number.isRequired,
-    }).isRequired,
-  };
-
   render() {
-    // This is just an example how one can render CSS
-    const { width, height } = this.props.viewport;
-    this.renderCss(`.Footer-viewport:after {content:' ${width}x${height}';}`);
-
     return (
-      <div className="Footer">
-        <div className="Footer-container">
-          <span className="Footer-text">© Your Company</span>
-          <span className="Footer-spacer">·</span>
-          <a className="Footer-link" href="/" onClick={Link.handleClick}>Home</a>
-          <span className="Footer-spacer">·</span>
-          <a className="Footer-link" href="/privacy" onClick={Link.handleClick}>Privacy</a>
-          <span className="Footer-spacer">·</span>
-          <a className="Footer-link" href="/not-found" onClick={Link.handleClick}>Not Found</a>
-          <span className="Footer-spacer"> | </span>
-          <span ref="viewport" className="Footer-viewport Footer-text Footer-text--muted">Viewport:</span>
-        </div>
-      </div>
+        <footer className="footer">
+          <div className="container inner">
+            <p className="pull-left">© 2014 Frost. All rights reserved. Theme by <a href="http://elemisfreebies.com">elemis</a>.</p>
+            <ul className="social pull-right">
+              <li><a href="#"><i className="icon-s-rss"></i></a></li>
+              <li><a href="#"><i className="icon-s-twitter"></i></a></li>
+              <li><a href="#"><i className="icon-s-facebook"></i></a></li>
+              <li><a href="#"><i className="icon-s-dribbble"></i></a></li>
+              <li><a href="#"><i className="icon-s-pinterest"></i></a></li>
+              <li><a href="#"><i className="icon-s-instagram"></i></a></li>
+              <li><a href="#"><i className="icon-s-vimeo"></i></a></li>
+            </ul>
+          </div>
+        </footer>
     );
   }
 
