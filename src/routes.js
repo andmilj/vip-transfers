@@ -22,7 +22,10 @@ const router = new Router(on => {
     return <ContactPage cars={cars}/>;
   });
 
-  on('/login', async () => <LoginPage />);
+  on('/login', async () => {
+    const users = await http.get('/api/users');
+    return <LoginPage users={users} />
+  });
 
   on('/register', async () => <RegisterPage />);
 
