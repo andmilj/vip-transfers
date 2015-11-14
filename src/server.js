@@ -10,8 +10,12 @@ import Html from './components/Html';
 import Db from './models/db';
 
 const server = global.server = express();
+const port = process.env.PORT || 5000;
+server.set('port', port);
 
-server.set('port', (process.env.PORT || 5000));
+//
+// Register Node.js middleware
+// -----------------------------------------------------------------------------
 server.use(express.static(path.join(__dirname, 'public')));
 
 //
@@ -50,11 +54,7 @@ server.get('*', async (req, res, next) => {
 //
 // Launch the server
 // -----------------------------------------------------------------------------
-
-server.listen(server.get('port'), () => {
+server.listen(port, () => {
   /* eslint-disable no-console */
-  console.log('The server is running at http://localhost:' + server.get('port'));
-  if (process.send) {
-    process.send('online');
-  }
+  console.log(`The server is running at http://localhost:${port}/`);
 });

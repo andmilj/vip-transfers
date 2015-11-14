@@ -11,8 +11,8 @@ import path from 'path';
 import webpack from 'webpack';
 import merge from 'lodash.merge';
 
-const DEBUG = !process.argv.includes('release');
-const VERBOSE = process.argv.includes('verbose');
+const DEBUG = !process.argv.includes('--release');
+const VERBOSE = process.argv.includes('--verbose');
 const WATCH = global.WATCH === undefined ? false : global.WATCH;
 const AUTOPREFIXER_BROWSERS = [
   'Android 2.3',
@@ -89,11 +89,9 @@ const config = {
     ],
   },
 
-  postcss: function plugins() {
+  postcss: function plugins(bundler) {
     return [
-      require('postcss-import')({
-        onImport: files => files.forEach(this.addDependency),
-      }),
+      require('postcss-import')({ addDependencyTo: bundler }),
       require('postcss-url')({
         copy: 'rebase',
       }),
