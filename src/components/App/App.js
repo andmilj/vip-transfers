@@ -4,13 +4,13 @@ import React, { PropTypes, Component } from 'react';
 import styles from './App.css';
 import withContext from '../../decorators/withContext';
 import withStyles from '../../decorators/withStyles';
+import reactSelectStyles from '../../../node_modules/react-select/scss/default.scss';
 import Header from '../Header';
 import Footer from '../Footer';
 
 @withContext
-@withStyles(styles)
+@withStyles(styles, reactSelectStyles)
 class App extends Component {
-
   static propTypes = {
     children: PropTypes.element.isRequired,
     error: PropTypes.object,
