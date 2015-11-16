@@ -164,6 +164,10 @@ const appConfig = merge({}, config, {
         test: /\.css$/,
         loader: 'style-loader/useable!css-loader!postcss-loader',
       },
+      {
+        test: /\.scss$/,
+        loader: 'style-loader/useable!css-loader!postcss-loader!sass',
+      },
     ],
   },
 });
@@ -211,6 +215,10 @@ const serverConfig = merge({}, config, {
       {
         test: /\.css$/,
         loader: 'css-loader!postcss-loader',
+      },
+      {
+        test: /\.scss$/,
+        loader: 'css-loader!postcss-loader!sass',
       },
     ],
   },
