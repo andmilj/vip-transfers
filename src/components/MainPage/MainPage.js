@@ -5,7 +5,6 @@ import Select from 'react-select';
 
 @withStyles(styles)
 class MainPage extends Component {
-
   static contextTypes = {
     onSetTitle: PropTypes.func.isRequired,
   };
@@ -20,46 +19,48 @@ class MainPage extends Component {
     ];
 
     return (
-      <div className="MainPage-container parallax parallax4">
-        <div className="container inner text-center">
-          <div className="bg-front full-center">
-            <div className="container">
-              <div>
-                <form>
+      <div className="MainPage-container">
+
+        <div className="parallax parallax4">
+          <div className="container inner text-center">
+          </div>
+        </div>
+
+        <div className="section anchor">
+          <div className="light-wrapper">
+            <div className="container inner">
+              <form className="forms">
+                <fieldset>
                   <div className="row">
-                    <div className="col-md-5">
-                      <div className="form-group">
-                        <label>Address 1</label>
-                        <Select options={options} />
-                        </div>
-                    </div>
-                    <div className="col-md-7">
-                      <div className="input-daterange">
-                        <div className="row">
-                          <div className="col-md-3">
-                            <div className="form-group">
-                              <label>Check-in</label>
-                              <input className="form-control" name="start" type="text" />
-                            </div>
-                          </div>
-                          <div className="col-md-3">
-                            <div className="form-group">
-                              <label>Check-out</label>
-                              <input className="form-control" name="end" type="text" />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                    <div className="col-sm-offset-3 col-sm-6">
+                      <input placeholder="Select your starting point" type="text" name="name" />
                     </div>
                   </div>
                   <div className="row">
-                    <div className="col-md-6"></div>
-                    <div className="col-md-6"></div>
+                    <div className="col-sm-offset-3 col-sm-6">
+                      <input placeholder="Select your destination point" type="text" name="name" />
+                    </div>
                   </div>
-                  <button className="btn btn-primary btn-lg" type="submit">Search for Hotels</button>
-                </form>
-              </div>
+                  <div className="row">
+                    <div className="col-sm-offset-3 col-sm-3">
+                      <input placeholder="Date" type="text" name="name" />
+                    </div>
+                    <div className="col-sm-3">
+                      <input placeholder="Persons" type="text" name="email" />
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="smooth text-center">
+                      <a href="#contact" className="btn btn-border">Search</a></div>
+                  </div>
+                </fieldset>
+              </form>
             </div>
+          </div>
+        </div>
+
+        <div className="parallax parallax4">
+          <div className="container inner text-center">
           </div>
         </div>
       </div>
