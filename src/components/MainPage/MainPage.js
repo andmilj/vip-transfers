@@ -5,18 +5,22 @@ import Select from 'react-select';
 
 @withStyles(styles)
 class MainPage extends Component {
+  static propTypes = {
+    destinations: PropTypes.array,
+  };
+
   static contextTypes = {
     onSetTitle: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    destinations: [],
   };
 
   render() {
     const title = 'Main Page';
     this.context.onSetTitle(title);
-
-    const options = [
-        { value: 'one', label: 'One' },
-        { value: 'two', label: 'Two' },
-    ];
+    console.log(this.props.destinations);
 
     return (
       <div className="MainPage-container">
