@@ -7,12 +7,11 @@ import React from 'react';
 import ReactDOM from 'react-dom/server';
 import Router from './routes';
 import Html from './components/Html';
-import Db from './models/db';
+import './db/start';
 
 const server = global.server = express();
 const port = process.env.PORT || 5000;
 server.set('port', port);
-
 //
 // Register Node.js middleware
 // -----------------------------------------------------------------------------
