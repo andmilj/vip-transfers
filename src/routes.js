@@ -19,8 +19,8 @@ const router = new Router(on => {
   });
 
   on('/contact', async () => {
-    const cars = await http.get('/api/cars');
-    return <ContactPage cars={cars}/>;
+    // const cars = await http.get('/api/cars');
+    return <ContactPage cars={[]}/>;
   });
 
   on('/login', async () => <LoginPage />);
@@ -28,8 +28,8 @@ const router = new Router(on => {
   on('/register', async () => <RegisterPage />);
 
   on('*', async () => {
-    // const content = await http.get(`/api/content?path=${state.path}`);
-    return <MainPage />;
+    const destinations = await http.get('/api/destinations');
+    return <MainPage destinations={destinations}/>;
   });
 
   on('error', (state, error) => state.statusCode === 404 ?
