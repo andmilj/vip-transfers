@@ -1,10 +1,13 @@
 import mongoose from 'mongoose';
+import {seedDatabase} from './seed';
 
 const dbURI = 'mongodb://localhost/vip';
 
 mongoose.connect(dbURI);
 
+/* eslint-disable no-console */
 mongoose.connection.on('connected', () => {
+  seedDatabase();
   console.log('Mongoose default connection open to ' + dbURI);
 });
 
