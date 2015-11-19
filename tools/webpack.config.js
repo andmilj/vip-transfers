@@ -28,14 +28,6 @@ const GLOBALS = {
   'process.env.NODE_ENV': DEBUG ? '"development"' : '"production"',
   __DEV__: DEBUG,
 };
-const JS_LOADER = {
-  test: /\.jsx?$/,
-  include: [
-    path.resolve(__dirname, '../node_modules/react-routing/src'),
-    path.resolve(__dirname, '../src'),
-  ],
-  loader: 'babel-loader',
-};
 
 //
 // Common configuration chunk to be used for both
@@ -68,12 +60,19 @@ const config = {
   ],
 
   resolve: {
-    extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx'],
+    extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx', '.json'],
   },
 
   module: {
     loaders: [
       {
+        test: /\.jsx?$/,
+        include: [
+          path.resolve(__dirname, '../node_modules/react-routing/src'),
+          path.resolve(__dirname, '../src'),
+        ],
+        loader: 'babel-loader',
+      }, {
         test: /\.json$/,
         loader: 'json-loader',
       }, {
@@ -85,6 +84,13 @@ const config = {
       }, {
         test: /\.(eot|ttf|wav|mp3)$/,
         loader: 'file-loader',
+      }, {
+        test: /\.css$/,
+        loader: 'style-loader/useable!css-loader!postcss-loader',
+      },
+      {
+        test: /\.scss$/,
+        loader: 'style-loader/useable!css-loader!postcss-loader!sass',
       },
     ],
   },
@@ -95,8 +101,7 @@ const config = {
       require('postcss-url')({
         copy: 'rebase',
       }),
-      require('postcss-nested')(),
-      require('postcss-cssnext')({ autoprefixer: AUTOPREFIXER_BROWSERS }),
+      require('autoprefixer')({ browsers: AUTOPREFIXER_BROWSERS }),
     ];
   },
 };
@@ -119,7 +124,6 @@ const appConfig = merge({}, config, {
   // http://webpack.github.io/docs/configuration.html#devtool
   devtool: DEBUG ? 'cheap-module-eval-source-map' : false,
   plugins: [
-    ...config.plugins,
     new webpack.DefinePlugin(GLOBALS),
     ...(!DEBUG ? [
       new webpack.optimize.DedupePlugin(),
@@ -135,42 +139,30 @@ const appConfig = merge({}, config, {
       new webpack.NoErrorsPlugin(),
     ] : []),
   ],
-  module: {
-    loaders: [
-      WATCH ? {
-        ...JS_LOADER,
-        query: {
-          // Wraps all React components into arbitrary transforms
-          // https://github.com/gaearon/babel-plugin-react-transform
-          plugins: ['react-transform'],
-          extra: {
-            'react-transform': {
-              transforms: [
-                {
-                  transform: 'react-transform-hmr',
-                  imports: ['react'],
-                  locals: ['module'],
-                }, {
-                  transform: 'react-transform-catch-errors',
-                  imports: ['react', 'redbox-react'],
-                },
-              ],
-            },
-          },
-        },
-      } : JS_LOADER,
-      ...config.module.loaders,
-      {
-        test: /\.css$/,
-        loader: 'style-loader/useable!css-loader!postcss-loader',
-      },
-      {
-        test: /\.scss$/,
-        loader: 'style-loader/useable!css-loader!postcss-loader!sass',
-      },
-    ],
-  },
 });
+
+// Enable React Transform in the "watch" mode
+appConfig.module.loaders
+  .filter(x => WATCH && x.loader === 'babel-loader')
+  .forEach(x => x.query = {
+    // Wraps all React components into arbitrary transforms
+    // https://github.com/gaearon/babel-plugin-react-transform
+    plugins: ['react-transform'],
+    extra: {
+      'react-transform': {
+        transforms: [
+          {
+            transform: 'react-transform-hmr',
+            imports: ['react'],
+            locals: ['module'],
+          }, {
+            transform: 'react-transform-catch-errors',
+            imports: ['react', 'redbox-react'],
+          },
+        ],
+      },
+    },
+  });
 
 //
 // Configuration for the server-side bundle (server.js)
@@ -187,7 +179,7 @@ const serverConfig = merge({}, config, {
   externals: [
     function filter(context, request, cb) {
       const isExternal =
-        request.match(/^[a-z][a-z\/\.\-0-9]*$/i) &&
+        request.match(/^[@a-z][a-z\/\.\-0-9]*$/i) &&
         !request.match(/^react-routing/) &&
         !context.match(/[\\/]react-routing/);
       cb(null, Boolean(isExternal));
@@ -203,25 +195,15 @@ const serverConfig = merge({}, config, {
   },
   devtool: 'source-map',
   plugins: [
-    ...config.plugins,
     new webpack.DefinePlugin(GLOBALS),
     new webpack.BannerPlugin('require("source-map-support").install();',
       { raw: true, entryOnly: false }),
   ],
-  module: {
-    loaders: [
-      JS_LOADER,
-      ...config.module.loaders,
-      {
-        test: /\.css$/,
-        loader: 'css-loader!postcss-loader',
-      },
-      {
-        test: /\.scss$/,
-        loader: 'css-loader!postcss-loader!sass',
-      },
-    ],
-  },
 });
+
+// Remove `style-loader` from the server-side bundle configuration
+serverConfig.module.loaders
+  .filter(x => x.loader.startsWith('style-loader/useable!'))
+  .forEach(x => x.loader = x.loader.substr(21));
 
 export default [appConfig, serverConfig];
