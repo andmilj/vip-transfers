@@ -10,19 +10,45 @@ class SearchForm extends Component {
     destinations: [],
   };
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      primarySelection: null,
+      secondarySelection: null,
+    };
+  }
+
+  _handlePrimarySelection = (city, destinations) => {
+    this.setState({primarySelection: destinations[0]});
+  }
+
+  _handleSecondarySelection = (city, destinations) => {
+    this.setState({secondarySelection: destinations[0]});
+  }
+
   render() {
-    console.log(this.props.destinations);
     return (
       <form className="forms">
         <fieldset>
           <div className="row">
             <div className="col-sm-offset-3 col-sm-6">
-              <input placeholder="Select your starting point" type="text" name="name" />
+              <Select placeholder="Select your starting point"
+                      value={this.state.primarySelection}
+                      options={this.props.destinations}
+                      labelKey={'city'}
+                      valueKey={'city'}
+                      onChange={this._handlePrimarySelection}/>
             </div>
           </div>
           <div className="row">
             <div className="col-sm-offset-3 col-sm-6">
-              <input placeholder="Select your destination point" type="text" name="name" />
+              <Select placeholder="Select your ending point"
+                      value={this.state.secondarySelection}
+                      options={this.props.destinations}
+                      labelKey={'city'}
+                      valueKey={'city'}
+                      onChange={this._handleSecondarySelection}/>
             </div>
           </div>
           <div className="row">
