@@ -60,7 +60,7 @@ const config = {
   ],
 
   resolve: {
-    extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx', '.json'],
+    extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx', '.json', '.scss'],
   },
 
   module: {

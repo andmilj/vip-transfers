@@ -1,5 +1,6 @@
 import React, {PropTypes, Component} from 'react';
 import Select from 'react-select';
+import DatePicker from '../ToolBox/DatePicker';
 
 class SearchForm extends Component {
   static propTypes = {
@@ -53,7 +54,7 @@ class SearchForm extends Component {
           </div>
           <div className="row">
             <div className="col-sm-offset-3 col-sm-3">
-              <input placeholder="Date" type="text" name="name" />
+              <DatePicker />
             </div>
             <div className="col-sm-3">
               <input placeholder="Persons" type="text" name="email" />
