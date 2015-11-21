@@ -1,6 +1,6 @@
 /*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
 import { Router } from 'express';
-import User from '../models/user.js';
+import User from '../db/models/user.js';
 
 const router = new Router();
 
