@@ -1,8 +1,15 @@
+import user from './models/user';
 import destination from './models/destination';
-import __ from 'lodash';
+import _ from 'lodash';
+
+function createUsers(users) {
+  _.forEach(users, data => {
+    user(data).save();
+  });
+}
 
 function createCroatianDestinations(cityNames) {
-  __.forEach(cityNames, name => {
+  _.forEach(cityNames, name => {
     destination({
       city: name,
       country: 'Croatia',
@@ -14,6 +21,30 @@ function createCroatianDestinations(cityNames) {
 
 /* eslint-disable no-console */
 export function seedDatabase() {
+  user.find({}, (error, users) => {
+    if (users.length === 0) {
+      createUsers([
+        {
+          firstName: 'Danijel',
+          lastName: 'Madunic',
+          username: 'dmadunic',
+          password: 'viptransfers',
+        }, {
+          firstName: 'Andrej',
+          lastName: 'Miljus',
+          username: 'amiljus',
+          password: 'developer',
+        }, {
+          firstName: 'Matko',
+          lastName: 'Bulic',
+          username: 'bulicmatko',
+          password: 'developer',
+        }
+      ]);
+      console.log('Users seeded!');
+    }
+  });
+
   destination.find({}, (error, destinations) => {
     if (destinations.length === 0) {
       createCroatianDestinations([
