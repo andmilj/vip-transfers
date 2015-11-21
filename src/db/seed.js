@@ -1,19 +1,27 @@
 import destination from './models/destination';
-import __ from 'lodash';
+import _ from 'lodash';
 
 function createCroatianDestinations(cityNames) {
-  __.forEach(cityNames, name => {
+  _.forEach(cityNames, name => {
     destination({
       city: name,
       country: 'Croatia',
       countryShort: 'Cro',
       type: ['City'],
+      // schema will alter this value before save
+      primary: false,
     }).save();
   });
 }
 
 /* eslint-disable no-console */
-export function seedDatabase() {
+export function seedDatabase(drop) {
+  if (drop) {
+    destination.remove({}, () => {
+      console.log('Destinastions removed!');
+    });
+  }
+
   destination.find({}, (error, destinations) => {
     if (destinations.length === 0) {
       createCroatianDestinations([

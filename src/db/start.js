@@ -7,7 +7,7 @@ mongoose.connect(dbURI);
 
 /* eslint-disable no-console */
 mongoose.connection.on('connected', () => {
-  seedDatabase();
+  seedDatabase(true);
   console.log('Mongoose default connection open to ' + dbURI);
 });
 
