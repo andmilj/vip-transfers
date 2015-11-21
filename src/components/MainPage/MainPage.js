@@ -21,7 +21,6 @@ class MainPage extends Component {
   render() {
     const title = 'Main Page';
     this.context.onSetTitle(title);
-
     return (
       <div className="MainPage-container">
 
