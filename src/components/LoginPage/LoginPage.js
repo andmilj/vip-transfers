@@ -3,6 +3,7 @@
 import React, { PropTypes, Component } from 'react';
 import styles from './LoginPage.css';
 import withStyles from '../../decorators/withStyles';
+import UserActions from '../../actions/UserActions';
 
 @withStyles(styles)
 class LoginPage extends Component {
@@ -27,8 +28,9 @@ class LoginPage extends Component {
   _handleSubmit(e) {
     e.preventDefault();
 
-    console.log('Username:', this.state.username);
-    console.log('Password:', this.state.password);
+    const {username, password} = this.state;
+
+    UserActions.authenticateUser(username, password);
   }
 
   _renderInputUsername() {
