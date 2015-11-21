@@ -19,6 +19,7 @@
     "mongoose": "^4.2.3",
     "normalize.css": "3.0.3",
     "react": "0.14.2",
+    "react-addons-css-transition-group": "^0.14.2",
     "react-dom": "0.14.2",
     "react-routing": "0.0.5",
     "react-select": "0.9.1",
