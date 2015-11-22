@@ -41,7 +41,7 @@ class DatePicker extends React.Component {
           className="DatePicker-input"
           onMouseDown={this.handleInputMouseDown}
           label={this.props.label}
-          readOnly={true}
+          readOnly
           type="text"
           value={date}
         />

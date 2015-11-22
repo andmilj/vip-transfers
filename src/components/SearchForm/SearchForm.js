@@ -1,6 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import Select from 'react-select';
 import DatePicker from '../ToolBox/DatePicker';
+import Input from '../ToolBox/Input';
 
 class SearchForm extends Component {
   static propTypes = {
@@ -17,6 +18,7 @@ class SearchForm extends Component {
     this.state = {
       primarySelection: null,
       secondarySelection: null,
+      date: undefined,
     };
   }
 
@@ -26,6 +28,10 @@ class SearchForm extends Component {
 
   _handleSecondarySelection = (city, destinations) => {
     this.setState({secondarySelection: destinations[0]});
+  }
+
+  _handleDateChange = (date) => {
+    this.setState({date: date});
   }
 
   render() {
@@ -54,10 +60,12 @@ class SearchForm extends Component {
           </div>
           <div className="row">
             <div className="col-sm-offset-3 col-sm-3">
-              <DatePicker />
+              <DatePicker label="Date"
+                          onChange={this._handleDateChange}
+                          value={this.state.date}/>
             </div>
             <div className="col-sm-3">
-              <input placeholder="Persons" type="text" name="email" />
+              <Input type="text" label="Name" name="name" value={this.state.name} />
             </div>
           </div>
           <div className="row">

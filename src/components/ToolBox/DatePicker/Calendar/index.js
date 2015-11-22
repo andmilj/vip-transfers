@@ -70,7 +70,7 @@ class Calendar extends React.Component {
 
   renderYear(year) {
     const props = {
-      className: year === this.state.viewDate.getFullYear() ? 'active' : '',
+      className: year === this.state.viewDate.getFullYear() ? 'Calendar-active' : '',
       key: year,
       onClick: this.handleYearClick.bind(this, year),
     };
@@ -91,13 +91,13 @@ class Calendar extends React.Component {
   }
 
   renderMonths() {
-    const animation = this.state.direction === 'left' ? 'SlideLeft' : 'SlideRight';
+    const animation = this.state.direction === 'left' ? 'slideleft' : 'slideright';
     return (
       <div data-react-toolbox="calendar">
-        <FontIcon className="prev" value="chevron-left" onMouseDown={this.decrementViewMonth}>
+        <FontIcon className="Calendar-prev" value="chevron-left" onMouseDown={this.decrementViewMonth}>
           <Ripple ref="rippleLeft" className="Calendar-ripple" spread={1.2} centered />
         </FontIcon>
-        <FontIcon className="next" value="chevron-right" onMouseDown={this.incrementViewMonth}>
+        <FontIcon className="Calendar-next" value="chevron-right" onMouseDown={this.incrementViewMonth}>
           <Ripple ref="rippleRight" className="Calendar-ripple" spread={1.2} centered />
         </FontIcon>
         <CSSTransitionGroup transitionName={animation} transitionEnterTimeout={350} transitionLeaveTimeout={350}>

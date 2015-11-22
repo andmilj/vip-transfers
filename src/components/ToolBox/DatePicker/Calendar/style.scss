@@ -1,5 +1,7 @@
 @import "../../base";
 @import "./config";
+@import "../../animations/slide-left";
+@import "../../animations/slide-right";
 
 .Calendar {
   position: relative;
@@ -8,7 +10,7 @@
   line-height: $calendar-row-height;
   text-align: center;
   background: $calendar-primary-contrast-color;
-  .prev, .next {
+  .Calendar-prev, .Calendar-next {
     position: absolute;
     top: 0;
     z-index: $z-index-high;
@@ -21,10 +23,10 @@
     cursor: pointer;
     opacity: .7;
   }
-  .prev {
+  .Calendar-prev {
     left: 0;
   }
-  .next {
+  .Calendar-next {
     right: 0;
   }
 }
@@ -34,13 +36,14 @@
 }
 
 .Calendar-years {
+  padding: 0;
   height: 100%;
   overflow: scroll;
   font-size: $font-size-big;
   > li {
     line-height: 2.4;
     cursor: pointer;
-    &.active {
+    &.Calendar-active {
       font-size: $calendar-year-font-size;
       color: $calendar-primary-color;
     }
@@ -75,18 +78,18 @@
     line-height: $calendar-row-height;
     border-radius: 50%;
   }
-  &:hover:not(.active):not(.disabled) > span {
+  &:hover:not(.Calendar-active):not(.Calendar-disabled) > span {
     color: $calendar-primary-contrast-color;
     background: $calendar-primary-hover-color;
   }
-  &.active > span {
+  &.Calendar-active > span {
     color: $calendar-primary-contrast-color;
     background: $calendar-primary-color;
   }
-  &:hover:not(.disabled) > span {
+  &:hover:not(.Calendar-disabled) > span {
     cursor: pointer;
   }
-  &.disabled {
+  &.Calendar-disabled {
     opacity: $calendar-day-disable-opacity;
   }
 }

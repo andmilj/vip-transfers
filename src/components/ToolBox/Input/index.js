@@ -37,22 +37,32 @@ class Input extends React.Component {
 
   renderInput() {
     let className = 'Input-input';
-    if (this.props.value && this.props.value.length > 0) className += ` Input-filled`;
-    if (this.props.multiline) {
-      return <textarea ref='input' role='input' {...this.props} className={className} />;
-    } else {
-      return <input ref='input' role='input' {...this.props} className={className} />;
+    if (this.props.value && this.props.value.length > 0) {
+      className += ` Input-filled`;
     }
+
+    if (this.props.multiline) {
+      return <textarea ref="input" role="input" {...this.props} className={className} />;
+    }
+
+    return <input ref="input" role="input" {...this.props} className={className} />;
   }
 
-  renderUnderline () {
+  renderUnderline() {
     const error = this.props.error ? <span className={'Input-error'}>{this.props.error}</span> : null;
     let counter = null;
+
     if (this.props.maxLength) {
       const length = this.props.value ? this.props.value.length : 0;
-      if (length > 0) counter = <span className={'Input-counter'}>{length} / {this.props.maxLength}</span>;
+
+      if (length > 0) {
+        counter = <span className={'Input-counter'}>{length} / {this.props.maxLength}</span>;
+      }
     }
-    if (error || counter) return <span className={'Input-underline'}>{error}{counter}</span>;
+
+    if (error || counter) {
+      return <span className={'Input-underline'}>{error}{counter}</span>;
+    }
   }
 
   render() {
@@ -66,7 +76,7 @@ class Input extends React.Component {
     if (!this.props.floating) labelClassName += ` Input-fixed}`;
 
     return (
-      <div data-react-toolbox='input' className={className}>
+      <div data-react-toolbox="input" className={className}>
         { this.renderInput() }
         { this.props.icon ? <FontIcon className={'Input-icon'} value={this.props.icon} /> : null }
         <span className={'Input-bar'}></span>
