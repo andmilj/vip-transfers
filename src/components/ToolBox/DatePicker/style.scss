@@ -19,6 +19,8 @@
 }
 
 .DatePicker-date {
+  @include typo-display-1;
+  color: $color-white;
   display: block;
   font-weight: $font-weight-semi-bold;
   text-transform: capitalize;
@@ -30,16 +32,16 @@
 }
 
 .DatePicker-display-years {
-  .date {
+  .DatePicker-date {
     opacity: $datepicker-inactive-opacity;
   }
-  .year {
+  .DatePicker-year {
     font-size: $font-size-normal;
   }
 }
 
 .DatePicker-display-months {
-  .year {
+  .DatePicker-year {
     opacity: $datepicker-inactive-opacity;
   }
 }

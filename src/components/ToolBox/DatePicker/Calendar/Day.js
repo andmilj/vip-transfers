@@ -26,8 +26,8 @@ class Day extends React.Component {
   }
 
   render() {
-    let className = this.isSelected() ? `Calendar-day active` : `Calendar-day`;
-    if (this.props.disabled) className += ` disabled`;
+    let className = this.isSelected() ? `Calendar-day Calendar-active` : `Calendar-day`;
+    if (this.props.disabled) className += ` Calendar-disabled`;
 
     return (
       <div className={className} style={this.dayStyle()}>
