@@ -55,7 +55,7 @@ function withStyles(...styles) {
         } else {
           this.context.onInsertCss(style.toString());
         }
-      })
+      });
     }
 
     componentWillUnmount() {
@@ -74,8 +74,12 @@ function withStyles(...styles) {
       }
     }
 
+    getChild() {
+      return this.refs.child;
+    }
+
     render() {
-      return <ComposedComponent {...this.props} />;
+      return <ComposedComponent ref="child" {...this.props} />;
     }
 
   };
