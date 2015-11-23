@@ -3,6 +3,7 @@ import FontIcon from '../FontIcon';
 import Tooltip from '../Tooltip';
 import withStyles from '../../../decorators/withStyles';
 import styles from './style';
+import _ from 'lodash';
 
 @withStyles(styles)
 class Input extends React.Component {
@@ -42,10 +43,10 @@ class Input extends React.Component {
     }
 
     if (this.props.multiline) {
-      return <textarea ref="input" role="input" {...this.props} className={className} />;
+      return <textarea ref="input" role="input" {..._.omit(this.props, 'placeholder')} className={className} />;
     }
 
-    return <input ref="input" role="input" {...this.props} className={className} />;
+    return <input ref="input" role="input" {..._.omit(this.props, 'placeholder')} className={className} />;
   }
 
   renderUnderline() {
@@ -68,19 +69,20 @@ class Input extends React.Component {
   render() {
     let className = 'Input';
     let labelClassName = 'Input-label';
-    if (this.props.error) className += ` Input-errored}`;
-    if (this.props.disabled) className += ` Input-disabled}`;
+    const labelValue = !this.props.value ? this.props.placeholder : (this.props.label || this.props.placeholder);
+    if (this.props.error) className += ` Input-errored`;
+    if (this.props.disabled) className += ` Input-disabled`;
     if (this.props.className) className += ` ${this.props.className}`;
-    if (this.props.type === 'hidden') className += ` Input-hidden}`;
-    if (this.props.icon) className += ` Input-with-icon}`;
-    if (!this.props.floating) labelClassName += ` Input-fixed}`;
+    if (this.props.type === 'hidden') className += ` Input-hidden`;
+    if (this.props.icon) className += ` Input-with-icon`;
+    if (!this.props.floating) labelClassName += ` Input-fixed`;
 
     return (
       <div data-react-toolbox="input" className={className}>
         { this.renderInput() }
         { this.props.icon ? <FontIcon className={'Input-icon'} value={this.props.icon} /> : null }
         <span className={'Input-bar'}></span>
-        { this.props.label ? <label className={labelClassName}>{this.props.label}</label> : null }
+        { this.props.label ? <label className={labelClassName}>{labelValue}</label> : null }
         { this.renderUnderline() }
         { this.props.tooltip ? <Tooltip label={this.props.tooltip} delay={this.props.tooltipDelay}/> : null }
       </div>

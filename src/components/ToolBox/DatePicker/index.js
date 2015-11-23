@@ -10,6 +10,7 @@ class DatePicker extends React.Component {
     maxDate: React.PropTypes.object,
     minDate: React.PropTypes.object,
     onChange: React.PropTypes.func,
+    placeholder: React.PropTypes.string,
     value: React.PropTypes.object,
   };
 
@@ -41,6 +42,7 @@ class DatePicker extends React.Component {
           className="DatePicker-input"
           onMouseDown={this.handleInputMouseDown}
           label={this.props.label}
+          placeholder={this.props.placeholder}
           readOnly
           type="text"
           value={date}
