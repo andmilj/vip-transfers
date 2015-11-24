@@ -38,7 +38,7 @@ class Input extends React.Component {
 
   renderInput() {
     let className = 'Input-input';
-    if (this.props.value && this.props.value.length > 0) {
+    if (this.props.value) {
       className += ` Input-filled`;
     }
 

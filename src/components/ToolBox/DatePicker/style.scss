@@ -1,6 +1,10 @@
 @import "../base";
 @import "./config";
 
+.DatePicker {
+    padding: $unit 0;
+}
+
 .DatePicker-input > [role="input"] {
   cursor: pointer;
 }

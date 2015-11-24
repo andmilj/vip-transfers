@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom';
 import Input from '../Input';
 import events from '../utils/events';
 import withStyles from '../../../decorators/withStyles';
 import styles from './style';
+import {map, isArray, isPlainObject} from 'lodash';
 
 const POSITION = {
   AUTO: 'auto',
@@ -12,22 +13,26 @@ const POSITION = {
 };
 
 @withStyles(styles)
-class Dropdown extends React.Component {
+class Dropdown extends Component {
   static propTypes = {
-    className: React.PropTypes.string,
-    direction: React.PropTypes.oneOf(['auto', 'up', 'down']),
-    disabled: React.PropTypes.bool,
-    error: React.PropTypes.string,
-    label: React.PropTypes.string,
-    onChange: React.PropTypes.func,
-    source: React.PropTypes.any,
-    value: React.PropTypes.any,
+    className: PropTypes.string,
+    direction: PropTypes.oneOf(['auto', 'up', 'down']),
+    disabled: PropTypes.bool,
+    error: PropTypes.string,
+    label: PropTypes.string,
+    onChange: PropTypes.func,
+    source: PropTypes.any,
+    sourceValueKey: PropTypes.any,
+    sourceLabelKey: PropTypes.any,
+    value: PropTypes.any,
   };
 
   static defaultProps = {
     className: '',
     direction: 'auto',
     source: {},
+    sourceValueKey: 'value',
+    sourceLabelKey: 'label',
   };
 
   state = {
@@ -136,12 +141,19 @@ class Dropdown extends React.Component {
   }
 
   source() {
-    const { source } = this.props;
-    if (source.hasOwnProperty('length')) {
-      return new Map(source.map(item => [item, item]));
+    const { source, sourceValueKey, sourceLabelKey } = this.props;
+
+    if (isArray(source)) {
+      return new Map(map(source, item => {
+        if (isPlainObject(item)) {
+          return [item[sourceValueKey], item[sourceLabelKey]];
+        }
+
+        return [item, item];
+      }));
     }
 
-    return new Map(Object.keys(source).map((key) => [key, source[key]]));
+    return new Map(map(Object.keys(source), key => [key, source[key]]));
   }
 
   values() {

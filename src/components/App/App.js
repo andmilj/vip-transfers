@@ -7,11 +7,10 @@ import Header from '../Header';
 import Footer from '../Footer';
 
 import styles from './App.css';
-import reactSelectStyles from '../../../node_modules/react-select/scss/default.scss';
 import toolboxCommonStyles from '../ToolBox/commons';
 
 @withContext
-@withStyles(toolboxCommonStyles, styles, reactSelectStyles)
+@withStyles(toolboxCommonStyles, styles)
 class App extends Component {
   static propTypes = {
     children: PropTypes.element.isRequired,
