@@ -1,6 +1,5 @@
 import React, {PropTypes, Component} from 'react';
 import DatePicker from '../ToolBox/DatePicker';
-import Input from '../ToolBox/Input';
 import Dropdown from '../ToolBox/Dropdown';
 
 class SearchForm extends Component {
@@ -18,6 +17,7 @@ class SearchForm extends Component {
     this.state = {
       primarySelection: null,
       secondarySelection: null,
+      numberOfPersons: null,
       date: undefined,
       name: null,
     };
@@ -32,12 +32,14 @@ class SearchForm extends Component {
   }
 
   _handleDateChange = (date) => {
-    this.setState({date: date});
+    this.setState({date});
+  }
+
+  _handlePersonsChange = (numberOfPersons) => {
+    this.setState({numberOfPersons});
   }
 
   render() {
-    const source = {'ES-es': 'Spain', 'TH-th': 'Thailand', 'EN-gb': 'England', 'EN-en': 'USA'};
-
     return (
       <form className="forms">
         <fieldset>
@@ -48,7 +50,9 @@ class SearchForm extends Component {
                         direction="down"
                         value={this.state.primarySelection}
                         onChange={this._handlePrimarySelection}
-                        source={source} />
+                        source={this.props.destinations}
+                        sourceValueKey={'city'}
+                        sourceLabelKey={'city'} />
             </div>
           </div>
           <div className="row">
@@ -58,7 +62,9 @@ class SearchForm extends Component {
                         label="Ending point"
                         onChange={this._handleSecondarySelection}
                         value={this.state.secondarySelection}
-                        source={source} />
+                        source={this.props.destinations}
+                        sourceValueKey={'city'}
+                        sourceLabelKey={'city'} />
             </div>
           </div>
           <div className="row">
@@ -69,7 +75,12 @@ class SearchForm extends Component {
                           value={this.state.date}/>
             </div>
             <div className="col-sm-3">
-              <Input type="text" label="Persons" placeholder="Select persons..." name="persons" error value={this.state.name} />
+              <Dropdown direction="down"
+                        placeholder="Select persons..."
+                        label="Persons"
+                        onChange={this._handlePersonsChange}
+                        value={this.state.numberOfPersons}
+                        source={[1, 2, 3, 4, 5]} />
             </div>
           </div>
           <div className="row">

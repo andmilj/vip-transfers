@@ -3,7 +3,7 @@ import CSSTransitionGroup from 'react-addons-css-transition-group';
 // import { SlideLeft, SlideRight } from '../../animations';
 import FontIcon from '../../FontIcon';
 import Ripple from '../../Ripple';
-import Month from './month';
+import Month from './Month';
 import time from '../../utils/time';
 import utils from '../../utils/utils';
 import withStyles from '../../../../decorators/withStyles';
