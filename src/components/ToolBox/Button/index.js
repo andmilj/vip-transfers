@@ -1,6 +1,5 @@
 import React from 'react';
 import FontIcon from '../FontIcon';
-import Ripple from '../Ripple';
 import Tooltip from '../Tooltip';
 import events from '../utils/events';
 import withStyles from '../../../decorators/withStyles';
@@ -20,7 +19,6 @@ class Button extends React.Component {
     mini: React.PropTypes.bool,
     primary: React.PropTypes.bool,
     raised: React.PropTypes.bool,
-    ripple: React.PropTypes.bool,
     toggle: React.PropTypes.bool,
     tooltip: React.PropTypes.string,
     tooltipDelay: React.PropTypes.number,
@@ -36,26 +34,23 @@ class Button extends React.Component {
     mini: false,
     primary: false,
     raised: false,
-    ripple: true,
     toggle: false,
   };
 
   handleMouseDown = (event) => {
     events.pauseEvent(event);
-    if (this.refs.ripple) this.refs.ripple.start(event);
     if (this.props.onMouseDown) this.props.onMouseDown(event);
   };
 
   handleTouchStart = (event) => {
     events.pauseEvent(event);
-    if (this.refs.ripple) this.refs.ripple.start(event.touches[0], true);
     if (this.props.onTouchStart) this.props.onTouchStart(event);
   };
 
-  render () {
+  render() {
     const {accent, flat, floating, href, icon, label,
-           loading, mini, primary, raised, ripple, toggle,
-           tooltip, tooltipDelay, ...others} = this.props;  //eslint-disable-line no-redeclare
+           loading, mini, primary, raised, toggle,
+           tooltip, tooltipDelay, ...others} = this.props;
     const element = href ? 'a' : 'button';
     const level = primary ? 'primary' : accent ? 'accent' : 'neutral';
     const shape = flat ? 'flat' : raised ? 'raised' : floating ? 'floating' : toggle ? 'toggle' : 'flat';
@@ -74,7 +69,6 @@ class Button extends React.Component {
     };
 
     return React.createElement(element, props,
-      ripple ? <Ripple ref="ripple" loading={loading}/> : null,
       tooltip ? <Tooltip className={'tooltip'} delay={tooltipDelay} label={tooltip}/> : null,
       icon ? <FontIcon className={'icon'} value={icon}/> : null,
       label ? label : this.props.children

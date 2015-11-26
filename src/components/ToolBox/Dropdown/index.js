@@ -188,6 +188,7 @@ class Dropdown extends Component {
           key={key}
           className={className}
           onMouseDown={this.select.bind(this, key)}
+          onTouchStart={this.select.bind(this, key)}
           onMouseOver={this.handleSuggestionHover.bind(this, key)}
         >
           {value}
