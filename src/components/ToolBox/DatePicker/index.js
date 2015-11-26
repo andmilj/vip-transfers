@@ -40,7 +40,7 @@ class DatePicker extends React.Component {
       <div data-toolbox="date-picker" className="DatePicker">
         <Input
           className="DatePicker-input"
-          onMouseDown={this.handleInputMouseDown}
+          onClick={this.handleInputMouseDown}
           label={this.props.label}
           placeholder={this.props.placeholder}
           readOnly

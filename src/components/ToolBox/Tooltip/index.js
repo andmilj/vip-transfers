@@ -43,7 +43,7 @@ class Tooltip extends React.Component {
       const position = parent.getBoundingClientRect();
 
       node.style.top = `${position.height - offset}px`;
-      node.style.left = `${parseInt((position.width / 2) - (node.offsetWidth / 2))}px`;
+      node.style.left = `${parseInt((position.width / 2) - (node.offsetWidth / 2), 10)}px`;
       if (!this.state.active) this.setState({ active: true});
     }, this.props.delay);
   };
@@ -51,7 +51,6 @@ class Tooltip extends React.Component {
   handleParentMouseOut = () => {
     if (this.state.active) {
       this.deferredHide = setTimeout(() => { this.setState({active: false}); }, HIDE_TIMEOUT);
-      console.log(this.deferredHide);
     }
   };
 
@@ -61,7 +60,7 @@ class Tooltip extends React.Component {
     if (this.state.active) className += ` Tooltip-active`;
 
     return (
-      <span data-react-toolbox='tooltip' className={className}>
+      <span data-react-toolbox="tooltip" className={className}>
         {this.props.label}
       </span>
     );
