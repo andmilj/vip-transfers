@@ -4,7 +4,7 @@ import Input from '../Input';
 import events from '../utils/events';
 import withStyles from '../../../decorators/withStyles';
 import styles from './style';
-import {map, isArray, isPlainObject} from 'lodash';
+import {map, isPlainObject, find, get} from 'lodash';
 
 const POSITION = {
   AUTO: 'auto',
@@ -21,7 +21,7 @@ class Dropdown extends Component {
     error: PropTypes.string,
     label: PropTypes.string,
     onChange: PropTypes.func,
-    source: PropTypes.any,
+    source: PropTypes.array,
     sourceValueKey: PropTypes.any,
     sourceLabelKey: PropTypes.any,
     value: PropTypes.any,
@@ -38,7 +38,7 @@ class Dropdown extends Component {
   state = {
     direction: this.props.direction,
     focus: false,
-    query: this.source().get(this.props.value) || '',
+    query: this.props.value || '',
   };
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -53,12 +53,14 @@ class Dropdown extends Component {
   }
 
   handleChange = (key) => {
-    const query = this.source().get(key);
+    const {source, sourceValueKey} = this.props;
+    let query = this.source().get(key);
+    query = isPlainObject(query) ? get(query, this.props.sourceValueKey) : query;
 
     this.setState({ focus: false, query }, () => {
       this.refs.input.getChild().blur();
       if (this.props.onChange) {
-        this.props.onChange(key);
+        this.props.onChange(key, find(source, {[sourceValueKey]: key}));
       }
     });
   };
@@ -141,27 +143,25 @@ class Dropdown extends Component {
   }
 
   source() {
-    const { source, sourceValueKey, sourceLabelKey } = this.props;
+    const { source, sourceValueKey } = this.props;
 
-    if (isArray(source)) {
-      return new Map(map(source, item => {
-        if (isPlainObject(item)) {
-          return [item[sourceValueKey], item[sourceLabelKey]];
-        }
+    return new Map(map(source, item => {
+      if (isPlainObject(item)) {
+        return [item[sourceValueKey], item];
+      }
 
-        return [item, item];
-      }));
-    }
-
-    return new Map(map(Object.keys(source), key => [key, source[key]]));
+      return [item, item];
+    }));
   }
 
   values() {
     const valueMap = new Map();
+    const {value, sourceValueKey} = this.props;
 
-    for (const [key, value] of this.source()) {
-      if (key === this.props.value) {
-        valueMap.set(key, value);
+    for (const [key, item] of this.source()) {
+      const sourceValue = isPlainObject(value) ? get(value, sourceValueKey) : value;
+      if (key === sourceValue) {
+        valueMap.set(key, item);
       }
     }
 
@@ -191,7 +191,7 @@ class Dropdown extends Component {
           onTouchStart={this.select.bind(this, key)}
           onMouseOver={this.handleSuggestionHover.bind(this, key)}
         >
-          {value}
+          {isPlainObject(value) ? get(value, this.props.sourceValueKey) : value}
         </li>
       );
     });

@@ -1,6 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import DatePicker from '../ToolBox/DatePicker';
 import Dropdown from '../ToolBox/Dropdown';
+import {filter, get} from 'lodash';
 
 class SearchForm extends Component {
   static propTypes = {
@@ -23,12 +24,12 @@ class SearchForm extends Component {
     };
   }
 
-  _handlePrimarySelection = (city) => {
-    this.setState({primarySelection: city});
+  _handlePrimarySelection = (key, destination) => {
+    this.setState({primarySelection: destination});
   }
 
-  _handleSecondarySelection = (city) => {
-    this.setState({secondarySelection: city});
+  _handleSecondarySelection = (key, destination) => {
+    this.setState({secondarySelection: destination});
   }
 
   _handleDateChange = (date) => {
@@ -37,6 +38,16 @@ class SearchForm extends Component {
 
   _handlePersonsChange = (numberOfPersons) => {
     this.setState({numberOfPersons});
+  }
+
+  _filterSource(otherSelection) {
+    const {destinations} = this.props;
+
+    if (get(otherSelection, 'primary')) {
+      return filter(destinations, {primary: false});
+    }
+
+    return destinations;
   }
 
   render() {
@@ -50,7 +61,7 @@ class SearchForm extends Component {
                         direction="down"
                         value={this.state.primarySelection}
                         onChange={this._handlePrimarySelection}
-                        source={this.props.destinations}
+                        source={this._filterSource(this.state.secondarySelection)}
                         sourceValueKey={'city'}
                         sourceLabelKey={'city'} />
             </div>
@@ -62,7 +73,7 @@ class SearchForm extends Component {
                         label="Ending point"
                         onChange={this._handleSecondarySelection}
                         value={this.state.secondarySelection}
-                        source={this.props.destinations}
+                        source={this._filterSource(this.state.primarySelection)}
                         sourceValueKey={'city'}
                         sourceLabelKey={'city'} />
             </div>
