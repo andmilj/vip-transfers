@@ -15,12 +15,20 @@ function createCroatianDestinations(cityNames) {
       country: 'Croatia',
       countryShort: 'Cro',
       type: ['City'],
+      // schema will alter this value before save
+      primary: false,
     }).save();
   });
 }
 
 /* eslint-disable no-console */
-export function seedDatabase() {
+export function seedDatabase(drop) {
+  if (drop) {
+    user.remove({}, () => {
+      console.log('Users removed!');
+    });
+  }
+
   user.find({}, (error, users) => {
     if (users.length === 0) {
       createUsers([
@@ -44,6 +52,12 @@ export function seedDatabase() {
       console.log('Users seeded!');
     }
   });
+
+  if (drop) {
+    destination.remove({}, () => {
+      console.log('Destinastions removed!');
+    });
+  }
 
   destination.find({}, (error, destinations) => {
     if (destinations.length === 0) {

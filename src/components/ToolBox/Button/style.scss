@@ -1,0 +1,200 @@
+@import "../base";
+@import "../mixins";
+@import "./config";
+
+%button {
+  @include typo-button();
+  position: relative;
+  display: inline-block;
+  height: $button-height;
+  flex-direction: row;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  color: $button-default-text-color;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  border: 0;
+  outline: none;
+  transition: box-shadow .2s $animation-curve-fast-out-linear-in,
+              background-color .2s $animation-curve-default,
+              color .2s $animation-curve-default;
+  &::-moz-focus-inner {
+    border: 0;
+  }
+  > span:not(.Button-tooltip) {
+    display: inline-block;
+    line-height: $button-height;
+    vertical-align: middle;
+  }
+  > svg {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    font-size: 120%;
+    vertical-align: middle;
+    fill: currentColor;
+  }
+  > * {
+    pointer-events: none;
+  }
+}
+
+%squared {
+  min-width: $button-squared-min-width;
+  padding: $button-squared-padding;
+  border-radius: $button-border-radius;
+  .icon {
+    margin-right: $button-squared-icon-margin;
+    font-size: 120%;
+    vertical-align: middle;
+  }
+  > svg {
+    margin-right: .5 * $unit;
+  }
+}
+
+%disabled {
+  color: $button-disabled-text-color;
+  pointer-events: none;
+  cursor: auto;
+}
+
+.Button-flat {
+  @extend %button;
+  @extend %squared;
+  background: transparent;
+  &:hover {
+    background: $button-flat-color-hover;
+  }
+  &:focus:not(:active) {
+    background: $button-flat-color-hover;
+  }
+  &[disabled] {
+    @extend %disabled;
+  }
+}
+
+.Button-toggle {
+  @extend %button;
+  @extend %toggle;
+  width: $button-height;
+  background: transparent;
+  border-radius: 50%;
+  &:hover {
+    background: $button-flat-color-hover;
+  }
+  &:focus:not(:active) {
+    background: $button-flat-color-hover;
+  }
+  &[disabled] {
+    @extend %disabled;
+  }
+  .icon {
+    font-size: 120%;
+    line-height: $button-height;
+    vertical-align: middle;
+  }
+}
+
+.Button-raised {
+  @extend %button;
+  @extend %squared;
+  @include shadow-2dp();
+  background: $button-solid-background-color;
+  &:active {
+    @include shadow-4dp();
+  }
+  &:focus:not(:active) {
+    @include focus-shadow();
+  }
+  &[disabled] {
+    @extend %disabled;
+    @include shadow-2dp();
+    background-color: $button-solid-disabled-background-color;
+  }
+}
+
+.Button-floating {
+  @extend %button;
+  width: $button-floating-height;
+  height: $button-floating-height;
+  font-size: $button-floating-font-size;
+  background: $button-solid-background-color;
+  border-radius: 50%;
+  box-shadow: 0 1px 1.5px 0 rgba(0, 0, 0, .12),
+              0 1px 1px 0 rgba(0, 0, 0, .24);
+  &:active {
+    @include shadow-4dp();
+  }
+  &:focus:not(:active) {
+    @include focus-shadow();
+  }
+  &[disabled] {
+    @extend %disabled;
+    @include shadow-2dp();
+    background-color: $button-solid-disabled-background-color;
+  }
+  .icon {
+    line-height: $button-floating-height;
+  }
+}
+
+.Button-primary:not([disabled]) {
+  &.Button-raised, &.Button-floating {
+    color: $button-primary-color-contrast;
+    background: $button-primary-color;
+  }
+  &.Button-flat, &.Button-toggle {
+    color: $button-primary-color;
+    &:hover {
+      background: $button-primary-color-hover;
+    }
+    &:focus:not(:active) {
+      background: $button-primary-color-hover;
+    }
+  }
+}
+
+.Button-accent:not([disabled]) {
+  &.Button-raised, &.Button-floating {
+    color: $button-accent-color-contrast;
+    background-color: $button-accent-color;
+  }
+  &.Button-flat, &.Button-toggle {
+    color: $button-accent-color;
+    &:hover {
+      background: $button-accent-color-hover;
+    }
+    &:focus:not(:active) {
+      background: $button-accent-color-hover;
+    }
+  }
+}
+
+.Button-neutral:not([disabled]) {
+  &.Button-raised, &.Button-floating {
+    color: $button-neutral-color-contrast;
+    background-color: $button-neutral-color;
+  }
+  &.Button-flat, &.Button-toggle {
+    color: $button-neutral-color-contrast;
+    &:hover {
+      background: $button-neutral-color-hover;
+    }
+    &:focus:not(:active) {
+      background: $button-neutral-color-hover;
+    }
+  }
+}
+
+.Button-mini.Button-floating {
+  width: $button-floating-height-mini;
+  height: $button-floating-height-mini;
+  font-size: $button-floating-mini-font-size;
+  .icon {
+    line-height: $button-floating-height-mini;
+  }
+}
