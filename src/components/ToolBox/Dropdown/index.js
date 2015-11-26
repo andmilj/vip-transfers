@@ -36,6 +36,7 @@ class Dropdown extends Component {
   };
 
   state = {
+    movingBytouch: false,
     direction: this.props.direction,
     focus: false,
     query: this.props.value || '',
@@ -169,8 +170,12 @@ class Dropdown extends Component {
   }
 
   select(key, event) {
-    events.pauseEvent(event);
-    this.handleChange(key);
+    if (!this.state.movingBytouch) {
+      events.pauseEvent(event);
+      this.handleChange(key);
+    }
+
+    this.setState({movingBytouch: false});
   }
 
   renderSuggestions() {
@@ -188,7 +193,7 @@ class Dropdown extends Component {
           key={key}
           className={className}
           onMouseDown={this.select.bind(this, key)}
-          onTouchStart={this.select.bind(this, key)}
+          onTouchEnd={this.select.bind(this, key)}
           onMouseOver={this.handleSuggestionHover.bind(this, key)}
         >
           {isPlainObject(value) ? get(value, this.props.sourceValueKey) : value}
@@ -196,7 +201,7 @@ class Dropdown extends Component {
       );
     });
 
-    return <ul ref="suggestions" className={suggestionsClassName}>{suggestions}</ul>;
+    return <ul ref="suggestions" onTouchMove={() => this.setState({movingBytouch: true})} className={suggestionsClassName}>{suggestions}</ul>;
   }
 
   render() {
