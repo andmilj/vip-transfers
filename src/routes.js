@@ -7,6 +7,7 @@ import App from './components/App';
 import NotFoundPage from './components/NotFoundPage';
 import ErrorPage from './components/ErrorPage';
 import MainPage from './components/MainPage';
+import LoginPage from './components/LoginPage';
 
 const router = new Router(on => {
   on('*', async (state, next) => {
@@ -14,7 +15,7 @@ const router = new Router(on => {
     return component && <App context={state.context}>{component}</App>;
   });
 
-  // on('/login', async () => <LoginPage />);
+  on('/login', async () => <LoginPage />);
 
   on('*', async () => {
     const destinations = await http.get('/api/destinations');
