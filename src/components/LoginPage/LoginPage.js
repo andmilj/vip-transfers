@@ -4,6 +4,8 @@ import React, { PropTypes, Component } from 'react';
 import styles from './LoginPage.css';
 import withStyles from '../../decorators/withStyles';
 import UserActions from '../../actions/UserActions';
+import Input from '../ToolBox/Input';
+import Button from '../ToolBox/Button';
 
 @withStyles(styles)
 class LoginPage extends Component {
@@ -35,37 +37,38 @@ class LoginPage extends Component {
 
   _renderInputUsername() {
     return (
-      <div className="form-group">
-        <label htmlFor="LoginForm[Username]">Username</label>
-        <input
-          id="LoginForm[Username]"
-          type="text"
-          placeholder="Username"
-          value={this.state.username}
-          onChange={(e) => this._handleInputChange('username', e.target.value)}
-        />
-      </div>
+      <Input
+        label="Username"
+        type="text"
+        placeholder="Username"
+        value={this.state.username}
+        onChange={(e) => this._handleInputChange('username', e.target.value)}
+      />
     );
   }
 
   _renderInputPassword() {
     return (
-      <div className="form-group">
-        <label htmlFor="LoginForm[Password]">Password</label>
-        <input
-          id="LoginForm[Password]"
-          type="password"
-          placeholder="Password"
-          value={this.state.password}
-          onChange={(e) => this._handleInputChange('password', e.target.value)}
-        />
-      </div>
+      <Input
+        label="Password"
+        type="password"
+        placeholder="Password"
+        value={this.state.password}
+        onChange={(e) => this._handleInputChange('password', e.target.value)}
+      />
+    );
+  }
+
+  _renderSubmitButton() {
+    return (
+      <Button type="submit">Login</Button>
     );
   }
 
   render() {
     const title = 'Login';
     this.context.onSetTitle(title);
+
     return (
       <div className="LoginPage">
         <div className="LoginPage-container">
@@ -74,7 +77,7 @@ class LoginPage extends Component {
             <br/>
             {this._renderInputUsername()}
             {this._renderInputPassword()}
-            <button type="submit" className="btn">Login</button>
+            {this._renderSubmitButton()}
           </form>
         </div>
       </div>

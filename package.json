@@ -17,6 +17,7 @@
     "front-matter": "2.0.0",
     "history": "1.13.1",
     "jade": "1.11.0",
+    "jquery": "^3.0.0-alpha1",
     "mongoose": "^4.2.3",
     "normalize.css": "3.0.3",
     "react": "0.14.2",
