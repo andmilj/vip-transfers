@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import bsPlugins from './bootstrap.js';
 
 const assignBootstrapMode = () => {
   const width = $( window ).width();
@@ -19,6 +20,8 @@ const assignBootstrapMode = () => {
 };
 
 const init = () => {
+  bsPlugins($);
+
   $(document).ready(() => {
     assignBootstrapMode();
     $(window).resize(() => {
@@ -34,7 +37,7 @@ const init = () => {
     const pos = menu.offset();
 
     $(window).scroll(function() {
-      if ($(this).scrollTop() > pos.top + menu.height() && menu.hasClass('default') && $(this).scrollTop() > 200) {
+      if ($(this).scrollTop() > pos.top + menu.height() && menu.hasClass('default') && $(this).scrollTop() > 50) {
         menu.fadeOut('fast', function() {
           $(this).removeClass('default').addClass('fixed').fadeIn('fast');
         });
