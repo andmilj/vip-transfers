@@ -5,6 +5,7 @@ import withContext from '../../decorators/withContext';
 import withStyles from '../../decorators/withStyles';
 import Header from '../Header';
 import Footer from '../Footer';
+import themeJs from './theme.js';
 
 import styles from './App.css';
 import toolboxCommonStyles from '../ToolBox/commons';
@@ -16,6 +17,10 @@ class App extends Component {
     children: PropTypes.element.isRequired,
     error: PropTypes.object,
   };
+
+  componentDidMount() {
+    themeJs();
+  }
 
   render() {
     return !this.props.error ? (
