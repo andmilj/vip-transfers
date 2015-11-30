@@ -1088,7 +1088,7 @@ footer .post-list li em {
     border-radius: 0;
     border: none;
     position: fixed;
-    z-index: 999;
+    z-index: 299;
     min-height: inherit;
     width: 100%;
 }
@@ -1254,7 +1254,7 @@ footer .post-list li em {
     padding: 0;
 }
 .revolution {
-    z-index: 998
+    z-index: 298
 }
 .revolution ul {
     visibility: hidden;
