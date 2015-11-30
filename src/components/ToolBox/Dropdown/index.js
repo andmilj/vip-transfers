@@ -4,7 +4,7 @@ import Input from '../Input';
 import events from '../utils/events';
 import withStyles from '../../../decorators/withStyles';
 import styles from './style';
-import {map, isPlainObject, find, get} from 'lodash';
+import {map, isPlainObject, find, get, includes} from 'lodash';
 
 const POSITION = {
   AUTO: 'auto',
@@ -55,8 +55,7 @@ class Dropdown extends Component {
 
   handleChange = (key) => {
     const {source, sourceValueKey} = this.props;
-    let query = this.source().get(key);
-    query = isPlainObject(query) ? get(query, this.props.sourceValueKey) : query;
+    const query = this._getLabel(this.source().get(key));
 
     this.setState({ focus: false, query }, () => {
       this.refs.input.getChild().blur();
@@ -64,26 +63,24 @@ class Dropdown extends Component {
         this.props.onChange(key, find(source, {[sourceValueKey]: key}));
       }
     });
-  };
+  }
 
   handleQueryBlur = () => {
     if (this.state.focus) {
       this.setState({focus: false});
     }
-  };
+  }
 
   handleQueryChange = (event) => {
     this.setState({query: event.target.value}, () => {
-      if (!event.target.value) {
-        this.props.onChange(null);
-      }
+      this.props.onChange(null);
     });
-  };
+  }
 
   handleQueryFocus = () => {
     this.refs.suggestions.scrollTop = 0;
     this.setState({active: '', focus: true});
-  };
+  }
 
   handleQueryKeyUp = (event) => {
     if (event.which === 13 && this.state.active) {
@@ -108,11 +105,19 @@ class Dropdown extends Component {
 
       this.setState({active: suggestionsKeys[index]});
     }
-  };
+  }
 
   handleSuggestionHover = (key) => {
     this.setState({active: key});
-  };
+  }
+
+  _getValue = item => {
+    return isPlainObject(item) ? get(item, this.props.sourceValueKey) : item;
+  }
+
+  _getLabel = item => {
+    return isPlainObject(item) ? get(item, this.props.sourceLabelKey) : item;
+  }
 
   blurMainInput = () => {
     // withStyles HoC is hiding public function of input
@@ -132,14 +137,23 @@ class Dropdown extends Component {
     return this.props.direction;
   }
 
+  _includes(word, value) {
+    return includes(word.toString().toLocaleLowerCase(), value.toString().toLocaleLowerCase());
+  }
+
   suggestions() {
+    const {value} = this.props;
+    const {query} = this.state;
     const suggestions = new Map();
-    const values = this.values();
-    for (const [key, value] of this.source()) {
-      if (!values.has(key)) {
-        suggestions.set(key, value);
+    const sourceValue = this._getValue(value);
+
+    for (const [key, item] of this.source()) {
+      const sourceLabel = this._getLabel(item);
+      if (sourceValue !== key && this._includes(sourceLabel, query)) {
+        suggestions.set(key, item);
       }
     }
+
     return suggestions;
   }
 
@@ -153,20 +167,6 @@ class Dropdown extends Component {
 
       return [item, item];
     }));
-  }
-
-  values() {
-    const valueMap = new Map();
-    const {value, sourceValueKey} = this.props;
-
-    for (const [key, item] of this.source()) {
-      const sourceValue = isPlainObject(value) ? get(value, sourceValueKey) : value;
-      if (key === sourceValue) {
-        valueMap.set(key, item);
-      }
-    }
-
-    return valueMap;
   }
 
   select(key, event) {
@@ -197,7 +197,7 @@ class Dropdown extends Component {
           onTouchStart={this.handleSuggestionHover.bind(this, key)}
           onMouseOver={this.handleSuggestionHover.bind(this, key)}
         >
-          {isPlainObject(value) ? get(value, this.props.sourceValueKey) : value}
+          {this._getLabel(value)}
         </li>
       );
     });

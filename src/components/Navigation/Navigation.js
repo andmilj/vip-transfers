@@ -1,6 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import withStyles from '../../decorators/withStyles';
-// import Link from '../Link';
+import Link from '../Link';
 
 class Navigation extends Component {
 
@@ -12,11 +11,8 @@ class Navigation extends Component {
     return (
         <nav className="collapse navbar-collapse pull-right">
           <ul className="nav navbar-nav">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#pricing">Pricing</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="/" onClick={Link.handleClick}>Home</a></li>
+            <li><a href="/login" onClick={Link.handleClick}>Log In</a></li>
           </ul>
         </nav>
     );
