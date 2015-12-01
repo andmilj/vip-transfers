@@ -1,6 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import DatePicker from '../ToolBox/DatePicker';
 import Dropdown from '../ToolBox/Dropdown';
+import Link from '../Link';
 import {filter, get} from 'lodash';
 
 class SearchForm extends Component {
@@ -96,7 +97,7 @@ class SearchForm extends Component {
           </div>
           <div className="row">
             <div className="smooth text-center">
-              <a href="#contact" className="btn btn-border">Search</a></div>
+              <a href="/results?abc=abc" onClick={Link.handleClick} className="btn btn-border">Search</a></div>
           </div>
         </fieldset>
       </form>
