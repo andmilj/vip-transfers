@@ -8,6 +8,7 @@ import NotFoundPage from './components/NotFoundPage';
 import ErrorPage from './components/ErrorPage';
 import MainPage from './components/MainPage';
 import LoginPage from './components/LoginPage';
+import ResultsPage from './components/ResultsPage';
 
 const router = new Router(on => {
   on('*', async (state, next) => {
@@ -16,6 +17,10 @@ const router = new Router(on => {
   });
 
   on('/login', async () => <LoginPage />);
+
+  on('/results', async state => {
+    return <ResultsPage query={state.query}/>;
+  });
 
   on('*', async () => {
     const destinations = await http.get('/api/destinations');
