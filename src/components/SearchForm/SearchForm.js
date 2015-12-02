@@ -51,6 +51,12 @@ class SearchForm extends Component {
     return destinations;
   }
 
+  _createQuery() {
+    return {
+      abc: 4,
+    };
+  }
+
   render() {
     return (
       <form className="forms">
@@ -97,7 +103,8 @@ class SearchForm extends Component {
           </div>
           <div className="row">
             <div className="smooth text-center">
-              <a href="/results?abc=abc" onClick={Link.handleClick} className="btn btn-border">Search</a></div>
+              <Link to={'/results'} query={this._createQuery()} className="btn btn-border">Search</Link>
+            </div>
           </div>
         </fieldset>
       </form>
