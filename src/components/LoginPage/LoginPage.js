@@ -1,11 +1,12 @@
 /*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
 
 import React, { PropTypes, Component } from 'react';
+import $ from 'jquery';
+import _ from 'lodash';
 import styles from './LoginPage.css';
 import withStyles from '../../decorators/withStyles';
 import UserActions from '../../actions/UserActions';
 import Input from '../ToolBox/Input';
-import Button from '../ToolBox/Button';
 
 @withStyles(styles)
 class LoginPage extends Component {
@@ -32,7 +33,20 @@ class LoginPage extends Component {
 
     const {username, password} = this.state;
 
-    UserActions.authenticateUser(username, password);
+    $.post('/api/auth/create', {username, password})
+      .done((res) => {
+        console.log(res);
+      }).fail(({responseJSON}) => {
+        this.setState({
+          errors: _.isArray(responseJSON) ? responseJSON : [responseJSON]
+        });
+      });
+  }
+
+  _getInputError(inputName) {
+    const { errors } = this.state;
+
+    return _.result(_.find(errors, {field: inputName}), 'message');
   }
 
   _renderInputUsername() {
@@ -43,6 +57,7 @@ class LoginPage extends Component {
         placeholder="Username"
         value={this.state.username}
         onChange={(e) => this._handleInputChange('username', e.target.value)}
+        error={this._getInputError('username')}
       />
     );
   }
@@ -55,13 +70,26 @@ class LoginPage extends Component {
         placeholder="Password"
         value={this.state.password}
         onChange={(e) => this._handleInputChange('password', e.target.value)}
+        error={this._getInputError('password')}
       />
     );
   }
 
+  _renderAuthError() {
+    const error = this._getInputError('*');
+
+    return error
+      ? (
+        <div>
+          <div className="alert alert-danger text-center">{error}</div>
+          <br/>
+        </div>
+      ) : null;
+  }
+
   _renderSubmitButton() {
     return (
-      <Button type="submit">Login</Button>
+      <button type="submit" className="btn btn-border">Login</button>
     );
   }
 
@@ -75,8 +103,10 @@ class LoginPage extends Component {
           <form className="LoginForm" onSubmit={this._handleSubmit.bind(this)}>
             <h1>{title}</h1>
             <br/>
+            {this._renderAuthError()}
             {this._renderInputUsername()}
             {this._renderInputPassword()}
+            <br/>
             {this._renderSubmitButton()}
           </form>
         </div>

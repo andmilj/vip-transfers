@@ -31,6 +31,7 @@ router.post('/create', async (req, res, next) => {
           res.status(201).json(user);
         } else {
           res.status(401).json({
+            field: '*',
             message: 'Wrong username/password combination!'
           });
         }
