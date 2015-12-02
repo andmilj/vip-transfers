@@ -7,7 +7,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/server';
 import Router from './routes';
 import Html from './components/Html';
-import Db from './models/db';
+import bodyParser from 'body-parser';
+import './db/start';
 
 const server = global.server = express();
 const port = process.env.PORT || 5000;
@@ -17,12 +18,15 @@ server.set('port', port);
 // Register Node.js middleware
 // -----------------------------------------------------------------------------
 server.use(express.static(path.join(__dirname, 'public')));
+server.use(bodyParser.json()); // to support JSON-encoded bodies
+server.use(bodyParser.urlencoded({extended: true})); // to support URL-encoded bodies
 
 //
 // Register API middleware
 // -----------------------------------------------------------------------------
+server.use('/api/auth', require('./api/auth'));
 server.use('/api/content', require('./api/content'));
-server.use('/api/cars', require('./api/cars'));
+server.use('/api/destinations', require('./api/destinations'));
 
 //
 // Register server-side rendering middleware

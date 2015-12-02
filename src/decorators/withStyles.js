@@ -6,7 +6,7 @@ import { canUseDOM } from 'fbjs/lib/ExecutionEnvironment';
 
 let count = 0;
 
-function withStyles(styles) {
+function withStyles(...styles) {
   return (ComposedComponent) => class WithStyles extends Component {
 
     static contextTypes = {
@@ -48,16 +48,21 @@ function withStyles(styles) {
     }
 
     componentWillMount() {
-      if (canUseDOM) {
-        invariant(styles.use, `The style-loader must be configured with reference-counted API.`);
-        styles.use();
-      } else {
-        this.context.onInsertCss(styles.toString());
-      }
+      styles.forEach(style => {
+        if (canUseDOM) {
+          invariant(style.use, `The style-loader must be configured with reference-counted API.`);
+          style.use();
+        } else {
+          this.context.onInsertCss(style.toString());
+        }
+      });
     }
 
     componentWillUnmount() {
-      styles.unuse();
+      styles.forEach(style => {
+        style.unuse();
+      });
+
       if (this.styleId) {
         this.refCount--;
         if (this.refCount < 1) {
@@ -69,8 +74,12 @@ function withStyles(styles) {
       }
     }
 
+    getChild() {
+      return this.refs.child;
+    }
+
     render() {
-      return <ComposedComponent {...this.props} />;
+      return <ComposedComponent ref="child" {...this.props} />;
     }
 
   };

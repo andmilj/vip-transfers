@@ -4,12 +4,11 @@ import React from 'react';
 import Router from 'react-routing/src/Router';
 import http from './core/HttpClient';
 import App from './components/App';
-import ContentPage from './components/ContentPage';
-import ContactPage from './components/ContactPage';
-import LoginPage from './components/LoginPage';
-import RegisterPage from './components/RegisterPage';
 import NotFoundPage from './components/NotFoundPage';
 import ErrorPage from './components/ErrorPage';
+import MainPage from './components/MainPage';
+import LoginPage from './components/LoginPage';
+import ResultsPage from './components/ResultsPage';
 
 const router = new Router(on => {
   on('*', async (state, next) => {
@@ -17,18 +16,15 @@ const router = new Router(on => {
     return component && <App context={state.context}>{component}</App>;
   });
 
-  on('/contact', async () => {
-    const cars = await http.get('/api/cars');
-    return <ContactPage cars={cars}/>;
-  });
-
   on('/login', async () => <LoginPage />);
 
-  on('/register', async () => <RegisterPage />);
+  on('/results', async state => {
+    return <ResultsPage query={state.query}/>;
+  });
 
-  on('*', async (state) => {
-    const content = await http.get(`/api/content?path=${state.path}`);
-    return content && <ContentPage {...content} />;
+  on('*', async () => {
+    const destinations = await http.get('/api/destinations');
+    return <MainPage destinations={destinations}/>;
   });
 
   on('error', (state, error) => state.statusCode === 404 ?
