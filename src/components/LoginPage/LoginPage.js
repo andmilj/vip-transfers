@@ -16,7 +16,9 @@ class LoginPage extends Component {
 
     this.state = {
       username: '',
-      password: ''
+      password: '',
+      errors: [],
+      loginSuccessful: false
     };
   }
 
@@ -34,8 +36,11 @@ class LoginPage extends Component {
     const {username, password} = this.state;
 
     $.post('/api/auth/create', {username, password})
-      .done((res) => {
-        console.log(res);
+      .done(res => {
+        this.setState({
+          loginSuccessful: true,
+          user: res
+        });
       }).fail(({responseJSON}) => {
         this.setState({
           errors: _.isArray(responseJSON) ? responseJSON : [responseJSON]
@@ -93,6 +98,15 @@ class LoginPage extends Component {
     );
   }
 
+
+  _renderLoginSuccess() {
+    return (
+        <div className="alert alert-success text-center">
+          Welcome back, <strong>{this.state.user.firstName}</strong>
+        </div>
+    );
+  }
+
   render() {
     const title = 'Login';
     this.context.onSetTitle(title);
@@ -101,13 +115,20 @@ class LoginPage extends Component {
       <div className="LoginPage">
         <div className="LoginPage-container">
           <form className="LoginForm" onSubmit={this._handleSubmit.bind(this)}>
-            <h1>{title}</h1>
-            <br/>
-            {this._renderAuthError()}
-            {this._renderInputUsername()}
-            {this._renderInputPassword()}
-            <br/>
-            {this._renderSubmitButton()}
+          {this.state.user
+            ? this._renderLoginSuccess()
+            : (
+                <div>
+                  <h1>{title}</h1>
+                  <br/>
+                  {this._renderAuthError()}
+                  {this._renderInputUsername()}
+                  {this._renderInputPassword()}
+                  <br/>
+                  {this._renderSubmitButton()}
+                </div>
+              )
+          }
           </form>
         </div>
       </div>
