@@ -17,28 +17,33 @@ class SearchForm extends Component {
     super(props);
 
     this.state = {
-      primarySelection: null,
-      secondarySelection: null,
-      numberOfPersons: null,
+      from: null,
+      to: null,
+      persons: null,
       date: undefined,
-      name: null,
     };
   }
 
   _handlePrimarySelection = (key, destination) => {
-    this.setState({primarySelection: destination});
+    this.setState({from: destination});
   }
 
   _handleSecondarySelection = (key, destination) => {
-    this.setState({secondarySelection: destination});
+    this.setState({to: destination});
   }
 
   _handleDateChange = (date) => {
     this.setState({date});
   }
 
-  _handlePersonsChange = (numberOfPersons) => {
-    this.setState({numberOfPersons});
+  _handlePersonsChange = (persons) => {
+    this.setState({persons});
+  }
+
+  _handleSubmit = (e) => {
+    e.preventDefault();
+    // TODO: validation and submit
+    console.log(e);
   }
 
   _filterSource(otherSelection) {
@@ -52,23 +57,29 @@ class SearchForm extends Component {
   }
 
   _createQuery() {
+    const {persons, from, to, date} = this.state;
+
     return {
-      abc: 4,
+      from: get(from, 'city'),
+      to: get(to, 'city'),
+      date: date ? date.getTime() : null,
+      persons,
     };
   }
 
   render() {
     return (
-      <form className="forms">
+      <form className="forms" action="/results" method="GET" onSubmit={this._handleSubmit}>
         <fieldset>
           <div className="row">
             <div className="col-sm-offset-3 col-sm-6">
               <Dropdown placeholder="Select your starting point"
+                        name="from"
                         label="Starting point"
                         direction="down"
-                        value={this.state.primarySelection}
+                        value={this.state.from}
                         onChange={this._handlePrimarySelection}
-                        source={this._filterSource(this.state.secondarySelection)}
+                        source={this._filterSource(this.state.to)}
                         sourceValueKey={'city'}
                         sourceLabelKey={'city'} />
             </div>
@@ -76,11 +87,12 @@ class SearchForm extends Component {
           <div className="row">
             <div className="col-sm-offset-3 col-sm-6">
               <Dropdown direction="down"
+                        name="to"
                         placeholder="Select your ending point"
                         label="Ending point"
                         onChange={this._handleSecondarySelection}
-                        value={this.state.secondarySelection}
-                        source={this._filterSource(this.state.primarySelection)}
+                        value={this.state.to}
+                        source={this._filterSource(this.state.from)}
                         sourceValueKey={'city'}
                         sourceLabelKey={'city'} />
             </div>
@@ -97,13 +109,13 @@ class SearchForm extends Component {
                         placeholder="Select persons..."
                         label="Persons"
                         onChange={this._handlePersonsChange}
-                        value={this.state.numberOfPersons}
+                        value={this.state.persons}
                         source={[1, 2, 3, 4, 5]} />
             </div>
           </div>
           <div className="row">
             <div className="smooth text-center">
-              <Link to={'/results'} query={this._createQuery()} className="btn btn-border">Search</Link>
+              <button type="submit" className="btn btn-border">Search</button>
             </div>
           </div>
         </fieldset>
