@@ -97,7 +97,6 @@ class LoginPage extends Component {
     );
   }
 
-
   _renderLoginSuccess() {
     return (
         <div className="alert alert-success text-center">
