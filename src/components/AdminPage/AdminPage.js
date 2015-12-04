@@ -1,19 +1,34 @@
 /*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
 
 import React, { PropTypes, Component } from 'react';
+import LoginPage from '../LoginPage';
 import withStyles from '../../decorators/withStyles';
 import styles from './AdminPage.css';
 
 @withStyles(styles)
 class AdminPage extends Component {
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      user: undefined //window.sessionStorage.getItem('user');
+    };
+  }
+
   static contextTypes = {
     onSetTitle: PropTypes.func.isRequired,
   };
 
-  render() {
+  _renderLoginPage() {
+    return <LoginPage/>;
+  }
+
+  _renderAdminPage() {
     const title = 'Admin';
     this.context.onSetTitle(title);
+
+    const { user } = this.state;
 
     return (
       <div className="AdminPage">
@@ -23,7 +38,7 @@ class AdminPage extends Component {
             <div className="light-wrapper">
               <div className="container inner">
                 <h2>Hello!</h2>
-                <p>Welcome to the Admin page!</p>
+                <p>Welcome back, <strong>{user.firstName}</strong>!</p>
               </div>
             </div>
           </div>
@@ -31,6 +46,14 @@ class AdminPage extends Component {
         </div>
       </div>
     );
+  }
+
+  render() {
+    const { user } = this.state;
+
+    return user
+      ? this._renderAdminPage()
+      : this._renderLoginPage();
   }
 
 }
