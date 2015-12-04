@@ -5,7 +5,6 @@ import $ from 'jquery';
 import _ from 'lodash';
 import styles from './LoginPage.css';
 import withStyles from '../../decorators/withStyles';
-import UserActions from '../../actions/UserActions';
 import Input from '../ToolBox/Input';
 
 @withStyles(styles)
