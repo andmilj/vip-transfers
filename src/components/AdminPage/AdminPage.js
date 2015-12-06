@@ -12,7 +12,7 @@ class AdminPage extends Component {
     super(props);
 
     this.state = {
-      user: undefined //window.sessionStorage.getItem('user');
+      user: undefined
     };
   }
 
@@ -21,7 +21,13 @@ class AdminPage extends Component {
   };
 
   _renderLoginPage() {
-    return <LoginPage/>;
+    const props = {
+      onLoginSuccess: (user) => {
+        this.setState({user});
+      }
+    };
+
+    return <LoginPage {...props}/>;
   }
 
   _renderAdminPage() {

@@ -39,6 +39,10 @@ class LoginPage extends Component {
         this.setState({
           loginSuccessful: true,
           user: res
+        }, () => {
+          const { onLoginSuccess } = this.props;
+
+          onLoginSuccess && onLoginSuccess(this.state.user);
         });
       }).fail(({responseJSON}) => {
         this.setState({
