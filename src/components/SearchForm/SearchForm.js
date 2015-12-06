@@ -107,6 +107,7 @@ class SearchForm extends Component {
             <div className="col-sm-3">
               <Dropdown direction="down"
                         placeholder="Select persons..."
+                        icon="people"
                         label="Persons"
                         onChange={this._handlePersonsChange}
                         value={this.state.persons}

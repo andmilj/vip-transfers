@@ -45,6 +45,7 @@ class DatePicker extends React.Component {
           placeholder={this.props.placeholder}
           readOnly
           type="text"
+          icon="date-range"
           value={date}
         />
         <CalendarDialog
