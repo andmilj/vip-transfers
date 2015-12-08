@@ -3,12 +3,12 @@
 import React, { PropTypes, Component } from 'react';
 import $ from 'jquery';
 import _ from 'lodash';
-import styles from './LoginPage.css';
-import withStyles from '../../decorators/withStyles';
-import Input from '../ToolBox/Input';
+import styles from './LoginForm.css';
+import withStyles from '../../../../decorators/withStyles';
+import Input from '../../../ToolBox/Input';
 
 @withStyles(styles)
-class LoginPage extends Component {
+class LoginForm extends Component {
 
   constructor(props) {
     super(props);
@@ -40,9 +40,9 @@ class LoginPage extends Component {
           loginSuccessful: true,
           user: res
         }, () => {
-          const { onLoginSuccess } = this.props;
+          const { onLogin } = this.props;
 
-          onLoginSuccess && onLoginSuccess(this.state.user);
+          onLogin && onLogin(this.state.user);
         });
       }).fail(({responseJSON}) => {
         this.setState({
@@ -114,8 +114,8 @@ class LoginPage extends Component {
     this.context.onSetTitle(title);
 
     return (
-      <div className="LoginPage">
-        <div className="LoginPage-container">
+      <div className="LoginForm">
+        <div className="LoginForm-container">
           <form className="LoginForm" onSubmit={this._handleSubmit.bind(this)}>
           {this.state.user
             ? this._renderLoginSuccess()
@@ -139,4 +139,4 @@ class LoginPage extends Component {
 
 }
 
-export default LoginPage;
+export default LoginForm;

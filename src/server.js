@@ -8,6 +8,7 @@ import ReactDOM from 'react-dom/server';
 import Router from './routes';
 import Html from './components/Html';
 import bodyParser from 'body-parser';
+import session from 'express-session';
 import './db/start';
 
 const server = global.server = express();
@@ -20,6 +21,11 @@ server.set('port', port);
 server.use(express.static(path.join(__dirname, 'public')));
 server.use(bodyParser.json()); // to support JSON-encoded bodies
 server.use(bodyParser.urlencoded({extended: true})); // to support URL-encoded bodies
+server.use(session({
+  secret: 's3cR3t',
+  resave: () => { /* TODO */ },
+  saveUninitialized: () => { /* TODO */ }
+}));
 
 //
 // Register API middleware

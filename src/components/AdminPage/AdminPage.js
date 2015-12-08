@@ -1,8 +1,11 @@
 /*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
 
 import React, { PropTypes, Component } from 'react';
-import LoginPage from '../LoginPage';
+import $ from 'jquery';
+import _ from 'lodash';
 import withStyles from '../../decorators/withStyles';
+import Dashboard from './components/Dashboard';
+import LoginForm from './components/LoginForm';
 import styles from './AdminPage.css';
 
 @withStyles(styles)
@@ -12,54 +15,81 @@ class AdminPage extends Component {
     super(props);
 
     this.state = {
+      isLoading: true,
       user: undefined
     };
   }
 
   static contextTypes = {
-    onSetTitle: PropTypes.func.isRequired,
+    onSetTitle: PropTypes.func.isRequired
   };
 
-  _renderLoginPage() {
-    const props = {
-      onLoginSuccess: (user) => {
-        this.setState({user});
-      }
-    };
-
-    return <LoginPage {...props}/>;
+  componentDidMount () {
+    $.post('/api/auth/check')
+      .done(res => {
+        this.setState({
+          isLoading: false,
+          user: res
+        });
+      })
+      .statusCode({
+        401: () => {
+          this.setState({
+            isLoading: false
+          });
+        }
+      });
   }
 
-  _renderAdminPage() {
-    const title = 'Admin';
-    this.context.onSetTitle(title);
+  _handleLogout = (e) => {
+    e.preventDefault();
 
+    $.post('/api/auth/destroy')
+      .done(res => {
+        this.setState({
+          user: undefined
+        });
+      })
+      .statusCode({
+        401: () => {
+          //
+        }
+      });
+  }
+
+  _handleLogin = (user) => {
+    this.setState({user});
+  }
+
+  _renderContent () {
     const { user } = this.state;
 
+    return user
+      ? <Dashboard user={user} onLogout={this._handleLogout}/>
+      : <LoginForm onLogin={this._handleLogin}/>;
+  }
+
+  _renderLoadingScreen() {
     return (
       <div className="AdminPage">
         <div className="AdminPage-container">
-
-          <div className="section anchor">
-            <div className="light-wrapper">
-              <div className="container inner">
-                <h2>Hello!</h2>
-                <p>Welcome back, <strong>{user.firstName}</strong>!</p>
-              </div>
-            </div>
-          </div>
-
+          <h1 className="loading-text">Please wait...</h1>
         </div>
       </div>
     );
   }
 
   render() {
-    const { user } = this.state;
+    const title = 'Loading...';
+    this.context.onSetTitle(title);
 
-    return user
-      ? this._renderAdminPage()
-      : this._renderLoginPage();
+    const { isLoading } = this.state;
+
+    console.log('render');
+
+    return isLoading
+      ? this._renderLoadingScreen()
+      : this._renderContent();
   }
 
 }
