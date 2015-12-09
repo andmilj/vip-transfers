@@ -19,6 +19,7 @@ class Dropdown extends Component {
     direction: PropTypes.oneOf(['auto', 'up', 'down']),
     disabled: PropTypes.bool,
     error: PropTypes.string,
+    icon: PropTypes.string,
     label: PropTypes.string,
     onChange: PropTypes.func,
     source: PropTypes.array,
@@ -217,6 +218,7 @@ class Dropdown extends Component {
           ref="input"
           {...this.props}
           className={'Dropdown-input'}
+          icon={this.props.icon}
           onBlur={this.handleQueryBlur}
           onChange={this.handleQueryChange}
           onFocus={this.handleQueryFocus}
