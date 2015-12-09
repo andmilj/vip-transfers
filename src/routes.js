@@ -7,7 +7,7 @@ import App from './components/App';
 import NotFoundPage from './components/NotFoundPage';
 import ErrorPage from './components/ErrorPage';
 import MainPage from './components/MainPage';
-import LoginPage from './components/LoginPage';
+import AdminPage from './components/AdminPage';
 import ResultsPage from './components/ResultsPage';
 
 const router = new Router(on => {
@@ -16,7 +16,7 @@ const router = new Router(on => {
     return component && <App context={state.context}>{component}</App>;
   });
 
-  on('/login', async () => <LoginPage />);
+  on('/admin', async () => <AdminPage />);
 
   on('/results', async state => {
     return <ResultsPage query={state.query}/>;

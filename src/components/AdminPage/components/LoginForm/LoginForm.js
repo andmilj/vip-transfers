@@ -3,20 +3,21 @@
 import React, { PropTypes, Component } from 'react';
 import $ from 'jquery';
 import _ from 'lodash';
-import styles from './LoginPage.css';
-import withStyles from '../../decorators/withStyles';
-import UserActions from '../../actions/UserActions';
-import Input from '../ToolBox/Input';
+import styles from './LoginForm.css';
+import withStyles from '../../../../decorators/withStyles';
+import Input from '../../../ToolBox/Input';
 
 @withStyles(styles)
-class LoginPage extends Component {
+class LoginForm extends Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
       username: '',
-      password: ''
+      password: '',
+      errors: [],
+      loginSuccessful: false
     };
   }
 
@@ -34,8 +35,15 @@ class LoginPage extends Component {
     const {username, password} = this.state;
 
     $.post('/api/auth/create', {username, password})
-      .done((res) => {
-        console.log(res);
+      .done(res => {
+        this.setState({
+          loginSuccessful: true,
+          user: res
+        }, () => {
+          const { onLogin } = this.props;
+
+          onLogin && onLogin(this.state.user);
+        });
       }).fail(({responseJSON}) => {
         this.setState({
           errors: _.isArray(responseJSON) ? responseJSON : [responseJSON]
@@ -93,21 +101,36 @@ class LoginPage extends Component {
     );
   }
 
+  _renderLoginSuccess() {
+    return (
+        <div className="alert alert-success text-center">
+          Welcome back, <strong>{this.state.user.firstName}</strong>
+        </div>
+    );
+  }
+
   render() {
     const title = 'Login';
     this.context.onSetTitle(title);
 
     return (
-      <div className="LoginPage">
-        <div className="LoginPage-container">
+      <div className="LoginForm">
+        <div className="LoginForm-container">
           <form className="LoginForm" onSubmit={this._handleSubmit.bind(this)}>
-            <h1>{title}</h1>
-            <br/>
-            {this._renderAuthError()}
-            {this._renderInputUsername()}
-            {this._renderInputPassword()}
-            <br/>
-            {this._renderSubmitButton()}
+          {this.state.user
+            ? this._renderLoginSuccess()
+            : (
+                <div>
+                  <h1>{title}</h1>
+                  <br/>
+                  {this._renderAuthError()}
+                  {this._renderInputUsername()}
+                  {this._renderInputPassword()}
+                  <br/>
+                  {this._renderSubmitButton()}
+                </div>
+              )
+          }
           </form>
         </div>
       </div>
@@ -116,4 +139,4 @@ class LoginPage extends Component {
 
 }
 
-export default LoginPage;
+export default LoginForm;
