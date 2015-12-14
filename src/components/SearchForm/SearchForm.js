@@ -57,7 +57,11 @@ class SearchForm extends Component {
     const error = {};
 
     if (from && to && persons && date) {
-      this.refs.searchForm.submit();
+      Link.redirectTo('/results', {
+        from: from.city,
+        to: to.city,
+        persons,
+        date: date.getTime()});
       return;
     }
 
@@ -94,7 +98,7 @@ class SearchForm extends Component {
 
   render() {
     return (
-      <form ref="searchForm" className="forms" action="/results" method="GET" onSubmit={this._handleSubmit}>
+      <form className="forms" action="/results" method="GET" onSubmit={this._handleSubmit}>
         <fieldset>
           <div className="row">
             <div className="col-sm-offset-3 col-sm-6">

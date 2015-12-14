@@ -46,6 +46,10 @@ class Link extends Component {
     }
   };
 
+  static redirectTo = (href, query) => {
+    Location.pushState(null, Location.createHref(href, query));
+  }
+
   render() {
     const { to, query, ...props } = this.props;
     return <a href={Location.createHref(to, query)} onClick={Link.handleClick.bind(this)} {...props} />;
