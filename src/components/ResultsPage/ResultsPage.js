@@ -4,6 +4,7 @@ import Parallax from '../Shared/Parallax.react';
 class ResultsPage extends Component {
   static propTypes = {
     query: PropTypes.object,
+    prices: PropTypes.object,
   }
 
   render() {
