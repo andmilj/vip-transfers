@@ -4,6 +4,7 @@ class VehicleColumn extends Component {
   static propTypes = {
     persons: PropTypes.number.isRequired,
     type: PropTypes.string.isRequired,
+    size: PropTypes.number.isRequired,
   };
 
   static defaultProps = {
@@ -11,7 +12,7 @@ class VehicleColumn extends Component {
 
   render() {
     return (
-      <div className="col-sm-3">
+      <div className={`col-sm-${this.props.size}`}>
           <div className="plan">
             <h3>{this.props.type}</h3>
             <h4>

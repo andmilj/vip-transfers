@@ -14,8 +14,11 @@ class ResultsPage extends Component {
   }
 
   _renderVehicles = () => {
-    return map(this.props.vehicles, vehicle => {
-      return <VehicleColumn key={vehicle.type} {...vehicle}/>;
+    const { vehicles } = this.props;
+    const size = 12 / vehicles.length;
+
+    return map(vehicles, vehicle => {
+      return <VehicleColumn key={vehicle.type} size={size} {...vehicle}/>;
     });
   }
 
