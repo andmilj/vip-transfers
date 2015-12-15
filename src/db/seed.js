@@ -1,5 +1,7 @@
 import user from './models/user';
 import destination from './models/destination';
+import vehicle from './models/vehicle';
+import vehicleTypes from './constants/vehicleTypes';
 import _ from 'lodash';
 
 function createUsers(users) {
@@ -47,7 +49,7 @@ export function seedDatabase(drop) {
           lastName: 'Bulic',
           username: 'bulicmatko',
           password: 'developer',
-        }
+        },
       ]);
       console.log('Users seeded!');
     }
@@ -64,6 +66,25 @@ export function seedDatabase(drop) {
       createCroatianDestinations([
         'Split', 'Rijeka', 'Zagreb', 'Pula', 'Dubrovnik', 'Vodice', 'Trogir']);
       console.log('Destinastions seeded!');
+    }
+  });
+
+  if (drop) {
+    vehicle.remove({}, () => {
+      console.log('Vehicles removed!');
+    });
+  }
+
+  vehicle.find({}, (error, vehicles) => {
+    if (vehicles.length === 0) {
+      _.forIn(vehicleTypes, value => {
+        vehicle({
+          type: value,
+          persons: 3,
+          pictureName: 'car.jpg',
+        }).save();
+      });
+      console.log('Vehicles seeded!');
     }
   });
 }
