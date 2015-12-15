@@ -1,0 +1,6 @@
+{
+  "name": "VehicleColumn",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./VehicleColumn.react.js"
+}
