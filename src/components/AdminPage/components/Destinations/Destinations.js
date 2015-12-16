@@ -1,11 +1,11 @@
 /*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
 
 import React, { PropTypes, Component } from 'react';
-import styles from './Dashboard.css';
+import styles from './Destinations.css';
 import withStyles from '../../../../decorators/withStyles';
 
 @withStyles(styles)
-class Dashboard extends Component {
+class Destinations extends Component {
 
   static propTypes = {
     user: PropTypes.object.isRequired,
@@ -23,18 +23,18 @@ class Dashboard extends Component {
   }
 
   render() {
-    const title = 'Dashboard';
+    const title = 'Destinations';
     this.context.onSetTitle(title);
 
     const { user } = this.props;
 
     return (
-      <div className="Dashboard">
-        <div className="Dashboard-container">
+      <div className="Destinations">
+        <div className="Destinations-container">
           <div className="container inner">
-            <h1>Dashboard</h1>
+            <h1>Destinations</h1>
             <p>
-              <span>Welcome to Dashboard, <strong>{user.firstName}</strong>! </span>
+              <span>Welcome to Destinations, <strong>{user.firstName}</strong>! </span>
               <a href="#" onClick={this.props.onLogout}>Logout</a>
             </p>
           </div>
@@ -45,4 +45,4 @@ class Dashboard extends Component {
 
 }
 
-export default Dashboard;
+export default Destinations;

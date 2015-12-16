@@ -10,6 +10,14 @@ import Input from '../../../ToolBox/Input';
 @withStyles(styles)
 class LoginForm extends Component {
 
+  static propTypes = {
+    onLogin: PropTypes.func.isRequired,
+  };
+
+  static contextTypes = {
+    onSetTitle: PropTypes.func.isRequired,
+  };
+
   constructor(props) {
     super(props);
 
@@ -17,13 +25,9 @@ class LoginForm extends Component {
       username: '',
       password: '',
       errors: [],
-      loginSuccessful: false
+      loginSuccessful: false,
     };
   }
-
-  static contextTypes = {
-    onSetTitle: PropTypes.func.isRequired,
-  };
 
   _handleInputChange(field, value) {
     this.setState({[field]: value});
@@ -38,15 +42,17 @@ class LoginForm extends Component {
       .done(res => {
         this.setState({
           loginSuccessful: true,
-          user: res
+          user: res,
         }, () => {
           const { onLogin } = this.props;
 
-          onLogin && onLogin(this.state.user);
+          if (onLogin) {
+            onLogin(this.state.user);
+          }
         });
       }).fail(({responseJSON}) => {
         this.setState({
-          errors: _.isArray(responseJSON) ? responseJSON : [responseJSON]
+          errors: _.isArray(responseJSON) ? responseJSON : [responseJSON],
         });
       });
   }
