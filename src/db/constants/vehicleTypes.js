@@ -1,8 +1,8 @@
-const vehicleTypes = {
-  STANDARD: 'STANDARD',
-  MINIBUS: 'MINIBUS',
-  STANDARD_VIP: 'STANDARD_VIP',
-  MINIBUS_VIP: 'MINIBUS_VIP',
-};
+import keyMirror from 'keyMirror';
 
-export default vehicleTypes;
+export default keyMirror({
+  STANDARD: null,
+  MINIBUS: null,
+  STANDARD_VIP: null,
+  MINIBUS_VIP: null,
+});

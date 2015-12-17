@@ -1,7 +1,11 @@
 import user from './models/user';
 import destination from './models/destination';
 import vehicle from './models/vehicle';
+import price from './models/price';
+
 import vehicleTypes from './constants/vehicleTypes';
+import cityTypes from './constants/cityTypes';
+import priceData from './data/prices';
 import _ from 'lodash';
 
 function createUsers(users) {
@@ -16,7 +20,7 @@ function createCroatianDestinations(cityNames) {
       city: name,
       country: 'Croatia',
       countryShort: 'Cro',
-      type: ['City'],
+      type: cityTypes.CITY,
       // schema will alter this value before save
       primary: false,
     }).save();
@@ -85,6 +89,21 @@ export function seedDatabase(drop) {
         }).save();
       });
       console.log('Vehicles seeded!');
+    }
+  });
+
+  if (drop) {
+    price.remove({}, () => {
+      console.log('All prices removed!');
+    });
+  }
+
+  price.find({}, (error, prices) => {
+    if (prices.length === 0) {
+      priceData.forEach(priceDataBlock => {
+        price(priceDataBlock).save();
+      });
+      console.log('Prices seeded!');
     }
   });
 }
