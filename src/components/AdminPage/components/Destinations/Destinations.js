@@ -47,32 +47,20 @@ class Destinations extends Component {
              </thead>
              <tbody>
                 <tr>
-                   <th scope="row">1</th>
-                   <td>Split</td>
-                   <td>
-                    <div className="btn-toolbar" role="toolbar" aria-label="...">
-                      <div className="btn-group" role="group" aria-label="...">
-                        <button className="btn btn-default">Edit</button>
-                      </div>
-                      <div className="btn-group" role="group" aria-label="...">
-                        <button className="btn btn-danger">Delete</button>
-                      </div>
-                    </div>
-                   </td>
+                  <th scope="row">1</th>
+                    <td>Split</td>
+                    <td>
+                      <button className="btn btn-default">Edit</button>
+                      <button className="btn btn-red">Delete</button>
+                    </td>
                 </tr>
                 <tr>
-                   <th scope="row">1</th>
-                   <td>Zagreb</td>
-                   <td>
-                    <div className="btn-toolbar" role="toolbar" aria-label="...">
-                      <div className="btn-group" role="group" aria-label="...">
-                        <button className="btn btn-default">Edit</button>
-                      </div>
-                      <div className="btn-group" role="group" aria-label="...">
-                        <button className="btn btn-danger">Delete</button>
-                      </div>
-                    </div>
-                   </td>
+                    <th scope="row">1</th>
+                    <td>Zagreb</td>
+                    <td>
+                      <button className="btn btn-default">Edit</button>
+                      <button className="btn btn-red">Delete</button>
+                    </td>
                 </tr>
               </tbody>
             </table>

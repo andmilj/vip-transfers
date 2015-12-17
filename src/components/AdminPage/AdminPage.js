@@ -3,6 +3,7 @@
 import React, { PropTypes, Component } from 'react';
 import $ from 'jquery';
 import withStyles from '../../decorators/withStyles';
+import Link from '../Link';
 import Dashboard from './components/Dashboard';
 import Destinations from './components/Destinations';
 import LoginForm from './components/LoginForm';
@@ -64,16 +65,30 @@ class AdminPage extends Component {
   _renderPage() {
     const { user } = this.state;
 
-    const page = window.location.pathname.split('/')[2];
+    let pageContent;
+    const pageUrl = window.location.pathname.split('/')[2];
 
-    switch (page) {
+    switch (pageUrl) {
     case 'dashboard':
-      return <Dashboard user={user} onLogout={this._handleLogout}/>;
+      pageContent = <Dashboard user={user} onLogout={this._handleLogout}/>;
+      break;
     case 'destinations':
-      return <Destinations user={user} onLogout={this._handleLogout}/>;
+      pageContent = <Destinations user={user} onLogout={this._handleLogout}/>;
+      break;
     default:
-      return <Dashboard user={user} onLogout={this._handleLogout}/>;
+      pageContent = <Dashboard user={user} onLogout={this._handleLogout}/>;
     }
+
+    return (
+      <div>
+        <br/><br/><br/><br/><br/>
+        <ul>
+          <li><Link to="/admin/dashboard">Dashboard</Link></li>
+          <li><Link to="/admin/destinations">Destinations</Link></li>
+        </ul>
+        {pageContent}
+      </div>
+    );
   }
 
   _renderContent() {
