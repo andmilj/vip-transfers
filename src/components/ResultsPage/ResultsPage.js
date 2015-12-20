@@ -6,19 +6,22 @@ import {map} from 'lodash';
 class ResultsPage extends Component {
   static propTypes = {
     query: PropTypes.object,
-    vehicles: PropTypes.array,
+    prices: PropTypes.array,
   }
 
   static defaultProps = {
-    vehicles: [],
+    prices: [],
   }
 
   _renderVehicles = () => {
-    const { vehicles } = this.props;
-    const size = 12 / vehicles.length;
+    const { prices } = this.props;
+    const size = 12 / prices.length;
 
-    return map(vehicles, vehicle => {
-      return <VehicleColumn key={vehicle.type} size={size} {...vehicle}/>;
+    return map(prices, price => {
+      return (<VehicleColumn key={price.vehicleType}
+                             size={size} {...price}
+                             persons={price.persons}
+                             type={prices.type}/>);
     });
   }
 
