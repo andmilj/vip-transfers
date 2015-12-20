@@ -4,6 +4,7 @@ class VehicleColumn extends Component {
   static propTypes = {
     persons: PropTypes.number.isRequired,
     type: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
     size: PropTypes.number.isRequired,
   };
 
@@ -17,7 +18,7 @@ class VehicleColumn extends Component {
             <h3>{this.props.type}</h3>
             <h4>
               <span className="amount">
-                <span>$</span>3</span>
+                <span>$</span>{this.props.price}</span>
             </h4>
             <div className="features">
               <ul>

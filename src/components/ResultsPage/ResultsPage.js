@@ -21,6 +21,7 @@ class ResultsPage extends Component {
       return (<VehicleColumn key={price.vehicleType}
                              size={size} {...price}
                              persons={price.persons}
+                             price={price.price}
                              type={prices.type}/>);
     });
   }

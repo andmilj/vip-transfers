@@ -19,7 +19,6 @@ const router = new Router(on => {
   on('/admin', async () => <AdminPage />);
 
   on('/results', async state => {
-    // currently only vehicles are returned
     const prices = await http.get('/api/prices', state.query);
     return <ResultsPage query={state.query} prices={prices}/>;
   });

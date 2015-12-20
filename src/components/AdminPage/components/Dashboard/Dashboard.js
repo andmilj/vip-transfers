@@ -1,7 +1,7 @@
 /*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
 
 import React, { PropTypes, Component } from 'react';
-import styles from './Dashboard.css';
+import styles from './Dashboard.scss';
 import withStyles from '../../../../decorators/withStyles';
 
 @withStyles(styles)
