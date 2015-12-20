@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import price from '../db/models/price';
+import vehicle from '../db/models/vehicle';
+import _ from 'lodash';
 
 const router = new Router();
 
@@ -12,8 +14,12 @@ router.get('/', async (req, res, next) => {
       if (err) {
         next(err);
       }
-      console.log(prices);
-      res.status(200).json(prices);
+      vehicle.find({}, (err, vehicles) => {
+        if (err) {
+          next(err);
+        }
+        res.status(200).json(_.assign({prices}, {vehicles}));
+      });
     });
   } catch (err) {
     next(err);

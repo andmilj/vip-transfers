@@ -19,8 +19,8 @@ const router = new Router(on => {
   on('/admin', async () => <AdminPage />);
 
   on('/results', async state => {
-    const prices = await http.get('/api/prices', state.query);
-    return <ResultsPage query={state.query} prices={prices}/>;
+    const {prices, vehicles} = await http.get('/api/prices', state.query);
+    return <ResultsPage query={state.query} prices={prices} vehicles={vehicles}/>;
   });
 
   on('*', async () => {

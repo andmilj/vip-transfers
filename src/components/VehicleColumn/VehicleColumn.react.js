@@ -1,11 +1,13 @@
 import React, {PropTypes, Component} from 'react';
+import styles from './VehicleColumn.scss';
+import withStyles from '../../decorators/withStyles';
 
+@withStyles(styles)
 class VehicleColumn extends Component {
   static propTypes = {
     persons: PropTypes.number.isRequired,
-    type: PropTypes.string.isRequired,
+    vehicleType: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
-    size: PropTypes.number.isRequired,
   };
 
   static defaultProps = {
@@ -13,9 +15,9 @@ class VehicleColumn extends Component {
 
   render() {
     return (
-      <div className={`col-sm-${this.props.size}`}>
+      <div className={`col-sm-3 vehicle-column`}>
           <div className="plan">
-            <h3>{this.props.type}</h3>
+            <h3>{this.props.vehicleType}</h3>
             <h4>
               <span className="amount">
                 <span>$</span>{this.props.price}</span>

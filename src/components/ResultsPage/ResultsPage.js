@@ -1,12 +1,13 @@
 import React, { PropTypes, Component } from 'react';
 import Parallax from '../Shared/Parallax.react';
 import VehicleColumn from '../VehicleColumn';
-import {map} from 'lodash';
+import {map, findWhere, get} from 'lodash';
 
 class ResultsPage extends Component {
   static propTypes = {
     query: PropTypes.object,
     prices: PropTypes.array,
+    vehicles: PropTypes.array,
   }
 
   static defaultProps = {
@@ -14,15 +15,14 @@ class ResultsPage extends Component {
   }
 
   _renderVehicles = () => {
-    const { prices } = this.props;
-    const size = 12 / prices.length;
+    const { prices, vehicles } = this.props;
+    return map(vehicles, ({type, persons}) => {
+      const price = findWhere(prices, {vehicleType: type});
 
-    return map(prices, price => {
-      return (<VehicleColumn key={price.vehicleType}
-                             size={size} {...price}
-                             persons={price.persons}
-                             price={price.price}
-                             type={prices.type}/>);
+      return (<VehicleColumn key={type}
+                             vehicleType={type}
+                             persons={persons}
+                             price={get(price, 'price')}/>);
     });
   }
 
