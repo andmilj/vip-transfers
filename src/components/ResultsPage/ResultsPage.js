@@ -1,23 +1,44 @@
 import React, { PropTypes, Component } from 'react';
 import Parallax from '../Shared/Parallax.react';
+import VehicleColumn from '../VehicleColumn';
+import {map, findWhere, get} from 'lodash';
 
 class ResultsPage extends Component {
   static propTypes = {
     query: PropTypes.object,
+    prices: PropTypes.array,
+    vehicles: PropTypes.array,
+  }
+
+  static defaultProps = {
+    prices: [],
+  }
+
+  _renderVehicles = () => {
+    const { prices, vehicles } = this.props;
+    return map(vehicles, ({type, persons}) => {
+      const price = findWhere(prices, {vehicleType: type});
+
+      return (<VehicleColumn key={type}
+                             vehicleType={type}
+                             persons={persons}
+                             price={get(price, 'price')}/>);
+    });
   }
 
   render() {
-    console.log(this.props);
     return (
       <div>
           <Parallax ordinal={1} />
-            <div className="section anchor">
-              <div className="light-wrapper">
-                <div className="container inner">
-                  Results
+          <div className="section anchor">
+            <div className="light-wrapper">
+              <div className="container inner">
+                <div className="row pricing">
+                  {this._renderVehicles()}
                 </div>
               </div>
             </div>
+          </div>
           <Parallax ordinal={1} />
       </div>
     );

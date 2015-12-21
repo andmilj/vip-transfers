@@ -1,5 +1,11 @@
 import user from './models/user';
 import destination from './models/destination';
+import vehicle from './models/vehicle';
+import price from './models/price';
+
+import vehicleTypes from './constants/vehicleTypes';
+import cityTypes from './constants/cityTypes';
+import priceData from './data/prices';
 import _ from 'lodash';
 
 function createUsers(users) {
@@ -14,7 +20,7 @@ function createCroatianDestinations(cityNames) {
       city: name,
       country: 'Croatia',
       countryShort: 'Cro',
-      type: ['City'],
+      type: cityTypes.CITY,
       // schema will alter this value before save
       primary: false,
     }).save();
@@ -47,7 +53,7 @@ export function seedDatabase(drop) {
           lastName: 'Bulic',
           username: 'bulicmatko',
           password: 'developer',
-        }
+        },
       ]);
       console.log('Users seeded!');
     }
@@ -64,6 +70,40 @@ export function seedDatabase(drop) {
       createCroatianDestinations([
         'Split', 'Rijeka', 'Zagreb', 'Pula', 'Dubrovnik', 'Vodice', 'Trogir']);
       console.log('Destinastions seeded!');
+    }
+  });
+
+  if (drop) {
+    vehicle.remove({}, () => {
+      console.log('Vehicles removed!');
+    });
+  }
+
+  vehicle.find({}, (error, vehicles) => {
+    if (vehicles.length === 0) {
+      _.forIn(vehicleTypes, value => {
+        vehicle({
+          type: value,
+          persons: 3,
+          pictureName: 'car.jpg',
+        }).save();
+      });
+      console.log('Vehicles seeded!');
+    }
+  });
+
+  if (drop) {
+    price.remove({}, () => {
+      console.log('All prices removed!');
+    });
+  }
+
+  price.find({}, (error, prices) => {
+    if (prices.length === 0) {
+      priceData.forEach(priceDataBlock => {
+        price(priceDataBlock).save();
+      });
+      console.log('Prices seeded!');
     }
   });
 }
