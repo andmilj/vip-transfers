@@ -44,4 +44,24 @@ router.post('/:id', async (req, res, next) => {
   }
 });
 
+router.post('/:id/delete', async (req, res, next) => {
+  try {
+    destination.findOne({ _id: req.params.id }, (err, _destination) => {
+      if (err) {
+        next(err);
+      }
+
+      _destination.remove(_err => {
+        if (_err) {
+          next(_err);
+        }
+
+        res.send(204);
+      });
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 export default router;

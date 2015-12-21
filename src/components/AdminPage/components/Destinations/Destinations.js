@@ -33,7 +33,7 @@ class Destinations extends Component {
     this._getDestinations();
   }
 
-  _getDestinations() {
+  _getDestinations = () => {
     $.get('/api/destinations')
       .done(res => {
         this.setState({
@@ -65,6 +65,13 @@ class Destinations extends Component {
         }, this._getDestinations);
       })
       .fail(() => { alert('Whoops!'); }); // eslint-disable-line
+  }
+
+  _deleteDestination = destinationId => {
+    if (confirm('Are you sure?')) {
+      $.post(`/api/destinations/${destinationId}/delete`)
+        .done(this._getDestinations);
+    }
   }
 
   _handleModalClose = e => {
@@ -108,7 +115,7 @@ class Destinations extends Component {
                 <td>
                   <button onClick={() => this._showDestinationModal(destination._id)}>Edit</button>
                   <span> | </span>
-                  <Link to={`/admin/destinations/${destination._id}/delete`}>Delete</Link>
+                  <button onClick={() => this._deleteDestination(destination._id)}>Delete</button>
                 </td>
               </tr>
             );
