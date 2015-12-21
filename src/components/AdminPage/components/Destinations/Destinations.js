@@ -1,9 +1,13 @@
 /*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
 
 import React, { PropTypes, Component } from 'react';
+import $ from 'jquery';
+import _ from 'lodash';
 
 import withStyles from '../../../../decorators/withStyles';
 import Link from '../../../Link';
+
+import DestinationModal from './DestinationModal';
 
 import styles from './Destinations.scss';
 
@@ -19,14 +23,64 @@ class Destinations extends Component {
     super(props, context);
 
     this.state = {
-      destinations: [{
-        id: 1,
-        name: 'Split',
-      }, {
-        id: 2,
-        name: 'Zagreb',
-      }],
+      isLoading: true,
+      destinations: [],
+      isModalShown: false,
     };
+  }
+
+  componentDidMount() {
+    this._getDestinations();
+  }
+
+  _getDestinations() {
+    $.get('/api/destinations')
+      .done(res => {
+        this.setState({
+          isLoading: false,
+          destinations: res,
+        });
+      })
+      .statusCode({
+        401: () => {
+          this.setState({
+            isLoading: false,
+          });
+        },
+      });
+  }
+
+  _showDestinationModal(destinationId) {
+    this.setState({
+      isModalShown: true,
+      destination: _.find(this.state.destinations, destination => destination._id === destinationId),
+    });
+  }
+
+  _handleModalSubmit = destination => {
+    $.post(`/api/destinations/${destination._id}`, destination)
+      .done(() => {
+        this.setState({
+          isModalShown: false,
+        }, this._getDestinations);
+      })
+      .fail(() => { alert('Whoops!'); }); // eslint-disable-line
+  }
+
+  _handleModalClose = e => {
+    e.preventDefault();
+    this.setState({ isModalShown: false });
+  }
+
+  _renderModal() {
+    return this.state.isModalShown
+      ? (
+        <DestinationModal
+          destination={this.state.destination}
+          onSubmit={this._handleModalSubmit}
+          onClose={this._handleModalClose}
+        />
+      ) : null;
   }
 
   _renderTable() {
@@ -35,21 +89,27 @@ class Destinations extends Component {
         <thead>
           <tr>
              <th width="50">#</th>
-             <th>Destination</th>
+             <th width="100">Primary</th>
+             <th>City</th>
+             <th>Country</th>
+             <th width="100">Type</th>
              <th width="100">Actions</th>
           </tr>
         </thead>
         <tbody>
           {this.state.destinations.map(destination => {
             return (
-              <tr>
-                <th scope="row">{destination.id}</th>
-                  <td>{destination.name}</td>
-                  <td>
-                    <Link to={`/admin/destinations/${destination.id}`}>Edit</Link>
-                    <span> | </span>
-                    <Link to={`/admin/destinations/${destination.id}/delete`}>Delete</Link>
-                  </td>
+              <tr key={destination._id}>
+                <td>#</td>
+                <td>{destination.primary ? 'Yes' : 'No'}</td>
+                <td>{destination.city}</td>
+                <td>{destination.country}</td>
+                <td>{destination.type}</td>
+                <td>
+                  <button onClick={() => this._showDestinationModal(destination._id)}>Edit</button>
+                  <span> | </span>
+                  <Link to={`/admin/destinations/${destination._id}/delete`}>Delete</Link>
+                </td>
               </tr>
             );
           })}
@@ -66,6 +126,7 @@ class Destinations extends Component {
       <div className="Destinations">
         <h1>Destinations</h1>
         <br/>
+        {this._renderModal()}
         {this._renderTable()}
       </div>
     );
