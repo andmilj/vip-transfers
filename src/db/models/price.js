@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { destinationSchema } from './destination';
 const PriceSchema = new mongoose.Schema({
-  price: Number,
+  price: String,
   vehicleType: String,
   persons: Number,
   destinations: [

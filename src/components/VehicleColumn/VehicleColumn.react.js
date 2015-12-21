@@ -23,7 +23,8 @@ class VehicleColumn extends Component {
             <h3>{this.props.vehicleType}</h3>
             <h4>
               <span className="amount">
-                <span>$</span>{this.props.price}</span>
+                <span>$</span><span>{this.props.price}</span>
+              </span>
             </h4>
             <div>
               <img src={`/cars/${this.props.pictureName}`} />
