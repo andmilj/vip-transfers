@@ -6,11 +6,14 @@ import withStyles from '../../decorators/withStyles';
 class VehicleColumn extends Component {
   static propTypes = {
     persons: PropTypes.number.isRequired,
+    pictureName: PropTypes.string,
+    price: PropTypes.string,
     vehicleType: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
   };
 
   static defaultProps = {
+    price: '-',
+    pictureName: 'car.jpg',
   };
 
   render() {
@@ -22,6 +25,9 @@ class VehicleColumn extends Component {
               <span className="amount">
                 <span>$</span>{this.props.price}</span>
             </h4>
+            <div>
+              <img src={`/cars/${this.props.pictureName}`} />
+            </div>
             <div className="features">
               <ul>
                 <li>MaxPersons: {this.props.persons}</li>
