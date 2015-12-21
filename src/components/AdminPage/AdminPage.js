@@ -2,22 +2,26 @@
 
 import React, { PropTypes, Component } from 'react';
 import $ from 'jquery';
+
 import withStyles from '../../decorators/withStyles';
 import Link from '../Link';
+
 import Dashboard from './components/Dashboard';
 import Destinations from './components/Destinations';
 import LoginForm from './components/LoginForm';
-import styles from './AdminPage.css';
+
+import styles from './AdminPage.scss';
 
 @withStyles(styles)
 class AdminPage extends Component {
+  static displayName = 'AdminPage';
 
   static contextTypes = {
     onSetTitle: PropTypes.func.isRequired,
   };
 
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
 
     this.state = {
       isLoading: true,
@@ -51,15 +55,11 @@ class AdminPage extends Component {
           user: undefined,
         });
       })
-      .statusCode({
-        401: () => {
-          //
-        },
-      });
+      .fail(() => window.location.reload());
   }
 
   _handleLogin = (user) => {
-    this.setState({user});
+    this.setState({ user });
   }
 
   _renderPage() {
@@ -70,23 +70,37 @@ class AdminPage extends Component {
 
     switch (pageUrl) {
     case 'dashboard':
-      pageContent = <Dashboard user={user} onLogout={this._handleLogout}/>;
+      pageContent = <Dashboard/>;
       break;
     case 'destinations':
-      pageContent = <Destinations user={user} onLogout={this._handleLogout}/>;
+      pageContent = <Destinations/>;
       break;
     default:
-      pageContent = <Dashboard user={user} onLogout={this._handleLogout}/>;
+      pageContent = <Dashboard/>;
     }
 
     return (
       <div>
-        <br/><br/><br/><br/><br/>
-        <ul>
-          <li><Link to="/admin/dashboard">Dashboard</Link></li>
-          <li><Link to="/admin/destinations">Destinations</Link></li>
-        </ul>
-        {pageContent}
+        <div className="row">
+          <div className="col-md-6">
+            <ul className="nav nav-pills">
+              <li role="presentation"><Link to="/admin/dashboard">Dashboard</Link></li>
+              <li role="presentation"><Link to="/admin/destinations">Destinations</Link></li>
+            </ul>
+          </div>
+          <div className="col-md-6">
+            <div className="text-right">
+              <span>Welcome back, <strong>{user.firstName}</strong>! </span>
+              <a href="#" className="navbar-link" onClick={this._handleLogout}>Logout</a>
+            </div>
+          </div>
+        </div>
+        <br/>
+        <div className="row">
+          <div className="col-md-12">
+            {pageContent}
+          </div>
+        </div>
       </div>
     );
   }
@@ -99,14 +113,8 @@ class AdminPage extends Component {
       : <LoginForm onLogin={this._handleLogin}/>;
   }
 
-  _renderLoadingScreen() {
-    return (
-      <div className="AdminPage">
-        <div className="AdminPage-container">
-          <h1 className="loading-text">Please wait...</h1>
-        </div>
-      </div>
-    );
+  _renderLoading() {
+    return <div className="loading">Please wait...</div>;
   }
 
   render() {
@@ -115,9 +123,13 @@ class AdminPage extends Component {
 
     const { isLoading } = this.state;
 
-    return isLoading
-      ? this._renderLoadingScreen()
-      : this._renderContent();
+    return (
+      <div className="AdminPage">
+        <div className="container">
+          {isLoading ? this._renderLoading() : this._renderContent()}
+        </div>
+      </div>
+    );
   }
 
 }

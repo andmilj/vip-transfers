@@ -1,75 +1,75 @@
 /*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
 
 import React, { PropTypes, Component } from 'react';
-import styles from './Destinations.css';
+
 import withStyles from '../../../../decorators/withStyles';
+import Link from '../../../Link';
+
+import styles from './Destinations.scss';
 
 @withStyles(styles)
 class Destinations extends Component {
-
-  static propTypes = {
-    user: PropTypes.object.isRequired,
-    onLogout: PropTypes.func.isRequired,
-  };
+  static displayName = 'Destinations';
 
   static contextTypes = {
     onSetTitle: PropTypes.func.isRequired,
   };
 
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
 
-    this.state = {};
+    this.state = {
+      destinations: [{
+        id: 1,
+        name: 'Split',
+      }, {
+        id: 2,
+        name: 'Zagreb',
+      }],
+    };
+  }
+
+  _renderTable() {
+    return (
+      <table className="table table-striped">
+        <thead>
+          <tr>
+             <th width="50">#</th>
+             <th>Destination</th>
+             <th width="100">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {this.state.destinations.map(destination => {
+            return (
+              <tr>
+                <th scope="row">{destination.id}</th>
+                  <td>{destination.name}</td>
+                  <td>
+                    <Link to={`/admin/destinations/${destination.id}`}>Edit</Link>
+                    <span> | </span>
+                    <Link to={`/admin/destinations/${destination.id}/delete`}>Delete</Link>
+                  </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    );
   }
 
   render() {
     const title = 'Destinations';
     this.context.onSetTitle(title);
 
-    const { user } = this.props;
-
     return (
       <div className="Destinations">
-        <div className="Destinations-container">
-          <div className="container inner">
-            <h1>Destinations</h1>
-            <p>
-              <span>Welcome to Destinations, <strong>{user.firstName}</strong>! </span>
-              <a href="#" onClick={this.props.onLogout}>Logout</a>
-            </p>
-            <table className="table table-striped">
-              <thead>
-                <tr>
-                   <th>#</th>
-                   <th>Name</th>
-                   <th>Actions</th>
-                </tr>
-             </thead>
-             <tbody>
-                <tr>
-                  <th scope="row">1</th>
-                    <td>Split</td>
-                    <td>
-                      <button className="btn btn-default">Edit</button>
-                      <button className="btn btn-red">Delete</button>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Zagreb</td>
-                    <td>
-                      <button className="btn btn-default">Edit</button>
-                      <button className="btn btn-red">Delete</button>
-                    </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <h1>Destinations</h1>
+        <br/>
+        {this._renderTable()}
       </div>
     );
   }
-
 }
 
 export default Destinations;
