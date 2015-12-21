@@ -1,16 +1,17 @@
 import { Router } from 'express';
 import price from '../db/models/price';
 import vehicle from '../db/models/vehicle';
-import _ from 'lodash';
 
 const router = new Router();
 
 router.get('/', async (req, res, next) => {
   try {
-    price.find({$and: [
+    const query = {$and: [
       {'destinations.city': req.query.from},
       {'destinations.city': req.query.to},
-      {'persons': req.query.persons}]}, (err, prices) => {
+      {'persons': req.query.persons}]};
+
+    price.find(query, (err, prices) => {
       if (err) {
         next(err);
       }
@@ -18,7 +19,7 @@ router.get('/', async (req, res, next) => {
         if (err) {
           next(err);
         }
-        res.status(200).json(_.assign({prices}, {vehicles}));
+        res.status(200).json({prices, vehicles});
       });
     });
   } catch (err) {
