@@ -5,7 +5,6 @@ import $ from 'jquery';
 import _ from 'lodash';
 
 import withStyles from '../../../../decorators/withStyles';
-import Link from '../../../Link';
 
 import DestinationModal from './DestinationModal';
 
@@ -58,7 +57,21 @@ class Destinations extends Component {
   }
 
   _handleModalSubmit = destination => {
+    return destination._id ? this._updateDestination(destination) : this._createDestination(destination);
+  }
+
+  _updateDestination(destination) {
     $.post(`/api/destinations/${destination._id}`, destination)
+      .done(() => {
+        this.setState({
+          isModalShown: false,
+        }, this._getDestinations);
+      })
+      .fail(() => { alert('Whoops!'); }); // eslint-disable-line
+  }
+
+  _createDestination(destination) {
+    $.post('/api/destinations', destination)
       .done(() => {
         this.setState({
           isModalShown: false,
@@ -77,6 +90,13 @@ class Destinations extends Component {
   _handleModalClose = e => {
     e.preventDefault();
     this.setState({ isModalShown: false });
+  }
+
+  _showCreateDestinationModal = () => {
+    this.setState({
+      isModalShown: true,
+      destination: {},
+    });
   }
 
   _renderModal() {
@@ -99,8 +119,9 @@ class Destinations extends Component {
              <th width="100">Primary</th>
              <th>City</th>
              <th>Country</th>
+             <th>Country Short</th>
              <th width="100">Type</th>
-             <th width="100">Actions</th>
+             <th width="130">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -111,6 +132,7 @@ class Destinations extends Component {
                 <td>{destination.primary ? 'Yes' : 'No'}</td>
                 <td>{destination.city}</td>
                 <td>{destination.country}</td>
+                <td>{destination.countryShort}</td>
                 <td>{destination.type}</td>
                 <td>
                   <button onClick={() => this._showDestinationModal(destination._id)}>Edit</button>
@@ -131,6 +153,9 @@ class Destinations extends Component {
 
     return (
       <div className="Destinations">
+        <div className="pull-right">
+          <button onClick={this._showCreateDestinationModal}>Create</button>
+        </div>
         <h1>Destinations</h1>
         <br/>
         {this._renderModal()}
