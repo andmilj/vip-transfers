@@ -1,4 +1,4 @@
-import keyMirror from 'keyMirror';
+import keyMirror from 'fbjs/lib/keyMirror';
 
 export default keyMirror({
   CITY: null,
