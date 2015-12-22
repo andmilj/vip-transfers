@@ -16,12 +16,13 @@ class ResultsPage extends Component {
 
   _renderVehicles = () => {
     const { prices, vehicles } = this.props;
-    return map(vehicles, ({type, persons}) => {
+    return map(vehicles, ({type, persons, pictureName}) => {
       const price = findWhere(prices, {vehicleType: type});
 
       return (<VehicleColumn key={type}
                              vehicleType={type}
                              persons={persons}
+                             pictureName={pictureName}
                              price={get(price, 'price')}/>);
     });
   }
