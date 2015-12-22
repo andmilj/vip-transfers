@@ -6,7 +6,7 @@ import _ from 'lodash';
 import withStyles from '../../decorators/withStyles';
 import Dashboard from './components/Dashboard';
 import LoginForm from './components/LoginForm';
-import styles from './AdminPage.css';
+import styles from './AdminPage.scss';
 
 @withStyles(styles)
 class AdminPage extends Component {

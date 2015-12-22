@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
 
-const destinationSchema = new mongoose.Schema({
+export const destinationSchema = new mongoose.Schema({
   city: String,
   country: String,
   countryShort: String,
-  type: Array,
+  type: String,
   primary: Boolean,
 });
 

@@ -24,7 +24,7 @@ server.use(bodyParser.urlencoded({extended: true})); // to support URL-encoded b
 server.use(session({
   secret: 's3cR3t',
   resave: () => { /* TODO */ },
-  saveUninitialized: () => { /* TODO */ }
+  saveUninitialized: () => { /* TODO */ },
 }));
 
 //
@@ -33,6 +33,7 @@ server.use(session({
 server.use('/api/auth', require('./api/auth'));
 server.use('/api/content', require('./api/content'));
 server.use('/api/destinations', require('./api/destinations'));
+server.use('/api/prices', require('./api/prices'));
 
 //
 // Register server-side rendering middleware
@@ -49,7 +50,7 @@ server.get('*', async (req, res, next) => {
       onPageNotFound: () => statusCode = 404,
     };
 
-    await Router.dispatch({ path: req.path, context }, (state, component) => {
+    await Router.dispatch({ path: req.path, query: req.query, context }, (state, component) => {
       data.body = ReactDOM.renderToString(component);
       data.css = css.join('');
     });

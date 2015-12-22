@@ -3,7 +3,7 @@
 import React, { PropTypes, Component } from 'react';
 import $ from 'jquery';
 import _ from 'lodash';
-import styles from './LoginForm.css';
+import styles from './LoginForm.scss';
 import withStyles from '../../../../decorators/withStyles';
 import Input from '../../../ToolBox/Input';
 
