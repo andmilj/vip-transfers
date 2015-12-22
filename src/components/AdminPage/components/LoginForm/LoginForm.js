@@ -1,29 +1,40 @@
 /*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
 
 import React, { PropTypes, Component } from 'react';
-import $ from 'jquery';
 import _ from 'lodash';
-import styles from './LoginForm.scss';
+import $ from 'jquery';
+
 import withStyles from '../../../../decorators/withStyles';
+
 import Input from '../../../ToolBox/Input';
+
+import styles from './LoginForm.scss';
 
 @withStyles(styles)
 class LoginForm extends Component {
+  static displayName = 'LoginForm';
 
-  constructor(props) {
-    super(props);
+  static propTypes = {
+    onLogin: PropTypes.func.isRequired,
+  };
+
+  static contextTypes = {
+    onSetTitle: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    onLogin: _.noop,
+  };
+
+  constructor(props, context) {
+    super(props, context);
 
     this.state = {
       username: '',
       password: '',
       errors: [],
-      loginSuccessful: false
     };
   }
-
-  static contextTypes = {
-    onSetTitle: PropTypes.func.isRequired,
-  };
 
   _handleInputChange(field, value) {
     this.setState({[field]: value});
@@ -32,21 +43,13 @@ class LoginForm extends Component {
   _handleSubmit(e) {
     e.preventDefault();
 
-    const {username, password} = this.state;
+    const { username, password } = this.state;
 
-    $.post('/api/auth/create', {username, password})
-      .done(res => {
+    $.post('/api/auth/create', { username, password })
+      .done(res => this.props.onLogin(res))
+      .fail(({responseJSON}) => {
         this.setState({
-          loginSuccessful: true,
-          user: res
-        }, () => {
-          const { onLogin } = this.props;
-
-          onLogin && onLogin(this.state.user);
-        });
-      }).fail(({responseJSON}) => {
-        this.setState({
-          errors: _.isArray(responseJSON) ? responseJSON : [responseJSON]
+          errors: _.isArray(responseJSON) ? responseJSON : [responseJSON],
         });
       });
   }
@@ -54,7 +57,7 @@ class LoginForm extends Component {
   _getInputError(inputName) {
     const { errors } = this.state;
 
-    return _.result(_.find(errors, {field: inputName}), 'message');
+    return _.result(_.find(errors, { field: inputName }), 'message');
   }
 
   _renderInputUsername() {
@@ -87,12 +90,8 @@ class LoginForm extends Component {
     const error = this._getInputError('*');
 
     return error
-      ? (
-        <div>
-          <div className="alert alert-danger text-center">{error}</div>
-          <br/>
-        </div>
-      ) : null;
+      ? <div className="error-message alert alert-danger text-center">{error}</div>
+      : null;
   }
 
   _renderSubmitButton() {
@@ -101,39 +100,27 @@ class LoginForm extends Component {
     );
   }
 
-  _renderLoginSuccess() {
-    return (
-        <div className="alert alert-success text-center">
-          Welcome back, <strong>{this.state.user.firstName}</strong>
-        </div>
-    );
-  }
-
   render() {
     const title = 'Login';
     this.context.onSetTitle(title);
 
     return (
-      <div className="LoginForm">
-        <div className="LoginForm-container">
-          <form className="LoginForm" onSubmit={this._handleSubmit.bind(this)}>
-          {this.state.user
-            ? this._renderLoginSuccess()
-            : (
-                <div>
-                  <h1>{title}</h1>
-                  <br/>
-                  {this._renderAuthError()}
-                  {this._renderInputUsername()}
-                  {this._renderInputPassword()}
-                  <br/>
-                  {this._renderSubmitButton()}
-                </div>
-              )
-          }
-          </form>
-        </div>
-      </div>
+      <form className="LoginForm" onSubmit={this._handleSubmit.bind(this)}>
+        {this.state.user
+          ? this._renderLoginSuccess()
+          : (
+              <div>
+                <h1>{title}</h1>
+                <br/>
+                {this._renderAuthError()}
+                {this._renderInputUsername()}
+                {this._renderInputPassword()}
+                <br/>
+                {this._renderSubmitButton()}
+              </div>
+            )
+        }
+      </form>
     );
   }
 

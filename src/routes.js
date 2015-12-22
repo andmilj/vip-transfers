@@ -18,6 +18,8 @@ const router = new Router(on => {
   });
 
   on('/admin', async () => <AdminPage />);
+  on('/admin/dashboard', async () => <AdminPage />);
+  on('/admin/destinations', async () => <AdminPage />);
 
   on('/results', async state => {
     const response = await fetch(Location.createHref('/api/prices', state.query));

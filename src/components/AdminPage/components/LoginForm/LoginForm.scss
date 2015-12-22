@@ -1,12 +1,13 @@
 /* React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
 
-.LoginForm-container {
+.LoginForm {
+  position: relative;
   margin: 0 auto;
-  padding: 0 0 40px;
-}
-
-.LoginForm-container .LoginForm {
-  margin: 0 auto;
-  padding: 150px 0;
+  padding: 50px 0 250px;
   max-width: 400px;
+
+  .error-message {
+    position: absolute; z-index: 500;
+    top: -50px; right: 0; left: 0;
+  }
 }

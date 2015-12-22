@@ -19,6 +19,7 @@ router.get('/', async (req, res, next) => {
         if (err) {
           next(err);
         }
+
         res.status(200).json({prices, vehicles});
       });
     });

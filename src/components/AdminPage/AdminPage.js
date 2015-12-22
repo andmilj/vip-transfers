@@ -2,42 +2,47 @@
 
 import React, { PropTypes, Component } from 'react';
 import $ from 'jquery';
-import _ from 'lodash';
+
 import withStyles from '../../decorators/withStyles';
+import Link from '../Link';
+
 import Dashboard from './components/Dashboard';
+import Destinations from './components/Destinations';
 import LoginForm from './components/LoginForm';
+
 import styles from './AdminPage.scss';
 
 @withStyles(styles)
 class AdminPage extends Component {
+  static displayName = 'AdminPage';
 
-  constructor(props) {
-    super(props);
+  static contextTypes = {
+    onSetTitle: PropTypes.func.isRequired,
+  };
+
+  constructor(props, context) {
+    super(props, context);
 
     this.state = {
       isLoading: true,
-      user: undefined
+      user: undefined,
     };
   }
 
-  static contextTypes = {
-    onSetTitle: PropTypes.func.isRequired
-  };
-
-  componentDidMount () {
+  componentDidMount() {
     $.post('/api/auth/check')
       .done(res => {
         this.setState({
           isLoading: false,
-          user: res
+          user: res,
         });
       })
       .statusCode({
         401: () => {
           this.setState({
-            isLoading: false
+            isLoading: false,
           });
-        }
+        },
       });
   }
 
@@ -45,38 +50,71 @@ class AdminPage extends Component {
     e.preventDefault();
 
     $.post('/api/auth/destroy')
-      .done(res => {
+      .done(() => {
         this.setState({
-          user: undefined
+          user: undefined,
         });
       })
-      .statusCode({
-        401: () => {
-          //
-        }
-      });
+      .fail(() => window.location.reload());
   }
 
   _handleLogin = (user) => {
-    this.setState({user});
+    this.setState({ user });
   }
 
-  _renderContent () {
+  _renderPage() {
     const { user } = this.state;
 
-    return user
-      ? <Dashboard user={user} onLogout={this._handleLogout}/>
-      : <LoginForm onLogin={this._handleLogin}/>;
-  }
+    let pageContent;
+    const pageUrl = window.location.pathname.split('/')[2];
 
-  _renderLoadingScreen() {
+    switch (pageUrl) {
+    case 'dashboard':
+      pageContent = <Dashboard/>;
+      break;
+    case 'destinations':
+      pageContent = <Destinations/>;
+      break;
+    default:
+      pageContent = <Dashboard/>;
+    }
+
     return (
-      <div className="AdminPage">
-        <div className="AdminPage-container">
-          <h1 className="loading-text">Please wait...</h1>
+      <div>
+        <div className="row">
+          <div className="col-md-6">
+            <ul className="nav nav-pills">
+              <li role="presentation"><Link to="/admin/dashboard">Dashboard</Link></li>
+              <li role="presentation"><Link to="/admin/destinations">Destinations</Link></li>
+            </ul>
+          </div>
+          <div className="col-md-6">
+            <div className="text-right">
+              <span>Welcome back, <strong>{user.firstName}</strong>! </span>
+              <a href="#" className="navbar-link" onClick={this._handleLogout}>Logout</a>
+            </div>
+          </div>
+        </div>
+        <br/>
+        <div className="row">
+          <div className="col-md-12">
+            {pageContent}
+          </div>
         </div>
       </div>
     );
+  }
+
+  _renderContent() {
+    const { user } = this.state;
+
+    return user
+      ? this._renderPage()
+      : <LoginForm onLogin={this._handleLogin}/>;
+  }
+
+  _renderLoading() {
+    return <div className="loading">Please wait...</div>;
   }
 
   render() {
@@ -85,11 +123,13 @@ class AdminPage extends Component {
 
     const { isLoading } = this.state;
 
-    console.log('render');
-
-    return isLoading
-      ? this._renderLoadingScreen()
-      : this._renderContent();
+    return (
+      <div className="AdminPage">
+        <div className="container">
+          {isLoading ? this._renderLoading() : this._renderContent()}
+        </div>
+      </div>
+    );
   }
 
 }
