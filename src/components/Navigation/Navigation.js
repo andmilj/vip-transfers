@@ -9,12 +9,12 @@ class Navigation extends Component {
 
   render() {
     return (
-        <nav className="collapse navbar-collapse pull-right">
-          <ul className="nav navbar-nav">
-            <li><a href="/" onClick={Link.handleClick}>Home</a></li>
-            <li><a href="/admin" onClick={Link.handleClick}>Admin</a></li>
-          </ul>
-        </nav>
+      <nav role="navigation" className="main-nav">
+        <ul>
+          <li className="active"><a href="/" onClick={Link.handleClick} title="Home Page">Home</a></li>
+          <li><a href="/admin" onClick={Link.handleClick}>Admin</a></li>
+        </ul>
+      </nav>
     );
   }
 

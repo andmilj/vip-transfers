@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
-import Parallax from '../Shared/Parallax.react';
-import SearchForm from '../SearchForm/SearchForm';
+import Intro from '../Intro/Intro.react';
+import Services from '../Services/Services.react';
 
 class MainPage extends Component {
   static propTypes = {
@@ -19,20 +19,10 @@ class MainPage extends Component {
     const title = 'Main Page';
     this.context.onSetTitle(title);
     return (
-      <div className="MainPage-container">
-
-        <Parallax ordinal={4} />
-
-        <div className="section anchor">
-          <div className="light-wrapper">
-            <div className="container inner">
-              <SearchForm {...this.props} />
-            </div>
-          </div>
-        </div>
-
-        <Parallax ordinal={4} />
-      </div>
+      <main className="main" role="main">
+        <Intro />
+        <Services />
+      </main>
     );
   }
 
