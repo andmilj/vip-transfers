@@ -7,11 +7,11 @@ import Header from '../Header';
 import Footer from '../Footer';
 import themeJs from './style/js/theme.js';
 
-import styles from './App.css';
+import './App.css';
 import toolboxCommonStyles from '../ToolBox/commons';
 
 @withContext
-@withStyles(toolboxCommonStyles, styles)
+@withStyles(toolboxCommonStyles)
 class App extends Component {
   static propTypes = {
     children: PropTypes.element.isRequired,

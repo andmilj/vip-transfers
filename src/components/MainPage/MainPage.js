@@ -1,10 +1,7 @@
 import React, { PropTypes, Component } from 'react';
-import styles from './MainPage.scss';
-import withStyles from '../../decorators/withStyles';
 import Parallax from '../Shared/Parallax.react';
 import SearchForm from '../SearchForm/SearchForm';
 
-@withStyles(styles)
 class MainPage extends Component {
   static propTypes = {
     destinations: PropTypes.array,
