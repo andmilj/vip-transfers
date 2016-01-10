@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
-import VehicleColumn from '../VehicleColumn';
-import {map, findWhere, get, omit} from 'lodash';
+import { omit, pick } from 'lodash';
 import AdvancedSearch from '../AdvancedSearch/AdvancedSearch.react';
+import Results from './Results.react';
 
 class ResultsPage extends Component {
   static propTypes = {
@@ -11,8 +11,15 @@ class ResultsPage extends Component {
       persons: PropTypes.string,
       date: PropTypes.string,
     }),
-    prices: PropTypes.array,
-    vehicles: PropTypes.array,
+    prices: PropTypes.arrayOf(PropTypes.shape({
+      price: PropTypes.any,
+      vehicleType: PropTypes.string,
+    })),
+    vehicles: PropTypes.arrayOf(PropTypes.shape({
+      type: PropTypes.string,
+      persons: PropTypes.string,
+      pictureName: PropTypes.string,
+    })),
     destinations: PropTypes.arrayOf(PropTypes.shape({
       city: PropTypes.string,
       primary: PropTypes.bool,
@@ -27,19 +34,6 @@ class ResultsPage extends Component {
     $('body').removeClass();
   }
 
-  _renderVehicles = () => {
-    const { prices, vehicles } = this.props;
-    return map(vehicles, ({type, persons, pictureName}) => {
-      const price = findWhere(prices, {vehicleType: type});
-
-      return (<VehicleColumn key={type}
-                             vehicleType={type}
-                             persons={persons}
-                             pictureName={pictureName}
-                             price={get(price, 'price')}/>);
-    });
-  }
-
   render() {
     const _date = new Date(parseInt(this.props.query.date, 10));
 
@@ -49,16 +43,7 @@ class ResultsPage extends Component {
                         destinations={this.props.destinations}
                         {...omit(this.props.query, 'date')}
                         date={_date}/>
-        <div className="wrap">
-          <div className="row">
-            <div className="full-width content">
-              <h2>Select transfer type for your DEPARTURE</h2>
-              <div className="results">
-                {this._renderVehicles()}
-              </div>
-            </div>
-          </div>
-        </div>
+        <Results {...pick(this.props, 'vehicles', 'prices')}/>
       </div>
     );
   }

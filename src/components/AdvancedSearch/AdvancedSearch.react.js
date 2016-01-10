@@ -7,7 +7,7 @@ class AdvancedSearch extends Component {
     from: PropTypes.string,
     to: PropTypes.string,
     persons: PropTypes.any,
-    date: PropTypes.any,
+    date: PropTypes.instanceOf(Date),
     twoWayEnabled: PropTypes.bool,
     destinations: PropTypes.array,
     onDateChange: PropTypes.func,
@@ -22,7 +22,7 @@ class AdvancedSearch extends Component {
     from: null,
     to: null,
     persons: null,
-    date: undefined,
+    date: null,
     twoWayEnabled: false,
   };
 
@@ -63,7 +63,7 @@ class AdvancedSearch extends Component {
     if (!this.state.return) {
       return null;
     }
-    return (<SearchRow />);
+    return (<SearchRow dateTimeLabel="RETURN DATE AND TIME"/>);
   }
 
   _renderRadioButtons() {

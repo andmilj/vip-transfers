@@ -5,9 +5,10 @@ import DateTimePicker from './DateTimePicker.react';
 class SearchRow extends Component {
   static propTypes = {
     destinations: PropTypes.array,
-    date: PropTypes.any,
+    date: PropTypes.instanceOf(Date),
     from: PropTypes.string,
     to: PropTypes.string,
+    dateTimeLabel: PropTypes.string,
     onDateChange: PropTypes.func.isRequired,
     onPickupChange: PropTypes.func.isRequired,
     onDropoffChange: PropTypes.func.isRequired,
@@ -15,7 +16,8 @@ class SearchRow extends Component {
 
   static defaultProps = {
     destinations: [],
-    date: undefined,
+    date: null,
+    dateTimeLabel: 'Departure date and time',
     from: '',
     to: '',
   };
@@ -34,7 +36,7 @@ class SearchRow extends Component {
     return (
       <div className="f-row">
         <div className="form-group datepicker one-third">
-          <label htmlFor="dep-date">Departure date and time</label>
+          <label htmlFor="dep-date">{this.props.dateTimeLabel}</label>
           <DateTimePicker onDateTimeChange={this.props.onDateChange} date={this.props.date}/>
         </div>
         <div className="form-group select one-third">

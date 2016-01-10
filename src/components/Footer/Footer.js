@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-// import withViewport from '../../decorators/withViewport';
-// import Link from '../Link';
 
-// @withViewport
 class Footer extends Component {
   render() {
     return (
@@ -16,8 +13,8 @@ class Footer extends Component {
             <article className="one-fourth">
               <h6>Need help?</h6>
               <p>Contact us via phone or email:</p>
-              <p className="contact-data"><span className="ico phone"></span> +1 555 555 555</p>
-              <p className="contact-data"><span className="ico email"></span> <a href="mailto:help@transfers.com">help@transfers.com</a></p>
+              <p className="contact-data"><span className="ico phone"></span> +385 91 123 456</p>
+              <p className="contact-data"><span className="ico email"></span> <a href="mailto:help@transfers.com">help@vip-transfers.com</a></p>
             </article>
             <article className="one-fourth">
               <h6>Follow us</h6>
@@ -26,24 +23,20 @@ class Footer extends Component {
                 <li className="twitter"><a href="#" title="twitter">twitter</a></li>
                 <li className="gplus"><a href="#" title="gplus">google plus</a></li>
                 <li className="linkedin"><a href="#" title="linkedin">linkedin</a></li>
-                <li className="vimeo"><a href="#" title="vimeo">vimeo</a></li>
-                <li className="pinterest"><a href="#" title="pinterest">pinterest</a></li>
               </ul>
             </article>
           </div>
 
           <div className="copy">
-            <p>Copyright 2014, Themeenergy. All rights reserved. </p>
+            <p>Copyright 2014, Vip transfers. All rights reserved. </p>
 
             <nav role="navigation" className="foot-nav">
               <ul>
                 <li><a href="#" title="Home">Home</a></li>
-                <li><a href="#" title="Blog">Blog</a></li>
                 <li><a href="#" title="About us">About us</a></li>
                 <li><a href="#" title="Contact us">Contact us</a></li>
                 <li><a href="#" title="Terms of use">Terms of use</a></li>
                 <li><a href="#" title="Help">Help</a></li>
-                <li><a href="#" title="For partners">For partners</a></li>
               </ul>
             </nav>
           </div>
