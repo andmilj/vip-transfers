@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { map } from 'lodash';
-import DatePicker from '../ToolBox/DatePicker';
+import DateTimePicker from './DateTimePicker.react';
 
 class SearchRow extends Component {
   static propTypes = {
@@ -35,9 +35,7 @@ class SearchRow extends Component {
       <div className="f-row">
         <div className="form-group datepicker one-third">
           <label htmlFor="dep-date">Departure date and time</label>
-            <DatePicker name="date"
-                        onChange={this.props.onDateChange}
-                        value={this.props.date}/>
+          <DateTimePicker onDateTimeChange={this.props.onDateChange} date={this.props.date}/>
         </div>
         <div className="form-group select one-third">
           <label>Pick up location</label>
