@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import Intro from '../Intro/Intro.react';
 import Services from '../Services/Services.react';
+import AdvancedSearch from '../AdvancedSearch/AdvancedSearch.react';
 
 class MainPage extends Component {
   static propTypes = {
@@ -21,6 +22,7 @@ class MainPage extends Component {
     return (
       <main className="main" role="main">
         <Intro />
+        <AdvancedSearch />
         <Services />
       </main>
     );
