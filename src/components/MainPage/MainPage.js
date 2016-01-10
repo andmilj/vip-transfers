@@ -3,6 +3,7 @@ import Intro from '../Intro/Intro.react';
 import Services from '../Services/Services.react';
 import AdvancedSearch from '../AdvancedSearch/AdvancedSearch.react';
 import Link from '../Link';
+import initTempScripts from '../App/style/js/scripts';
 
 class MainPage extends Component {
   static propTypes = {
@@ -32,6 +33,7 @@ class MainPage extends Component {
 
   componentDidMount() {
     $('body').removeClass().addClass('home');
+    initTempScripts();
   }
 
   _handleDateChange = (date) => {

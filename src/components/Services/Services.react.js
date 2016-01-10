@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class Services extends Component {
   render() {
     return (
-      <div className="services iconic white">
+      <div className="services iconic white" id="services">
         <div className="wrap">
           <div className="row">
             <div className="one-third wow fadeIn">
