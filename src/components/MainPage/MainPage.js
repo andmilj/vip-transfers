@@ -21,8 +21,8 @@ class MainPage extends Component {
     super(props);
 
     this.state = {
-      from: null,
-      to: null,
+      from: '',
+      to: '',
       persons: null,
       date: undefined,
       return: false,
@@ -80,8 +80,8 @@ class MainPage extends Component {
         <AdvancedSearch {...this.props} {...this.state}
           onDateChange={this._handleDateChange}
           onPersonChange={this._handlePersonsChange}
-          onDropoffChange={this._handlePrimarySelection}
-          onPickupChange={this._handleSecondarySelection}
+          onPickupChange={this._handlePrimarySelection}
+          onDropoffChange={this._handleSecondarySelection}
           onSubmit={this._handleSubmit} />
         <Services />
       </main>

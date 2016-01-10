@@ -4,11 +4,11 @@ import SearchRow from './SearchRow.react';
 
 class AdvancedSearch extends Component {
   static propTypes = {
-    from: PropTypes.any,
-    to: PropTypes.any,
+    from: PropTypes.string,
+    to: PropTypes.string,
     persons: PropTypes.any,
     date: PropTypes.any,
-    twoWayEnabled: PropTypes.boolean,
+    twoWayEnabled: PropTypes.bool,
     destinations: PropTypes.array,
     onDateChange: PropTypes.func,
     onPersonChange: PropTypes.func,
@@ -77,7 +77,7 @@ class AdvancedSearch extends Component {
           <input type="radio"
             name="radio"
             value="return"
-            onClick={this._handleRadio}
+            onChange={this._handleRadio}
             checked={this.state.return}/>
           <label htmlFor="return">Return</label>
         </div>
@@ -85,7 +85,7 @@ class AdvancedSearch extends Component {
           <input type="radio"
                 name="radio"
                 value="oneway"
-                onClick={this._handleRadio}
+                onChange={this._handleRadio}
                 checked={!this.state.return} />
           <label htmlFor="oneway">One way</label>
         </div>

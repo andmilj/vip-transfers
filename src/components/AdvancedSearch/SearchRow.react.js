@@ -6,6 +6,8 @@ class SearchRow extends Component {
   static propTypes = {
     destinations: PropTypes.array,
     date: PropTypes.any,
+    from: PropTypes.string,
+    to: PropTypes.string,
     onDateChange: PropTypes.func.isRequired,
     onPickupChange: PropTypes.func.isRequired,
     onDropoffChange: PropTypes.func.isRequired,
@@ -14,6 +16,8 @@ class SearchRow extends Component {
   static defaultProps = {
     destinations: [],
     date: undefined,
+    from: '',
+    to: '',
   };
 
   renderOptions() {
@@ -37,7 +41,7 @@ class SearchRow extends Component {
         </div>
         <div className="form-group select one-third">
           <label>Pick up location</label>
-          <select onChange={this.props.onPickupChange} defaultValue="">
+          <select onChange={this.props.onPickupChange} value={this.props.from}>
             <option value="">&nbsp;</option>
             <optgroup label="Croatia">
               {this.renderOptions()}
@@ -46,7 +50,7 @@ class SearchRow extends Component {
         </div>
         <div className="form-group select one-third">
           <label>Drop off location</label>
-          <select onChange={this.props.onDropoffChange} defaultValue="">
+          <select onChange={this.props.onDropoffChange} value={this.props.to}>
             <option value="">&nbsp;</option>
             <optgroup label="Croatia">
               {this.renderOptions()}

@@ -22,9 +22,13 @@ const router = new Router(on => {
   on('/admin/destinations', async () => <AdminPage />);
 
   on('/results', async state => {
-    const response = await fetch(Location.createHref('/api/prices', state.query));
-    const {prices, vehicles} = await response.json();
-    return <ResultsPage query={state.query} prices={prices} vehicles={vehicles}/>;
+    const respones = await Promise.all([
+      fetch(Location.createHref('/api/prices', state.query)),
+      fetch('/api/destinations'),
+    ]);
+    const {prices, vehicles} = await respones[0].json();
+    const destinations = await respones[1].json();
+    return <ResultsPage query={state.query} prices={prices} vehicles={vehicles} destinations={destinations}/>;
   });
 
   on('*', async () => {

@@ -1,13 +1,22 @@
 import React, { PropTypes, Component } from 'react';
 import VehicleColumn from '../VehicleColumn';
-import {map, findWhere, get} from 'lodash';
+import {map, findWhere, get, omit} from 'lodash';
 import AdvancedSearch from '../AdvancedSearch/AdvancedSearch.react';
 
 class ResultsPage extends Component {
   static propTypes = {
-    query: PropTypes.object,
+    query: PropTypes.shape({
+      from: PropTypes.string,
+      to: PropTypes.string,
+      persons: PropTypes.string,
+      date: PropTypes.string,
+    }),
     prices: PropTypes.array,
     vehicles: PropTypes.array,
+    destinations: PropTypes.arrayOf(PropTypes.shape({
+      city: PropTypes.string,
+      primary: PropTypes.bool,
+    })),
   }
 
   static defaultProps = {
@@ -32,9 +41,14 @@ class ResultsPage extends Component {
   }
 
   render() {
+    const _date = new Date(parseInt(this.props.query.date, 10));
+
     return (
       <div>
-        <AdvancedSearch twoWayEnabled/>
+        <AdvancedSearch twoWayEnabled
+                        destinations={this.props.destinations}
+                        {...omit(this.props.query, 'date')}
+                        date={_date}/>
         <div className="wrap">
           <div className="row">
             <div className="full-width content">
