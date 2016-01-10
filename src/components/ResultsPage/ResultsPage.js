@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
-import Parallax from '../Shared/Parallax.react';
 import VehicleColumn from '../VehicleColumn';
 import {map, findWhere, get} from 'lodash';
+import AdvancedSearch from '../AdvancedSearch/AdvancedSearch.react';
 
 class ResultsPage extends Component {
   static propTypes = {
@@ -12,6 +12,10 @@ class ResultsPage extends Component {
 
   static defaultProps = {
     prices: [],
+  }
+
+  componentDidMount() {
+    $('body').removeClass();
   }
 
   _renderVehicles = () => {
@@ -30,17 +34,17 @@ class ResultsPage extends Component {
   render() {
     return (
       <div>
-          <Parallax ordinal={1} />
-          <div className="section anchor">
-            <div className="light-wrapper">
-              <div className="container inner">
-                <div className="row pricing">
-                  {this._renderVehicles()}
-                </div>
+        <AdvancedSearch />
+        <div className="wrap">
+          <div className="row">
+            <div className="full-width content">
+              <h2>Select transfer type for your DEPARTURE</h2>
+              <div className="results">
+                {this._renderVehicles()}
               </div>
             </div>
           </div>
-          <Parallax ordinal={1} />
+        </div>
       </div>
     );
   }

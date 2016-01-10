@@ -25,11 +25,3 @@
     content: "\e916";
   }
 }
-
-.people {
-  @extend %icon;
-
-  &::before {
-    content: "\e7fb"
-  }
-}

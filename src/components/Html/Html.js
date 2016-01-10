@@ -42,7 +42,7 @@ class Html extends Component {
         <link rel="stylesheet" href="/app.css" />
         <style id="css" dangerouslySetInnerHTML={{__html: this.props.css}} />
       </head>
-      <body className="home">
+      <body>
         <div id="app" dangerouslySetInnerHTML={{__html: this.props.body}} />
         <script src="jquery.min.js"></script>
         <script src="jquery.uniform.min.js"></script>
