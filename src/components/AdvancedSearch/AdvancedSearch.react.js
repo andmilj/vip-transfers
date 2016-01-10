@@ -8,6 +8,7 @@ class AdvancedSearch extends Component {
     to: PropTypes.any,
     persons: PropTypes.any,
     date: PropTypes.any,
+    twoWayEnabled: PropTypes.boolean,
     destinations: PropTypes.array,
     onDateChange: PropTypes.func,
     onPersonChange: PropTypes.func,
@@ -22,6 +23,7 @@ class AdvancedSearch extends Component {
     to: null,
     persons: null,
     date: undefined,
+    twoWayEnabled: false,
   };
 
   constructor(props) {
@@ -64,47 +66,59 @@ class AdvancedSearch extends Component {
     return (<SearchRow />);
   }
 
+  _renderRadioButtons() {
+    if (!this.props.twoWayEnabled) {
+      return null;
+    }
+
+    return (
+      <div className="form-group radios">
+        <div>
+          <input type="radio"
+            name="radio"
+            value="return"
+            onClick={this._handleRadio}
+            checked={this.state.return}/>
+          <label htmlFor="return">Return</label>
+        </div>
+        <div>
+          <input type="radio"
+                name="radio"
+                value="oneway"
+                onClick={this._handleRadio}
+                checked={!this.state.return} />
+          <label htmlFor="oneway">One way</label>
+        </div>
+      </div>
+    );
+  }
+
   render() {
     return (
       <div className="advanced-search color" ref="advancedSearch" id="booking">
-			<div className="wrap">
-				<form role="form" action="/results" method="GET" onSubmit={this._handleSubmit}>
+        <div className="wrap">
+          <form role="form" action="/results" method="GET" onSubmit={this._handleSubmit}>
           <SearchRow {...this.props} />
           {this._renderReturnSearchRow()}
-					<div className="f-row">
-						<div className="form-group spinner">
-							<label htmlFor="people">How many people <small>(including children)</small>?</label>
-							<input type="number"
-                value={this.props.persons}
-                onChange={this.props.onPersonChange}
-                id="people"
-                min="1" />
-						</div>
-						<div className="form-group radios">
-							<div>
-								<input type="radio"
-                  name="radio"
-                  value="return"
-                  onClick={this._handleRadio}
-                  checked={this.state.return}/>
-								<label htmlFor="return">Return</label>
-							</div>
-							<div>
-								<input type="radio"
-                      name="radio"
-                      value="oneway"
-                      onClick={this._handleRadio}
-                      checked={!this.state.return} />
-								<label htmlFor="oneway">One way</label>
-							</div>
-						</div>
-						<div className="form-group right">
-							<button type="submit" className="btn large black">Find a transfer</button>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
+          <div className="f-row">
+            <div className="form-group spinner">
+            <label htmlFor="people">How many people <small>(including children)</small>?</label>
+            <input type="number"
+                    value={this.props.persons}
+                    onChange={this.props.onPersonChange}
+                    id="people"
+                    min="1" />
+            </div>
+            {this._renderRadioButtons()}
+            <div className="form-group right">
+              <button type="submit" className="btn large black">
+                Find a transfer
+              </button>
+            </div>
+          </div>
+          </form>
+        </div>
+      </div>
     );
   }
 }

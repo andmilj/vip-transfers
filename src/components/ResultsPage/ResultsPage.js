@@ -34,7 +34,7 @@ class ResultsPage extends Component {
   render() {
     return (
       <div>
-        <AdvancedSearch />
+        <AdvancedSearch twoWayEnabled/>
         <div className="wrap">
           <div className="row">
             <div className="full-width content">

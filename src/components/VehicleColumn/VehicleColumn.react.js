@@ -16,6 +16,37 @@ class VehicleColumn extends Component {
     pictureName: 'car.jpg',
   };
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showInformation: false,
+    };
+  }
+
+  toggleInformation = (e) => {
+    e.preventDefault();
+    this.setState({
+      showInformation: !this.state.showInformation,
+    });
+  }
+
+  _renderInformation() {
+    if (!this.state.showInformation) {
+      return null;
+    }
+
+    return (
+      <div className="full-width information">
+        <a href="#"
+          className="close color"
+          title="Close"
+          onClick={this.toggleInformation}>x</a>
+        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+      </div>
+    );
+  }
+
   render() {
     return (
       <article className="result">
@@ -24,7 +55,10 @@ class VehicleColumn extends Component {
         </div>
         <div className="one-half heightfix">
           <h3>{this.props.vehicleType}
-            <a href="#" className="trigger color" title="Read more">?</a>
+            <a href="#"
+              onClick={this.toggleInformation}
+              className="trigger color"
+              title="Read more">?</a>
           </h3>
           <ul>
             <li>
@@ -48,10 +82,7 @@ class VehicleColumn extends Component {
             <a href="booking-step1.html" className="btn grey large">select</a>
           </div>
         </div>
-        <div className="full-width information">
-          <a href="#" className="close color" title="Close">x</a>
-          <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-        </div>
+        {this._renderInformation()}
       </article>
     );
   }
