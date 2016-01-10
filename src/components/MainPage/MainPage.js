@@ -22,7 +22,7 @@ class MainPage extends Component {
     return (
       <main className="main" role="main">
         <Intro />
-        <AdvancedSearch />
+        <AdvancedSearch {...this.props}/>
         <Services />
       </main>
     );

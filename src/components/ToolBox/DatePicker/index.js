@@ -1,7 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import CalendarDialog from './Dialog';
 import events from '../utils/events';
-import Input from '../Input';
 import time from '../utils/time';
 
 class DatePicker extends Component {
@@ -35,21 +34,18 @@ class DatePicker extends Component {
   };
 
   render() {
-    const { value, error, placeholder, label, maxDate, minDate, name } = this.props;
+    const { value, placeholder, label, maxDate, minDate, name } = this.props;
     const date = value ? `${value.getDate()} ${time.getFullMonth(value)} ${value.getFullYear()}` : null;
 
     return (
       <div data-toolbox="date-picker" className="DatePicker">
-        <Input
-          className="DatePicker-input"
+        <input
           onClick={this.handleInputMouseDown}
           label={label}
           placeholder={placeholder}
           readOnly
           type="text"
-          icon="date-range"
           value={date}
-          error={error}
           name={name}
         />
         <CalendarDialog

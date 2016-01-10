@@ -1,95 +1,68 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import React, { PropTypes, Component } from 'react';
+import { findDOMNode } from 'react-dom';
+import SearchRow from './SearchRow.react';
 
 class AdvancedSearch extends Component {
+  static propTypes = {
+    destinations: PropTypes.array,
+  };
+
+  static defaultProps = {
+    destinations: [],
+  };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      from: null,
+      to: null,
+      persons: null,
+      date: undefined,
+      return: false,
+      error: {},
+    };
+  }
   componentDidMount() {
-    const {onewayCheckbox, returnCheckbox} = this.refs;
-    $([ReactDOM.findDOMNode(onewayCheckbox), ReactDOM.findDOMNode(returnCheckbox)]).uniform();
+    const { advancedSearch } = this.refs;
+    $(findDOMNode(advancedSearch))
+      .find('input[type=radio], input[type=checkbox],input[type=number], select')
+      .uniform();
+  }
+
+  componentDidUpdate() {
+    const { advancedSearch } = this.refs;
+    $(findDOMNode(advancedSearch))
+      .find('input[type=radio], input[type=checkbox],input[type=number], select')
+      .uniform();
+  }
+
+  _handleDateChange = (date) => {
+    this.setState({ date });
+  }
+
+  _handleRadio = (e) => {
+    this.setState({
+      return: e.target.value === 'return',
+    });
+  }
+
+  _renderReturnSearchRow() {
+    if (!this.state.return) {
+      return null;
+    }
+    return (<SearchRow {...this.props}/>);
   }
 
   render() {
     return (
-      <div className="advanced-search color" id="booking">
+      <div className="advanced-search color" ref="advancedSearch" id="booking">
 			<div className="wrap">
 				<form role="form" action="search-results.html" method="post">
-					<div className="f-row">
-						<div className="form-group datepicker one-third">
-							<label htmlFor="dep-date">Departure date and time</label>
-							<input type="text" id="dep-date" />
-						</div>
-						<div className="form-group select one-third">
-							<label>Pick up location</label>
-							<select>
-								<option selected>&nbsp;</option>
-								<optgroup label="Germany">
-									<option value="Berlin Central Train Station">Berlin Central Train Station</option>
-									<option value="Berlin Schonefeld Airport">Berlin Schonefeld Airport</option>
-									<option value="Berlin Tegel Airport">Berlin Tegel Airport</option>
-								</optgroup>
-								<optgroup label="United Kingdom">
-									<option value="Belfast City Airport">Belfast City Airport</option>
-									<option value="Belfast International Airport">Belfast International Airport</option>
-									<option value="Bristol Airport">Bristol Airport</option>
-								</optgroup>
-							</select>
-						</div>
-						<div className="form-group select one-third">
-							<label>Drop off location</label>
-              <select>
-                <option selected>&nbsp;</option>
-                <optgroup label="Germany">
-                  <option value="Berlin Central Train Station">Berlin Central Train Station</option>
-                  <option value="Berlin Schonefeld Airport">Berlin Schonefeld Airport</option>
-                  <option value="Berlin Tegel Airport">Berlin Tegel Airport</option>
-                </optgroup>
-                <optgroup label="United Kingdom">
-                  <option value="Belfast City Airport">Belfast City Airport</option>
-                  <option value="Belfast International Airport">Belfast International Airport</option>
-                  <option value="Bristol Airport">Bristol Airport</option>
-                </optgroup>
-              </select>
-						</div>
-					</div>
-
-					<div className="f-row">
-						<div className="form-group datepicker one-third">
-							<label htmlFor="ret-date">Return date and time</label>
-							<input type="text" id="ret-date" />
-						</div>
-						<div className="form-group select one-third">
-							<label>Pick up location</label>
-              <select>
-                <option selected>&nbsp;</option>
-                <optgroup label="Germany">
-                  <option value="Berlin Central Train Station">Berlin Central Train Station</option>
-                  <option value="Berlin Schonefeld Airport">Berlin Schonefeld Airport</option>
-                  <option value="Berlin Tegel Airport">Berlin Tegel Airport</option>
-                </optgroup>
-                <optgroup label="United Kingdom">
-                  <option value="Belfast City Airport">Belfast City Airport</option>
-                  <option value="Belfast International Airport">Belfast International Airport</option>
-                  <option value="Bristol Airport">Bristol Airport</option>
-                </optgroup>
-              </select>
-						</div>
-						<div className="form-group select one-third">
-							<label>Drop off location</label>
-              <select>
-                <option selected>&nbsp;</option>
-                <optgroup label="Germany">
-                  <option value="Berlin Central Train Station">Berlin Central Train Station</option>
-                  <option value="Berlin Schonefeld Airport">Berlin Schonefeld Airport</option>
-                  <option value="Berlin Tegel Airport">Berlin Tegel Airport</option>
-                </optgroup>
-                <optgroup label="United Kingdom">
-                  <option value="Belfast City Airport">Belfast City Airport</option>
-                  <option value="Belfast International Airport">Belfast International Airport</option>
-                  <option value="Bristol Airport">Bristol Airport</option>
-                </optgroup>
-              </select>
-						</div>
-					</div>
-
+          <SearchRow {...this.props}
+                      date={this.state.date}
+                      onDateChange={this._handleDateChange}/>
+          {this._renderReturnSearchRow()}
 					<div className="f-row">
 						<div className="form-group spinner">
 							<label htmlFor="people">How many people <small>(including children)</small>?</label>
@@ -97,20 +70,19 @@ class AdvancedSearch extends Component {
 						</div>
 						<div className="form-group radios">
 							<div>
-								<input ref="returnCheckbox"
-                  type="radio"
+								<input type="radio"
                   name="radio"
-                  id="return"
                   value="return"
-                  onClick={(e) => console.log(e.target.checked)}/>
+                  onClick={this._handleRadio}
+                  checked={this.state.return}/>
 								<label htmlFor="return">Return</label>
 							</div>
 							<div>
-								<input ref="onewayCheckbox"
-                      type="radio"
+								<input type="radio"
                       name="radio"
-                      id="oneway"
-                      value="oneway" checked />
+                      value="oneway"
+                      onClick={this._handleRadio}
+                      checked={!this.state.return} />
 								<label htmlFor="oneway">One way</label>
 							</div>
 						</div>

@@ -1,6 +1,11 @@
 @import "../base";
 @import "./config";
 
+.DatePicker::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
 .DatePicker {
     padding: $unit 0;
 }
