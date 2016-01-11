@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import ExtrasTable from './ExtrasTable.react';
-import ExtrasJson from '../../constants/Extras';
 
 class Extras extends Component {
   render() {
@@ -13,7 +12,7 @@ class Extras extends Component {
           </div>
           <div className="three-fourth">
             <form>
-              <ExtrasTable extras={ExtrasJson} />
+              <ExtrasTable />
               <div className="actions">
                 <a href="search-results.html"
                   className="btn medium back">Go back

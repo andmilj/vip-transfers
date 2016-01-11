@@ -1,31 +1,35 @@
 import React, { PropTypes, Component } from 'react';
-import { noop } from 'lodash';
 
 class ExtrasTableRow extends Component {
   static propTypes = {
     name: PropTypes.string.isRequired,
     info: PropTypes.string.isRequired,
     price: PropTypes.any.isRequired,
-    returnEnabled: PropTypes.bool,
-    onDepartureValueChange: PropTypes.func,
-    onReturnValueChange: PropTypes.func,
   };
 
-  static defaultProps = {
-    returnEnabled: false,
-    onDepartureValueChange: noop,
-    onReturnValueChange: noop,
+  static contextTypes = {
+    onDepartureValueChange: PropTypes.func,
+    onReturnValueChange: PropTypes.func,
+    returnEnabled: PropTypes.bool,
+  }
+
+  _onReturnValueChange = e => {
+    this.context.onReturnValueChange(this.props.name, e.target.value);
+  }
+
+  _onDepartureValueChange = e => {
+    this.context.onDepartureValueChange(this.props.name, e.target.value);
   }
 
   _renderReturnSelect = () => {
-    if (!this.props.returnEnabled) {
+    if (!this.context.returnEnabled) {
       return null;
     }
 
     return (
       <td>
         <select defaultValue="0"
-                onChange={this.props.onReturnValueChange}>
+                onChange={this._onReturnValueChange}>
           <option value="0">0</option>
           <option value="1">1</option>
           <option value="2">2</option>
@@ -46,7 +50,7 @@ class ExtrasTableRow extends Component {
         <td>{this.props.price}</td>
         <td>
           <select defaultValue="0"
-                  onChange={this.props.onDepartureValueChange}>
+                  onChange={this._onDepartureValueChange}>
             <option value="0">0</option>
             <option value="1">1</option>
             <option value="2">2</option>

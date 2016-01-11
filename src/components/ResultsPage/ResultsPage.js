@@ -3,14 +3,33 @@ import { omit, pick } from 'lodash';
 import AdvancedSearch from '../AdvancedSearch/AdvancedSearch.react';
 import Results from './Results.react';
 import Extras from './Extras.react';
+import ExtrasJson from '../../constants/Extras';
 
 class ResultsPage extends Component {
   static defaultProps = {
     prices: [],
   }
 
+  getChildContext() {
+    return {
+      extras: ExtrasJson,
+      onDepartureValueChange: this.handleDepartureValueChange,
+      onReturnValueChange: this.handleReturnValueChange,
+      returnEnabled: true,
+    };
+  }
+
   componentDidMount() {
     $('body').removeClass();
+  }
+
+  handleDepartureValueChange = (name, count) => {
+    console.log(name);
+    console.log(count);
+  }
+
+  handleReturnValueChange = (name, count) => {
+    console.log(name);
   }
 
   render() {
@@ -49,6 +68,17 @@ ResultsPage.propTypes = {
     city: PropTypes.string,
     primary: PropTypes.bool,
   })),
+};
+
+ResultsPage.childContextTypes = {
+  extras: PropTypes.arrayOf(PropTypes.shape({
+    info: PropTypes.string,
+    name: PropTypes.string,
+    price: PropTypes.number,
+  })).isRequired,
+  onDepartureValueChange: PropTypes.func.isRequired,
+  onReturnValueChange: PropTypes.func.isRequired,
+  returnEnabled: PropTypes.bool,
 };
 
 export default ResultsPage;

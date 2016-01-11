@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import SearchRow from './SearchRow.react';
+import { initUniform } from '../App/style/js/scripts';
 
 class AdvancedSearch extends Component {
   static propTypes = {
@@ -36,16 +37,12 @@ class AdvancedSearch extends Component {
 
   componentDidMount() {
     const { advancedSearch } = this.refs;
-    $(findDOMNode(advancedSearch))
-      .find('input[type=radio], input[type=checkbox],input[type=number], select')
-      .uniform();
+    initUniform(findDOMNode(advancedSearch));
   }
 
   componentDidUpdate() {
     const { advancedSearch } = this.refs;
-    $(findDOMNode(advancedSearch))
-      .find('input[type=radio], input[type=checkbox],input[type=number], select')
-      .uniform();
+    initUniform(findDOMNode(advancedSearch));
   }
 
   _handleRadio = (e) => {

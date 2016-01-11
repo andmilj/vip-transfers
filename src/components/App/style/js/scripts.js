@@ -1,4 +1,4 @@
-function init() {
+export function initScroll() {
   const $root = $('html, body');
   $('a.anchor').click(function(e) {
     const href = $.attr(this, 'href');
@@ -20,4 +20,8 @@ function init() {
   });
 }
 
-export default init;
+export function initUniform(nodes) {
+  $(nodes)
+    .find('input[type=radio], input[type=checkbox],input[type=number], select')
+    .uniform();
+}

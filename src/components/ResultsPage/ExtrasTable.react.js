@@ -1,47 +1,37 @@
 import React, { Component, PropTypes } from 'react';
+import { findDOMNode } from 'react-dom';
 import ExtrasTableRow from './ExtrasTableRow.react';
 import { map } from 'lodash';
+import { initUniform } from '../App/style/js/scripts';
 
 class ExtrasTable extends Component {
-  static propTypes = {
+  static contextTypes = {
     extras: PropTypes.arrayOf(PropTypes.shape({
       info: PropTypes.string,
       name: PropTypes.string,
       price: PropTypes.number,
     })),
-    onDepartureValueChange: PropTypes.func.isRequired,
-    onReturnValueChange: PropTypes.func.isRequired,
     returnEnabled: PropTypes.bool,
+  };
+
+  componentDidMount() {
+    initUniform(findDOMNode(this.refs.table));
   }
 
-  static defaultProps = {
-    extras: [],
-    returnEnabled: false,
-  }
-
-  handleDepartureValueChange = (name, count) => {
-    console.log(name);
-    this.props.onDepartureValueChange(name, count);
-  }
-
-  handleReturnValueChange = (name, count) => {
-    console.log(name);
-    this.props.onReturnValueChange(name, count);
+  componentDidUpdate() {
+    initUniform(findDOMNode(this.refs.table));
   }
 
   _renderRows = () => {
-    return map(this.props.extras, extra => {
-      return (<ExtrasTableRow {...extra}
-                              returnEnabled={this.props.returnEnabled}
-                              onDepartureValueChange={this.handleDepartureValueChange}
-                              onReturnValueChange={this.handleReturnValueChange}/>);
+    return map(this.context.extras, extra => {
+      return (<ExtrasTableRow key={extra.name} {...extra} />);
     });
   }
 
   render() {
-    const { returnEnabled } = this.props;
+    const { returnEnabled } = this.context;
     return (
-      <table className="data responsive">
+      <table ref="table" className="data responsive">
         <thead>
           <tr>
             <th>Baggage type</th>
