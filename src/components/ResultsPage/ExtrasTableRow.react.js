@@ -14,11 +14,11 @@ class ExtrasTableRow extends Component {
   }
 
   _onReturnValueChange = e => {
-    this.context.onReturnValueChange(this.props.name, e.target.value);
+    this.context.onReturnValueChange(this.props.name, parseInt(e.target.value, 10));
   }
 
   _onDepartureValueChange = e => {
-    this.context.onDepartureValueChange(this.props.name, e.target.value);
+    this.context.onDepartureValueChange(this.props.name, parseInt(e.target.value, 10));
   }
 
   _renderReturnSelect = () => {

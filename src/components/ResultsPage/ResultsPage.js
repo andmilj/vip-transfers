@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { omit, pick } from 'lodash';
+import { omit, pick, assign } from 'lodash';
 import AdvancedSearch from '../AdvancedSearch/AdvancedSearch.react';
 import Results from './Results.react';
 import Extras from './Extras.react';
@@ -10,12 +10,37 @@ class ResultsPage extends Component {
     prices: [],
   }
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      bookingStep: 1,
+      extrasDeparture: {},
+      extrasReturn: {},
+      returnEnabled: false,
+      vehicleType: null,
+      queryReturn: {
+        from: null,
+        to: null,
+        persons: null,
+        date: null,
+      },
+    };
+  }
+
   getChildContext() {
     return {
       extras: ExtrasJson,
       onDepartureValueChange: this.handleDepartureValueChange,
       onReturnValueChange: this.handleReturnValueChange,
-      returnEnabled: true,
+      onVehicleTypeSelect: this.handleVehicleTypeSelect,
+      returnEnabled: this.state.returnEnabled,
+      onStepBack: this.handleStepBack,
+      extrasDeparture: this.state.extrasDeparture,
+      extrasReturn: this.state.extrasReturn,
+      query: this.props.query,
+      queryReturn: this.state.queryReturn,
+      vehicleType: this.state.vehicleType,
     };
   }
 
@@ -23,38 +48,68 @@ class ResultsPage extends Component {
     $('body').removeClass();
   }
 
+  handleVehicleTypeSelect = (type) => {
+    this.setState({
+      vehicleType: type,
+      bookingStep: 2,
+    });
+  }
+
+  handleStepBack = () => {
+    this.setState({
+      bookingStep: this.state.bookingStep - 1,
+    });
+  }
+
   handleDepartureValueChange = (name, count) => {
-    console.log(name);
-    console.log(count);
+    this.setState({
+      extrasDeparture: assign({}, this.state.extrasDeparture, {
+        [name]: count,
+      }),
+    });
   }
 
   handleReturnValueChange = (name, count) => {
-    console.log(name);
+    this.setState({
+      extrasReturn: assign({}, this.state.extrasReturn, {
+        [name]: count,
+      }),
+    });
   }
 
   render() {
+    const { bookingStep } = this.state;
     const _date = new Date(parseInt(this.props.query.date, 10));
 
-    return (
-      <div>
-        <AdvancedSearch twoWayEnabled
-                        destinations={this.props.destinations}
-                        {...omit(this.props.query, 'date')}
-                        date={_date}/>
-        <Results {...pick(this.props, 'vehicles', 'prices')}/>
+    if (bookingStep === 1) {
+      return (
+        <div>
+          <AdvancedSearch twoWayEnabled
+                          destinations={this.props.destinations}
+                          {...omit(this.props.query, 'date')}
+                          date={_date}/>
+          <Results {...pick(this.props, 'vehicles', 'prices')}/>
+        </div>
+      );
+    }
+
+    if (bookingStep === 2) {
+      return (
         <Extras />
-      </div>
-    );
+      );
+    }
   }
 }
 
+const queryShape = PropTypes.shape({
+  from: PropTypes.string,
+  to: PropTypes.string,
+  persons: PropTypes.string,
+  date: PropTypes.string,
+});
+
 ResultsPage.propTypes = {
-  query: PropTypes.shape({
-    from: PropTypes.string,
-    to: PropTypes.string,
-    persons: PropTypes.string,
-    date: PropTypes.string,
-  }),
+  query: queryShape,
   prices: PropTypes.arrayOf(PropTypes.shape({
     price: PropTypes.any,
     vehicleType: PropTypes.string,
@@ -78,7 +133,14 @@ ResultsPage.childContextTypes = {
   })).isRequired,
   onDepartureValueChange: PropTypes.func.isRequired,
   onReturnValueChange: PropTypes.func.isRequired,
+  onVehicleTypeSelect: PropTypes.func.isRequired,
   returnEnabled: PropTypes.bool,
+  onStepBack: PropTypes.func.isRequired,
+  extrasDeparture: PropTypes.object,
+  extrasReturn: PropTypes.object,
+  query: queryShape,
+  queryReturn: queryShape,
+  vehicleType: PropTypes.string,
 };
 
 export default ResultsPage;
