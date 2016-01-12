@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
-import { reduce, find } from 'lodash';
+import { reduce, find, pick, map } from 'lodash';
 
 const queryShape = PropTypes.shape({
   from: PropTypes.string,
@@ -37,6 +37,17 @@ class BookingSummary extends Component {
     return this.context.vehicleOneWayPrice + priceDeparture + priceReturn;
   }
 
+  renderDepartureExtras = () => {
+    return map(pick(this.context.extrasDeparture, value => !!value), (times, name) => {
+      return (
+        <span>
+          <dt>Extras</dt>
+          <dd>{times} x {name}</dd>
+        </span>
+      );
+    });
+  }
+
   renderReturnSummary = () => {
     if (!this.context.returnEnabled) {
       return null;
@@ -53,6 +64,7 @@ class BookingSummary extends Component {
           <dd>London bus station</dd>
           <dt>Vehicle</dt>
           <dd>Private shuttle</dd>
+          {this.renderDepartureExtras()}
         </dl>
       </div>
     );
@@ -77,6 +89,7 @@ class BookingSummary extends Component {
                 <dd>{this.context.query.to}</dd>
                 <dt>Vehicle</dt>
                 <dd>{this.context.vehicleType}</dd>
+                {this.renderDepartureExtras()}
               </dl>
             </div>
             {this.renderReturnSummary()}

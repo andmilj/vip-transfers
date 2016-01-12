@@ -11,6 +11,8 @@ class ExtrasTableRow extends Component {
     onDepartureValueChange: PropTypes.func,
     onReturnValueChange: PropTypes.func,
     returnEnabled: PropTypes.bool,
+    extrasDeparture: PropTypes.object,
+    extrasReturn: PropTypes.object,
   }
 
   _onReturnValueChange = e => {
@@ -25,10 +27,10 @@ class ExtrasTableRow extends Component {
     if (!this.context.returnEnabled) {
       return null;
     }
-
+    const selectedValue = this.context.extrasReturn[this.props.name] || 0;
     return (
       <td>
-        <select defaultValue="0"
+        <select value={selectedValue}
                 onChange={this._onReturnValueChange}>
           <option value="0">0</option>
           <option value="1">1</option>
@@ -42,6 +44,7 @@ class ExtrasTableRow extends Component {
   }
 
   render() {
+    const selectedValue = this.context.extrasDeparture[this.props.name] || 0;
     return (
       <tr>
         <td>{this.props.name}
@@ -49,7 +52,7 @@ class ExtrasTableRow extends Component {
         </td>
         <td>{this.props.price}</td>
         <td>
-          <select defaultValue="0"
+          <select value={selectedValue}
                   onChange={this._onDepartureValueChange}>
             <option value="0">0</option>
             <option value="1">1</option>
