@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
+import { reduce, find } from 'lodash';
 
 const queryShape = PropTypes.shape({
   from: PropTypes.string,
@@ -10,12 +11,30 @@ const queryShape = PropTypes.shape({
 
 class BookingSummary extends Component {
   static contextTypes = {
+    extras: PropTypes.arrayOf(PropTypes.shape({
+      name: PropTypes.string,
+      price: PropTypes.number,
+    })).isRequired,
     extrasDeparture: PropTypes.object,
     extrasReturn: PropTypes.object,
-    query: queryShape,
+    query: queryShape.isRequired,
     queryReturn: queryShape,
-    vehicleType: PropTypes.string,
-    returnEnabled: PropTypes.bool,
+    vehicleType: PropTypes.string.isRequired,
+    returnEnabled: PropTypes.bool.isRequired,
+    vehicleOneWayPrice: PropTypes.number,
+  }
+
+  reducePriceFromExtras = (extraType) => {
+    return reduce(extraType, (result, value, name) => {
+      return result + find(this.context.extras, { name }).price * value;
+    }, 0);
+  }
+
+  calculatePrice = () => {
+    const { extrasDeparture, extrasReturn } = this.context;
+    const priceDeparture = this.reducePriceFromExtras(extrasDeparture);
+    const priceReturn = this.reducePriceFromExtras(extrasReturn);
+    return this.context.vehicleOneWayPrice + priceDeparture + priceReturn;
   }
 
   renderReturnSummary = () => {
@@ -63,7 +82,7 @@ class BookingSummary extends Component {
             {this.renderReturnSummary()}
             <dl className="total">
               <dt>Total</dt>
-              <dd>800,00 usd</dd>
+              <dd>{this.calculatePrice()} usd</dd>
             </dl>
           </div>
         </div>

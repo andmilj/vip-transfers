@@ -19,6 +19,7 @@ class ResultsPage extends Component {
       extrasReturn: {},
       returnEnabled: false,
       vehicleType: null,
+      vehicleOneWayPrice: null,
       queryReturn: {
         from: null,
         to: null,
@@ -31,16 +32,17 @@ class ResultsPage extends Component {
   getChildContext() {
     return {
       extras: ExtrasJson,
-      onDepartureValueChange: this.handleDepartureValueChange,
-      onReturnValueChange: this.handleReturnValueChange,
-      onVehicleTypeSelect: this.handleVehicleTypeSelect,
-      returnEnabled: this.state.returnEnabled,
-      onStepBack: this.handleStepBack,
       extrasDeparture: this.state.extrasDeparture,
       extrasReturn: this.state.extrasReturn,
+      onDepartureValueChange: this.handleDepartureValueChange,
+      onReturnValueChange: this.handleReturnValueChange,
+      onStepBack: this.handleStepBack,
+      onVehicleTypeSelect: this.handleVehicleTypeSelect,
+      returnEnabled: this.state.returnEnabled,
       query: this.props.query,
       queryReturn: this.state.queryReturn,
       vehicleType: this.state.vehicleType,
+      vehicleOneWayPrice: this.state.vehicleOneWayPrice,
     };
   }
 
@@ -48,9 +50,10 @@ class ResultsPage extends Component {
     $('body').removeClass();
   }
 
-  handleVehicleTypeSelect = (type) => {
+  handleVehicleTypeSelect = (type, price) => {
     this.setState({
       vehicleType: type,
+      vehicleOneWayPrice: price,
       bookingStep: 2,
     });
   }
@@ -131,16 +134,17 @@ ResultsPage.childContextTypes = {
     name: PropTypes.string,
     price: PropTypes.number,
   })).isRequired,
-  onDepartureValueChange: PropTypes.func.isRequired,
-  onReturnValueChange: PropTypes.func.isRequired,
-  onVehicleTypeSelect: PropTypes.func.isRequired,
-  returnEnabled: PropTypes.bool,
-  onStepBack: PropTypes.func.isRequired,
   extrasDeparture: PropTypes.object,
   extrasReturn: PropTypes.object,
+  onDepartureValueChange: PropTypes.func.isRequired,
+  onReturnValueChange: PropTypes.func.isRequired,
+  onStepBack: PropTypes.func.isRequired,
+  onVehicleTypeSelect: PropTypes.func.isRequired,
+  returnEnabled: PropTypes.bool,
   query: queryShape,
   queryReturn: queryShape,
   vehicleType: PropTypes.string,
+  vehicleOneWayPrice: PropTypes.number,
 };
 
 export default ResultsPage;

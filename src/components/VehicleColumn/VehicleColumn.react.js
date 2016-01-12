@@ -50,7 +50,7 @@ class VehicleColumn extends Component {
   }
 
   handleVehicleTypeSelect = () => {
-    this.context.onVehicleTypeSelect(this.props.vehicleType);
+    this.context.onVehicleTypeSelect(this.props.vehicleType, parseInt(this.props.price, 10));
   }
 
   render() {
