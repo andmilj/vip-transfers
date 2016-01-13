@@ -1,11 +1,12 @@
 import React, { PropTypes, Component } from 'react';
-import AdvancedSearch from '../AdvancedSearch/AdvancedSearch.react';
 import Extras from './Extras.react';
 import ExtrasJson from '../../constants/Extras';
 import PassengerDetails from './PassengerDetails.react';
-import Results from './Results.react';
+import VehicleResults from './VehicleResults.react';
 
-import { omit, pick, assign } from 'lodash';
+import { findDOMNode } from 'react-dom';
+
+import { assign } from 'lodash';
 
 class ResultsPage extends Component {
   static defaultProps = {
@@ -61,12 +62,14 @@ class ResultsPage extends Component {
   }
 
   handleStepBack = () => {
+    findDOMNode(this).scrollIntoView();
     this.setState({
       bookingStep: this.state.bookingStep - 1,
     });
   }
 
   handleStepForward = (additionalState = {}) => {
+    findDOMNode(this).scrollIntoView();
     this.setState(assign({}, {
       bookingStep: this.state.bookingStep + 1,
     }, additionalState));
@@ -90,17 +93,10 @@ class ResultsPage extends Component {
 
   render() {
     const { bookingStep } = this.state;
-    const _date = new Date(parseInt(this.props.query.date, 10));
 
     if (bookingStep === 1) {
       return (
-        <div>
-          <AdvancedSearch twoWayEnabled
-                          destinations={this.props.destinations}
-                          {...omit(this.props.query, 'date')}
-                          date={_date}/>
-          <Results {...pick(this.props, 'vehicles', 'prices')}/>
-        </div>
+        <VehicleResults {...this.props}/>
       );
     }
 
