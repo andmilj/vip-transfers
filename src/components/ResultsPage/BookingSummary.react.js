@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
+import classNames from 'classnames';
 import { reduce, find, pick, map } from 'lodash';
 
 const queryShape = PropTypes.shape({
@@ -10,6 +11,10 @@ const queryShape = PropTypes.shape({
 });
 
 class BookingSummary extends Component {
+  static propTypes = {
+    className: PropTypes.string,
+  }
+
   static contextTypes = {
     extras: PropTypes.arrayOf(PropTypes.shape({
       name: PropTypes.string,
@@ -72,9 +77,10 @@ class BookingSummary extends Component {
 
   render() {
     const _date = moment(parseInt(this.context.query.date, 10));
+    const c = classNames('sidebar right', this.props.className);
 
     return (
-      <aside className="one-fourth sidebar right">
+      <aside className={c}>
         <div className="widget">
           <h4>Booking summary</h4>
           <div className="summary">

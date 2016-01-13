@@ -1,9 +1,11 @@
 import React, { PropTypes, Component } from 'react';
-import { omit, pick, assign } from 'lodash';
 import AdvancedSearch from '../AdvancedSearch/AdvancedSearch.react';
-import Results from './Results.react';
 import Extras from './Extras.react';
 import ExtrasJson from '../../constants/Extras';
+import PassengerDetails from './PassengerDetails.react';
+import Results from './Results.react';
+
+import { omit, pick, assign } from 'lodash';
 
 class ResultsPage extends Component {
   static defaultProps = {
@@ -37,6 +39,7 @@ class ResultsPage extends Component {
       onDepartureValueChange: this.handleDepartureValueChange,
       onReturnValueChange: this.handleReturnValueChange,
       onStepBack: this.handleStepBack,
+      onStepForward: this.handleStepForward,
       onVehicleTypeSelect: this.handleVehicleTypeSelect,
       returnEnabled: this.state.returnEnabled,
       query: this.props.query,
@@ -51,10 +54,9 @@ class ResultsPage extends Component {
   }
 
   handleVehicleTypeSelect = (type, price) => {
-    this.setState({
+    this.handleStepForward({
       vehicleType: type,
       vehicleOneWayPrice: price,
-      bookingStep: 2,
     });
   }
 
@@ -62,6 +64,12 @@ class ResultsPage extends Component {
     this.setState({
       bookingStep: this.state.bookingStep - 1,
     });
+  }
+
+  handleStepForward = (additionalState = {}) => {
+    this.setState(assign({}, {
+      bookingStep: this.state.bookingStep + 1,
+    }, additionalState));
   }
 
   handleDepartureValueChange = (name, count) => {
@@ -99,6 +107,12 @@ class ResultsPage extends Component {
     if (bookingStep === 2) {
       return (
         <Extras />
+      );
+    }
+
+    if (bookingStep === 3) {
+      return (
+        <PassengerDetails />
       );
     }
   }
@@ -139,6 +153,7 @@ ResultsPage.childContextTypes = {
   onDepartureValueChange: PropTypes.func.isRequired,
   onReturnValueChange: PropTypes.func.isRequired,
   onStepBack: PropTypes.func.isRequired,
+  onStepForward: PropTypes.func.isRequired,
   onVehicleTypeSelect: PropTypes.func.isRequired,
   returnEnabled: PropTypes.bool,
   query: queryShape,
