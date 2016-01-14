@@ -45,6 +45,7 @@
     "eslint-loader": "^1.1.1",
     "eslint-plugin-react": "^3.7.1",
     "extract-text-webpack-plugin": "^0.9.1",
+    "file-loader": "^0.8.5",
     "gaze": "^0.5.2",
     "git-repository": "^0.1.1",
     "glob": "^6.0.1",
