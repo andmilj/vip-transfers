@@ -12,11 +12,17 @@ class AdvancedSearch extends Component {
     twoWayEnabled: PropTypes.bool,
     destinations: PropTypes.array,
     onDateChange: PropTypes.func,
+    onReturnDateChange: PropTypes.func,
     onPersonChange: PropTypes.func,
     onDropoffChange: PropTypes.func,
     onPickupChange: PropTypes.func,
     onSubmit: PropTypes.func,
   };
+
+  static contextTypes = {
+    onReturnToggle: PropTypes.func,
+    returnEnabled: PropTypes.bool,
+  }
 
   static defaultProps = {
     destinations: [],
@@ -26,14 +32,6 @@ class AdvancedSearch extends Component {
     date: null,
     twoWayEnabled: false,
   };
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      return: false,
-    };
-  }
 
   componentDidMount() {
     const { advancedSearch } = this.refs;
@@ -45,10 +43,8 @@ class AdvancedSearch extends Component {
     initUniform(findDOMNode(advancedSearch));
   }
 
-  _handleRadio = (e) => {
-    this.setState({
-      return: e.target.value === 'return',
-    });
+  _handleRadio = () => {
+    this.context.onReturnToggle();
   }
 
   _handleSubmit= (e) => {
@@ -57,10 +53,14 @@ class AdvancedSearch extends Component {
   }
 
   _renderReturnSearchRow() {
-    if (!this.state.return) {
+    if (!this.context.returnEnabled) {
       return null;
     }
-    return (<SearchRow dateTimeLabel="RETURN DATE AND TIME"/>);
+    return (<SearchRow dateTimeLabel="RETURN DATE AND TIME"
+                       destinations={this.props.destinations}
+                       from={this.props.to}
+                       to={this.props.from}
+                       onDateChange={this.props.onReturnDateChange}/>);
   }
 
   _renderRadioButtons() {
@@ -75,7 +75,7 @@ class AdvancedSearch extends Component {
             name="radio"
             value="return"
             onChange={this._handleRadio}
-            checked={this.state.return}/>
+            checked={this.context.returnEnabled}/>
           <label htmlFor="return">Return</label>
         </div>
         <div>
@@ -83,7 +83,7 @@ class AdvancedSearch extends Component {
                 name="radio"
                 value="oneway"
                 onChange={this._handleRadio}
-                checked={!this.state.return} />
+                checked={!this.context.returnEnabled} />
           <label htmlFor="oneway">One way</label>
         </div>
       </div>

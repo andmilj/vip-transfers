@@ -41,6 +41,7 @@ class ResultsPage extends Component {
       onReturnValueChange: this.handleReturnValueChange,
       onStepBack: this.handleStepBack,
       onStepForward: this.handleStepForward,
+      onReturnToggle: this.handleReturnToggle,
       onVehicleTypeSelect: this.handleVehicleTypeSelect,
       returnEnabled: this.state.returnEnabled,
       query: this.props.query,
@@ -52,6 +53,12 @@ class ResultsPage extends Component {
 
   componentDidMount() {
     $('body').removeClass();
+  }
+
+  handleReturnToggle = () => {
+    this.setState({
+      returnEnabled: !this.state.returnEnabled,
+    });
   }
 
   handleVehicleTypeSelect = (type, price) => {
@@ -150,6 +157,7 @@ ResultsPage.childContextTypes = {
   onReturnValueChange: PropTypes.func.isRequired,
   onStepBack: PropTypes.func.isRequired,
   onStepForward: PropTypes.func.isRequired,
+  onReturnToggle: PropTypes.func,
   onVehicleTypeSelect: PropTypes.func.isRequired,
   returnEnabled: PropTypes.bool,
   query: queryShape,
