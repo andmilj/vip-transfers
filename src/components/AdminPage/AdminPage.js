@@ -1,7 +1,6 @@
 /*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
 
 import React, { PropTypes, Component } from 'react';
-import $ from 'jquery';
 
 import withStyles from '../../decorators/withStyles';
 import Link from '../Link';
@@ -38,79 +37,70 @@ class AdminPage extends Component {
         });
       })
       .statusCode({
-        401: () => {
-          this.setState({
-            isLoading: false,
-          });
-        },
+        401: () => this.setState({isLoading: false}),
       });
   }
 
-  _handleLogout = (e) => {
+  _handleLogout(e) {
     e.preventDefault();
 
     $.post('/api/auth/destroy')
-      .done(() => {
-        this.setState({
-          user: undefined,
-        });
-      })
+      .done(() => this.setState({user: undefined}))
       .fail(() => window.location.reload());
   }
 
-  _handleLogin = (user) => {
+  _handleLogin(user) {
     this.setState({ user });
-  }
-
-  _renderPage() {
-    const { user } = this.state;
-
-    let pageContent;
-    const pageUrl = window.location.pathname.split('/')[2];
-
-    switch (pageUrl) {
-    case 'dashboard':
-      pageContent = <Dashboard/>;
-      break;
-    case 'destinations':
-      pageContent = <Destinations/>;
-      break;
-    default:
-      pageContent = <Dashboard/>;
-    }
-
-    return (
-      <div>
-        <div className="row">
-          <div className="col-md-6">
-            <ul className="nav nav-pills">
-              <li role="presentation"><Link to="/admin/dashboard">Dashboard</Link></li>
-              <li role="presentation"><Link to="/admin/destinations">Destinations</Link></li>
-            </ul>
-          </div>
-          <div className="col-md-6">
-            <div className="text-right">
-              <span>Welcome back, <strong>{user.firstName}</strong>! </span>
-              <a href="#" className="navbar-link" onClick={this._handleLogout}>Logout</a>
-            </div>
-          </div>
-        </div>
-        <br/>
-        <div className="row">
-          <div className="col-md-12">
-            {pageContent}
-          </div>
-        </div>
-      </div>
-    );
   }
 
   _renderContent() {
     const { user } = this.state;
 
-    return user
-      ? this._renderPage()
-      : <LoginForm onLogin={this._handleLogin}/>;
+    let pageTitle;
+    let pageContent;
+    const pageUrl = window.location.pathname.split('/')[2];
+
+    if (user) {
+      switch (pageUrl) {
+      case 'dashboard':
+        pageTitle = 'Dashboard';
+        pageContent = <Dashboard/>;
+        break;
+      case 'destinations':
+        pageTitle = 'Destinations';
+        pageContent = <Destinations/>;
+        break;
+      default:
+        pageTitle = 'Dashboard';
+        pageContent = <Dashboard/>;
+      }
+    } else {
+      pageTitle = 'Login';
+      pageContent = <LoginForm onLogin={this._handleLogin.bind(this)}/>;
+    }
+
+    return (
+      <main className="main" role="main">
+        <header className="site-title color">
+          <div className="wrap">
+            <div className="container">
+              <h1>{pageTitle}</h1>
+              {user && (
+                <nav role="navigation" className="breadcrumbs">
+                  <ul>
+                    <li><Link to="/admin/dashboard">Dashboard</Link></li>
+                    <li><Link to="/admin/destinations">Destinations</Link></li>
+                    <li><a href="#" onClick={this._handleLogout.bind(this)}>Logout</a></li>
+                    <li>{user.firstName}</li>
+                  </ul>
+                </nav>
+              )}
+            </div>
+          </div>
+        </header>
+        {pageContent}
+      </main>
+    );
   }
 
   _renderLoading() {
@@ -124,10 +114,8 @@ class AdminPage extends Component {
     const { isLoading } = this.state;
 
     return (
-      <div className="AdminPage">
-        <div className="container">
-          {isLoading ? this._renderLoading() : this._renderContent()}
-        </div>
+      <div id="AdminPage">
+        {isLoading ? this._renderLoading() : this._renderContent()}
       </div>
     );
   }

@@ -1,7 +1,6 @@
 /*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
 
 import React, { PropTypes, Component } from 'react';
-import $ from 'jquery';
 import _ from 'lodash';
 
 import withStyles from '../../../../decorators/withStyles';
@@ -111,40 +110,41 @@ class Destinations extends Component {
   }
 
   _renderTable() {
-    return (
-      <table className="table table-striped">
-        <thead>
-          <tr>
-             <th width="50">#</th>
-             <th width="100">Primary</th>
-             <th>City</th>
-             <th>Country</th>
-             <th>Country Short</th>
-             <th width="100">Type</th>
-             <th width="130">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {this.state.destinations.map(destination => {
-            return (
-              <tr key={destination._id}>
-                <td>#</td>
-                <td>{destination.primary ? 'Yes' : 'No'}</td>
-                <td>{destination.city}</td>
-                <td>{destination.country}</td>
-                <td>{destination.countryShort}</td>
-                <td>{destination.type}</td>
-                <td>
-                  <button onClick={() => this._showDestinationModal(destination._id)}>Edit</button>
-                  <span> | </span>
-                  <button onClick={() => this._deleteDestination(destination._id)}>Delete</button>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    );
+    return !this.state.isModalShown
+      ? (
+        <table className="table table-striped">
+          <thead>
+            <tr>
+               <th width="50">#</th>
+               <th width="100">Primary</th>
+               <th>City</th>
+               <th>Country</th>
+               <th>Country Short</th>
+               <th width="100">Type</th>
+               <th width="190">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.state.destinations.map(destination => {
+              return (
+                <tr key={destination._id}>
+                  <td>#</td>
+                  <td>{destination.primary ? 'Yes' : 'No'}</td>
+                  <td>{destination.city}</td>
+                  <td>{destination.country}</td>
+                  <td>{destination.countryShort}</td>
+                  <td>{destination.type}</td>
+                  <td>
+                    <button className="btn small color" onClick={() => this._showDestinationModal(destination._id)}>Edit</button>
+                    <span> | </span>
+                    <button className="btn small color" onClick={() => this._deleteDestination(destination._id)}>Delete</button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      ) : null;
   }
 
   render() {
@@ -152,14 +152,20 @@ class Destinations extends Component {
     this.context.onSetTitle(title);
 
     return (
-      <div className="Destinations">
-        <div className="pull-right">
-          <button onClick={this._showCreateDestinationModal}>Create</button>
+      <div id="Destinations">
+        <div className="wrap">
+          <div className="row">
+            <div className="content">
+              <div className="box">
+                <button className="btn color medium right" onClick={this._showCreateDestinationModal}>Create</button>
+                <h1>Destinations</h1>
+                <br/>
+                {this._renderTable()}
+                {this._renderModal()}
+              </div>
+            </div>
+          </div>
         </div>
-        <h1>Destinations</h1>
-        <br/>
-        {this._renderModal()}
-        {this._renderTable()}
       </div>
     );
   }

@@ -48,15 +48,12 @@ class Destination extends Component {
     this.context.onSetTitle(title);
 
     return (
-      <form onSubmit={this._handleSubmit} className="Destination modal show" tabIndex="-1" role="dialog">
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <button onClick={this.props.onClose} type="button" className="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 className="modal-title">Destination</h4>
-            </div>
-            <div className="modal-body">
-              <div className="form-group">
+      <form onSubmit={this._handleSubmit}>
+        <div>
+          <div>
+            <h4>Destination</h4>
+            <div>
+              <div>
                 <label forHtml="destination[primary]">Primary</label>
                 <input
                   type="checkbox"
@@ -65,7 +62,7 @@ class Destination extends Component {
                   onChange={() => this._handleInputChange('primary', !this.state.primary)}
                 />
               </div>
-              <div className="form-group">
+              <div>
                 <label forHtml="destination[city]">City</label>
                 <input
                   type="text"
@@ -77,7 +74,7 @@ class Destination extends Component {
                 />
                 <p className="help-block">Please enter destination city.</p>
               </div>
-              <div className="form-group">
+              <div>
                 <label forHtml="destination[country]">Country</label>
                 <input
                   type="text"
@@ -89,7 +86,7 @@ class Destination extends Component {
                 />
                 <p className="help-block">Please enter destination short country name.</p>
               </div>
-              <div className="form-group">
+              <div>
                 <label forHtml="destination[country-short]">Country Short</label>
                 <input
                   type="text"
@@ -101,7 +98,7 @@ class Destination extends Component {
                 />
                 <p className="help-block">Please enter destination country.</p>
               </div>
-              <div className="form-group">
+              <div>
                 <label forHtml="destination[type]">Type</label>
                 <input
                   type="text"
@@ -114,9 +111,10 @@ class Destination extends Component {
                 <p className="help-block">Please enter destination type.</p>
               </div>
             </div>
-            <div className="modal-footer">
-              <button onClick={this.props.onClose} type="button" className="btn btn-default">Close</button>
-              <button type="submit" className="btn btn-primary">Save</button>
+            <div>
+              <button type="button" className="btn small color" onClick={this.props.onClose}>Close</button>
+              <span> | </span>
+              <button type="submit" className="btn small color">Save</button>
             </div>
           </div>
         </div>

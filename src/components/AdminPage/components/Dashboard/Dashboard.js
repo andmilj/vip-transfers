@@ -18,10 +18,16 @@ class Dashboard extends Component {
     this.context.onSetTitle(title);
 
     return (
-      <div className="Dashboard">
-        <h1>Dashboard</h1>
-        <br/>
-        <p>Welcome to Dashboard!</p>
+      <div id="Dashboard">
+        <div className="wrap">
+          <div className="row">
+            <div className="content">
+              <div className="box">
+                <h1>Dashboard</h1>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

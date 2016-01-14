@@ -123,12 +123,12 @@ class LoginForm extends Component {
     this.context.onSetTitle(title);
 
     return (
-      <main className="main" role="main">
+      <div id="LoginForm">
         <div className="wrap">
           <div className="row">
             <div className="content one-half modal">
               <div className="box">
-                <form className="LoginForm" onSubmit={this._handleSubmit.bind(this)}>
+                <form onSubmit={this._handleSubmit.bind(this)}>
                   {this._renderInputUsername()}
                   {this._renderInputPassword()}
                   {this._renderAuthError()}
@@ -138,7 +138,7 @@ class LoginForm extends Component {
             </div>
           </div>
         </div>
-      </main>
+      </div>
     );
   }
 
