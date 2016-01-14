@@ -30,14 +30,14 @@ class Destination extends Component {
   constructor(props, context) {
     super(props, context);
 
-    this.state = _.pick(props.destination, ['city', 'country', 'type']);
+    this.state = _.pick(props.destination, ['primary', 'city', 'country', 'countryShort', 'type']);
   }
 
   _handleInputChange(field, value) {
     this.setState({[field]: value});
   }
 
-  _handleSubmit = (e) => {
+  _handleSubmit = e => {
     e.preventDefault();
 
     this.props.onSubmit(_.extend({}, this.props.destination, this.state));
@@ -57,6 +57,15 @@ class Destination extends Component {
             </div>
             <div className="modal-body">
               <div className="form-group">
+                <label forHtml="destination[primary]">Primary</label>
+                <input
+                  type="checkbox"
+                  id="destination[primary]"
+                  checked={this.state.primary}
+                  onChange={() => this._handleInputChange('primary', !this.state.primary)}
+                />
+              </div>
+              <div className="form-group">
                 <label forHtml="destination[city]">City</label>
                 <input
                   type="text"
@@ -64,7 +73,7 @@ class Destination extends Component {
                   id="destination[city]"
                   placeholder="City"
                   value={this.state.city}
-                  onChange={(e) => this._handleInputChange('city', e.target.value)}
+                  onChange={e => this._handleInputChange('city', e.target.value)}
                 />
                 <p className="help-block">Please enter destination city.</p>
               </div>
@@ -76,7 +85,19 @@ class Destination extends Component {
                   id="destination[country]"
                   placeholder="Country"
                   value={this.state.country}
-                  onChange={(e) => this._handleInputChange('country', e.target.value)}
+                  onChange={e => this._handleInputChange('country', e.target.value)}
+                />
+                <p className="help-block">Please enter destination short country name.</p>
+              </div>
+              <div className="form-group">
+                <label forHtml="destination[country-short]">Country Short</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="destination[country-short]"
+                  placeholder="Country Short"
+                  value={this.state.countryShort}
+                  onChange={e => this._handleInputChange('countryShort', e.target.value)}
                 />
                 <p className="help-block">Please enter destination country.</p>
               </div>
@@ -88,7 +109,7 @@ class Destination extends Component {
                   id="destination[type]"
                   placeholder="Type"
                   value={this.state.type}
-                  onChange={(e) => this._handleInputChange('type', e.target.value)}
+                  onChange={e => this._handleInputChange('type', e.target.value)}
                 />
                 <p className="help-block">Please enter destination type.</p>
               </div>
