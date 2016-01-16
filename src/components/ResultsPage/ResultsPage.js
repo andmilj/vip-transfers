@@ -24,6 +24,13 @@ class ResultsPage extends Component {
       vehicleType: null,
       vehicleOneWayPrice: null,
       returnDate: null,
+      passengerDetails: {
+        name: null,
+        number: null,
+        email: null,
+        country: null,
+        city: null,
+      },
     };
   }
 
@@ -33,12 +40,14 @@ class ResultsPage extends Component {
       extrasDeparture: this.state.extrasDeparture,
       extrasReturn: this.state.extrasReturn,
       onDepartureValueChange: this.handleDepartureValueChange,
+      onPassengerDetailsChange: this.handlePassengerDetailsChange,
       onStepBack: this.handleStepBack,
       onStepForward: this.handleStepForward,
       onReturnDateChange: this.handleReturnDateChange,
       onReturnToggle: this.handleReturnToggle,
       onReturnValueChange: this.handleReturnValueChange,
       onVehicleTypeSelect: this.handleVehicleTypeSelect,
+      passengerDetails: this.state.passengerDetails,
       returnEnabled: this.state.returnEnabled,
       query: this.props.query,
       returnDate: this.state.returnDate,
@@ -100,6 +109,14 @@ class ResultsPage extends Component {
     });
   }
 
+  handlePassengerDetailsChange = (field, value) => {
+    this.setState({
+      passengerDetails: assign({}, this.state.passengerDetails, {
+        [field]: value,
+      }),
+    });
+  }
+
   render() {
     const { bookingStep } = this.state;
 
@@ -155,7 +172,15 @@ ResultsPage.childContextTypes = {
   })).isRequired,
   extrasDeparture: PropTypes.object,
   extrasReturn: PropTypes.object,
+  passengerDetails: PropTypes.shape({
+    name: PropTypes.string,
+    number: PropTypes.string,
+    email: PropTypes.string,
+    country: PropTypes.string,
+    city: PropTypes.string,
+  }),
   onDepartureValueChange: PropTypes.func.isRequired,
+  onPassengerDetailsChange: PropTypes.func.isRequired,
   onStepBack: PropTypes.func.isRequired,
   onStepForward: PropTypes.func.isRequired,
   onReturnDateChange: PropTypes.func,
@@ -163,8 +188,8 @@ ResultsPage.childContextTypes = {
   onReturnValueChange: PropTypes.func.isRequired,
   onVehicleTypeSelect: PropTypes.func.isRequired,
   returnEnabled: PropTypes.bool,
-  query: queryShape,
   returnDate: PropTypes.instanceOf(Date),
+  query: queryShape,
   vehicleType: PropTypes.string,
   vehicleOneWayPrice: PropTypes.number,
 };
