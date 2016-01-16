@@ -3,6 +3,7 @@ import Extras from './Extras.react';
 import ExtrasJson from '../../constants/Extras';
 import PassengerDetails from './PassengerDetails.react';
 import VehicleResults from './VehicleResults.react';
+import Summary from './Summary.react';
 
 import { findDOMNode } from 'react-dom';
 
@@ -20,6 +21,7 @@ class ResultsPage extends Component {
       bookingStep: 1,
       extrasDeparture: {},
       extrasReturn: {},
+      lastStep: false,
       returnEnabled: false,
       vehicleType: null,
       vehicleOneWayPrice: null,
@@ -39,6 +41,7 @@ class ResultsPage extends Component {
       extras: ExtrasJson,
       extrasDeparture: this.state.extrasDeparture,
       extrasReturn: this.state.extrasReturn,
+      lastStep: this.state.lastStep,
       onDepartureValueChange: this.handleDepartureValueChange,
       onPassengerDetailsChange: this.handlePassengerDetailsChange,
       onStepBack: this.handleStepBack,
@@ -77,6 +80,7 @@ class ResultsPage extends Component {
     findDOMNode(this).scrollIntoView();
     this.setState({
       bookingStep: this.state.bookingStep - 1,
+      lastStep: (this.state.bookingStep + 1) === 4,
     });
   }
 
@@ -84,6 +88,7 @@ class ResultsPage extends Component {
     findDOMNode(this).scrollIntoView();
     this.setState(assign({}, {
       bookingStep: this.state.bookingStep + 1,
+      lastStep: (this.state.bookingStep + 1) === 4,
     }, additionalState));
   }
 
@@ -137,6 +142,12 @@ class ResultsPage extends Component {
         <PassengerDetails />
       );
     }
+
+    if (bookingStep === 4) {
+      return (
+        <Summary />
+      );
+    }
   }
 }
 
@@ -172,6 +183,7 @@ ResultsPage.childContextTypes = {
   })).isRequired,
   extrasDeparture: PropTypes.object,
   extrasReturn: PropTypes.object,
+  lastStep: PropTypes.bool,
   passengerDetails: PropTypes.shape({
     name: PropTypes.string,
     number: PropTypes.string,

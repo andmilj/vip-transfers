@@ -78,7 +78,9 @@ class PassengerDetails extends Component {
               <BookingActions />
             </form>
           </div>
-          <BookingSummary className="one-fourth"/>
+          <aside className="sidebar right one-fourth">
+            <BookingSummary />
+          </aside>
         </div>
       </div>
     </div>

@@ -78,35 +78,31 @@ class BookingSummary extends Component {
 
   render() {
     const _date = moment(parseInt(this.context.query.date, 10));
-    const c = classNames('sidebar right', this.props.className);
-
     return (
-      <aside className={c}>
-        <div className="widget">
-          <h4>Booking summary</h4>
-          <div className="summary">
-            <div>
-              <h5>DEPARTURE</h5>
-              <dl>
-                <dt>Date</dt>
-                <dd>{_date.format('DD.MM.YYYY HH:mm')}</dd>
-                <dt>From</dt>
-                <dd>{this.context.query.from}</dd>
-                <dt>To</dt>
-                <dd>{this.context.query.to}</dd>
-                <dt>Vehicle</dt>
-                <dd>{this.context.vehicleType}</dd>
-                {this.renderExtras(this.context.extrasDeparture)}
-              </dl>
-            </div>
-            {this.renderReturnSummary()}
-            <dl className="total">
-              <dt>Total</dt>
-              <dd>{this.calculatePrice()} usd</dd>
+      <div className="widget">
+        <h4>Booking summary</h4>
+        <div className="summary">
+          <div>
+            <h5>DEPARTURE</h5>
+            <dl>
+              <dt>Date</dt>
+              <dd>{_date.format('DD.MM.YYYY HH:mm')}</dd>
+              <dt>From</dt>
+              <dd>{this.context.query.from}</dd>
+              <dt>To</dt>
+              <dd>{this.context.query.to}</dd>
+              <dt>Vehicle</dt>
+              <dd>{this.context.vehicleType}</dd>
+              {this.renderExtras(this.context.extrasDeparture)}
             </dl>
           </div>
+          {this.renderReturnSummary()}
+          <dl className="total">
+            <dt>Total</dt>
+            <dd>{this.calculatePrice()} usd</dd>
+          </dl>
         </div>
-      </aside>
+      </div>
     );
   }
 }
