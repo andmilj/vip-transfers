@@ -23,12 +23,7 @@ class ResultsPage extends Component {
       returnEnabled: false,
       vehicleType: null,
       vehicleOneWayPrice: null,
-      queryReturn: {
-        from: null,
-        to: null,
-        persons: null,
-        date: null,
-      },
+      returnDate: null,
     };
   }
 
@@ -38,14 +33,15 @@ class ResultsPage extends Component {
       extrasDeparture: this.state.extrasDeparture,
       extrasReturn: this.state.extrasReturn,
       onDepartureValueChange: this.handleDepartureValueChange,
-      onReturnValueChange: this.handleReturnValueChange,
       onStepBack: this.handleStepBack,
       onStepForward: this.handleStepForward,
+      onReturnDateChange: this.handleReturnDateChange,
       onReturnToggle: this.handleReturnToggle,
+      onReturnValueChange: this.handleReturnValueChange,
       onVehicleTypeSelect: this.handleVehicleTypeSelect,
       returnEnabled: this.state.returnEnabled,
       query: this.props.query,
-      queryReturn: this.state.queryReturn,
+      returnDate: this.state.returnDate,
       vehicleType: this.state.vehicleType,
       vehicleOneWayPrice: this.state.vehicleOneWayPrice,
     };
@@ -95,6 +91,12 @@ class ResultsPage extends Component {
       extrasReturn: assign({}, this.state.extrasReturn, {
         [name]: count,
       }),
+    });
+  }
+
+  handleReturnDateChange = (returnDate) => {
+    this.setState({
+      returnDate,
     });
   }
 
@@ -154,14 +156,15 @@ ResultsPage.childContextTypes = {
   extrasDeparture: PropTypes.object,
   extrasReturn: PropTypes.object,
   onDepartureValueChange: PropTypes.func.isRequired,
-  onReturnValueChange: PropTypes.func.isRequired,
   onStepBack: PropTypes.func.isRequired,
   onStepForward: PropTypes.func.isRequired,
+  onReturnDateChange: PropTypes.func,
   onReturnToggle: PropTypes.func,
+  onReturnValueChange: PropTypes.func.isRequired,
   onVehicleTypeSelect: PropTypes.func.isRequired,
   returnEnabled: PropTypes.bool,
   query: queryShape,
-  queryReturn: queryShape,
+  returnDate: PropTypes.instanceOf(Date),
   vehicleType: PropTypes.string,
   vehicleOneWayPrice: PropTypes.number,
 };

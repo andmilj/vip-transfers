@@ -22,6 +22,7 @@ class AdvancedSearch extends Component {
   static contextTypes = {
     onReturnToggle: PropTypes.func,
     returnEnabled: PropTypes.bool,
+    onReturnDateChange: PropTypes.func,
   }
 
   static defaultProps = {
@@ -60,7 +61,7 @@ class AdvancedSearch extends Component {
                        destinations={this.props.destinations}
                        from={this.props.to}
                        to={this.props.from}
-                       onDateChange={this.props.onReturnDateChange}/>);
+                       onDateChange={this.context.onReturnDateChange}/>);
   }
 
   _renderRadioButtons() {

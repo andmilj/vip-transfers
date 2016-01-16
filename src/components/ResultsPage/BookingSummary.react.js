@@ -23,7 +23,7 @@ class BookingSummary extends Component {
     extrasDeparture: PropTypes.object,
     extrasReturn: PropTypes.object,
     query: queryShape.isRequired,
-    queryReturn: queryShape,
+    returnDate: PropTypes.instanceOf(Date),
     vehicleType: PropTypes.string.isRequired,
     returnEnabled: PropTypes.bool.isRequired,
     vehicleOneWayPrice: PropTypes.number,
@@ -42,8 +42,8 @@ class BookingSummary extends Component {
     return this.context.vehicleOneWayPrice + priceDeparture + priceReturn;
   }
 
-  renderDepartureExtras = () => {
-    return map(pick(this.context.extrasDeparture, value => !!value), (times, name) => {
+  renderExtras = (extras) => {
+    return map(pick(extras, value => !!value), (times, name) => {
       return (
         <span>
           <dt>Extras</dt>
@@ -54,6 +54,7 @@ class BookingSummary extends Component {
   }
 
   renderReturnSummary = () => {
+    const _date = moment(this.context.returnDate);
     if (!this.context.returnEnabled) {
       return null;
     }
@@ -62,14 +63,14 @@ class BookingSummary extends Component {
         <h5>RETURN</h5>
         <dl>
           <dt>Date</dt>
-          <dd>02.09.2014 17:00</dd>
+          <dd>{_date.format('DD.MM.YYYY HH:mm')}</dd>
           <dt>From</dt>
-          <dd>London airport</dd>
+          <dd>{this.context.query.to}</dd>
           <dt>To</dt>
-          <dd>London bus station</dd>
+          <dd>{this.context.query.from}</dd>
           <dt>Vehicle</dt>
-          <dd>Private shuttle</dd>
-          {this.renderDepartureExtras()}
+          <dd>{this.context.vehicleType}</dd>
+          {this.renderExtras(this.context.extrasReturn)}
         </dl>
       </div>
     );
@@ -95,7 +96,7 @@ class BookingSummary extends Component {
                 <dd>{this.context.query.to}</dd>
                 <dt>Vehicle</dt>
                 <dd>{this.context.vehicleType}</dd>
-                {this.renderDepartureExtras()}
+                {this.renderExtras(this.context.extrasDeparture)}
               </dl>
             </div>
             {this.renderReturnSummary()}
