@@ -21,6 +21,7 @@ class Summary extends Component {
       city: PropTypes.string,
     }).isRequired,
     onPassengerDetailsChange: PropTypes.func.isRequired,
+    price: PropTypes.number.isRequired,
     query: queryShape.isRequired,
     returnEnabled: PropTypes.bool,
     returnDate: PropTypes.instanceOf(Date),
@@ -81,7 +82,7 @@ class Summary extends Component {
 
               {this.renderReturn()}
 
-              <h3>TOTAL: 840,00 USD</h3>
+              <h3>TOTAL: {this.context.price} USD</h3>
             </form>
             <BookingActions />
           </div>

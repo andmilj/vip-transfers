@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
-import classNames from 'classnames';
-import { reduce, find, pick, map } from 'lodash';
+import { pick, map } from 'lodash';
 
 const queryShape = PropTypes.shape({
   from: PropTypes.string,
@@ -22,24 +21,12 @@ class BookingSummary extends Component {
     })).isRequired,
     extrasDeparture: PropTypes.object,
     extrasReturn: PropTypes.object,
+    price: PropTypes.number.isRequired,
     query: queryShape.isRequired,
     returnDate: PropTypes.instanceOf(Date),
     vehicleType: PropTypes.string.isRequired,
     returnEnabled: PropTypes.bool.isRequired,
     vehicleOneWayPrice: PropTypes.number,
-  }
-
-  reducePriceFromExtras = (extraType) => {
-    return reduce(extraType, (result, value, name) => {
-      return result + find(this.context.extras, { name }).price * value;
-    }, 0);
-  }
-
-  calculatePrice = () => {
-    const { extrasDeparture, extrasReturn } = this.context;
-    const priceDeparture = this.reducePriceFromExtras(extrasDeparture);
-    const priceReturn = this.reducePriceFromExtras(extrasReturn);
-    return this.context.vehicleOneWayPrice + priceDeparture + priceReturn;
   }
 
   renderExtras = (extras) => {
@@ -99,7 +86,7 @@ class BookingSummary extends Component {
           {this.renderReturnSummary()}
           <dl className="total">
             <dt>Total</dt>
-            <dd>{this.calculatePrice()} usd</dd>
+            <dd>{this.context.price} usd</dd>
           </dl>
         </div>
       </div>

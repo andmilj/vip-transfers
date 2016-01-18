@@ -7,7 +7,7 @@ import Summary from './Summary.react';
 
 import { findDOMNode } from 'react-dom';
 
-import { assign } from 'lodash';
+import { assign, values, filter, isEmpty, reduce, defaults, find } from 'lodash';
 
 class ResultsPage extends Component {
   static defaultProps = {
@@ -33,6 +33,7 @@ class ResultsPage extends Component {
         country: null,
         city: null,
       },
+      price: 0,
     };
   }
 
@@ -51,6 +52,7 @@ class ResultsPage extends Component {
       onReturnValueChange: this.handleReturnValueChange,
       onVehicleTypeSelect: this.handleVehicleTypeSelect,
       passengerDetails: this.state.passengerDetails,
+      price: this.state.price,
       returnEnabled: this.state.returnEnabled,
       query: this.props.query,
       returnDate: this.state.returnDate,
@@ -63,16 +65,39 @@ class ResultsPage extends Component {
     $('body').removeClass();
   }
 
+  getPrice = ({ extrasDeparture, extrasReturn, vehicleOneWayPrice }) => {
+    const priceDeparture = this.reducePriceFromExtras(extrasDeparture);
+    const priceReturn = this.reducePriceFromExtras(extrasReturn);
+    return vehicleOneWayPrice + priceDeparture + priceReturn;
+  }
+
+  reducePriceFromExtras = (extraType) => {
+    return reduce(extraType, (result, value, name) => {
+      return result + find(ExtrasJson, { name }).price * value;
+    }, 0);
+  }
+
+  validate() {
+    switch (this.state.bookingStep) {
+    case 3:
+      return isEmpty(filter(values(this.state.passengerDetails), value => !value));
+    default:
+      return true;
+    }
+  }
+
   handleReturnToggle = () => {
     this.setState({
       returnEnabled: !this.state.returnEnabled,
     });
   }
 
-  handleVehicleTypeSelect = (type, price) => {
+  handleVehicleTypeSelect = (type, vehicleOneWayPrice) => {
+    const price = this.getPrice(defaults({ vehicleOneWayPrice }, this.state));
     this.handleStepForward({
       vehicleType: type,
-      vehicleOneWayPrice: price,
+      vehicleOneWayPrice,
+      price,
     });
   }
 
@@ -85,26 +110,36 @@ class ResultsPage extends Component {
   }
 
   handleStepForward = (additionalState = {}) => {
-    findDOMNode(this).scrollIntoView();
-    this.setState(assign({}, {
-      bookingStep: this.state.bookingStep + 1,
-      lastStep: (this.state.bookingStep + 1) === 4,
-    }, additionalState));
+    if (this.validate()) {
+      findDOMNode(this).scrollIntoView();
+      this.setState(assign({}, {
+        bookingStep: this.state.bookingStep + 1,
+        lastStep: (this.state.bookingStep + 1) === 4,
+      }, additionalState));
+    }
   }
 
   handleDepartureValueChange = (name, count) => {
+    const extrasDeparture = assign({}, this.state.extrasDeparture, {
+      [name]: count,
+    });
+    const price = this.getPrice(defaults({ extrasDeparture }, this.state));
+
     this.setState({
-      extrasDeparture: assign({}, this.state.extrasDeparture, {
-        [name]: count,
-      }),
+      extrasDeparture,
+      price,
     });
   }
 
   handleReturnValueChange = (name, count) => {
+    const extrasReturn = assign({}, this.state.extrasReturn, {
+      [name]: count,
+    });
+    const price = this.getPrice(defaults({ extrasReturn }, this.state));
+
     this.setState({
-      extrasReturn: assign({}, this.state.extrasReturn, {
-        [name]: count,
-      }),
+      extrasReturn,
+      price,
     });
   }
 
@@ -191,6 +226,7 @@ ResultsPage.childContextTypes = {
     country: PropTypes.string,
     city: PropTypes.string,
   }),
+  price: PropTypes.number.isRequired,
   onDepartureValueChange: PropTypes.func.isRequired,
   onPassengerDetailsChange: PropTypes.func.isRequired,
   onStepBack: PropTypes.func.isRequired,
