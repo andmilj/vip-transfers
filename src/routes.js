@@ -20,6 +20,7 @@ const router = new Router(on => {
   on('/admin', async () => <AdminPage />);
   on('/admin/dashboard', async () => <AdminPage />);
   on('/admin/destinations', async () => <AdminPage />);
+  on('/admin/vehicles', async () => <AdminPage />);
 
   on('/results', async state => {
     const respones = await Promise.all([
