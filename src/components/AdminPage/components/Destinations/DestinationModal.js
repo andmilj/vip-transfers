@@ -14,7 +14,7 @@ class Destination extends Component {
   static propTypes = {
     destination: PropTypes.object.isRequired,
     onSubmit: PropTypes.func.isRequired,
-    onClose: PropTypes.func.isRequired,
+    onCancel: PropTypes.func.isRequired,
   };
 
   static contextTypes = {
@@ -24,7 +24,7 @@ class Destination extends Component {
   static defaultProps = {
     destination: {},
     onSubmit: _.noop,
-    onClose: _.noop,
+    onCancel: _.noop,
   };
 
   constructor(props, context) {
@@ -106,7 +106,7 @@ class Destination extends Component {
             <div className="right">
               <button type="submit" className="btn medium color">Save</button>
               <span> </span>
-              <button type="button" className="btn medium" onClick={this.props.onClose}>Close</button>
+              <button type="button" className="btn medium" onClick={this.props.onCancel}>Cancel</button>
             </div>
           </div>
         </div>

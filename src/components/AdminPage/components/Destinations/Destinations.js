@@ -86,7 +86,7 @@ class Destinations extends Component {
     }
   }
 
-  _handleModalClose = e => {
+  _handleModalCancel = e => {
     e.preventDefault();
     this.setState({ isModalShown: false });
   }
@@ -104,7 +104,7 @@ class Destinations extends Component {
         <DestinationModal
           destination={this.state.destination}
           onSubmit={this._handleModalSubmit}
-          onClose={this._handleModalClose}
+          onCancel={this._handleModalCancel}
         />
       ) : null;
   }
