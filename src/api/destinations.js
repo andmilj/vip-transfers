@@ -24,7 +24,6 @@ router.post('/', async (req, res, next) => {
 
     _destination
       .set({
-        primary: req.body.primary,
         city: req.body.city,
         country: req.body.country,
         countryShort: req.body.countryShort,
@@ -50,7 +49,6 @@ router.post('/:id', async (req, res, next) => {
       }
 
       _.extend(_destination, {
-        primary: req.body.primary,
         city: req.body.city,
         country: req.body.country,
         countryShort: req.body.countryShort,

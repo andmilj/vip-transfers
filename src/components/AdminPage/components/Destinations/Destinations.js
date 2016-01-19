@@ -109,14 +109,24 @@ class Destinations extends Component {
       ) : null;
   }
 
+  _renderPageHeader() {
+    return !this.state.isModalShown
+      ? (
+        <div>
+          <button className="btn color medium right" onClick={this._showCreateDestinationModal}>Create</button>
+          <h1>Destinations</h1>
+          <br/>
+        </div>
+      ) : null;
+  }
+
   _renderTable() {
     return !this.state.isModalShown
       ? (
-        <table className="table table-striped">
+        <table className="table">
           <thead>
             <tr>
                <th width="50">#</th>
-               <th width="100">Primary</th>
                <th>City</th>
                <th>Country</th>
                <th>Country Short</th>
@@ -129,7 +139,6 @@ class Destinations extends Component {
               return (
                 <tr key={destination._id}>
                   <td>#</td>
-                  <td>{destination.primary ? 'Yes' : 'No'}</td>
                   <td>{destination.city}</td>
                   <td>{destination.country}</td>
                   <td>{destination.countryShort}</td>
@@ -157,9 +166,7 @@ class Destinations extends Component {
           <div className="row">
             <div className="content">
               <div className="box">
-                <button className="btn color medium right" onClick={this._showCreateDestinationModal}>Create</button>
-                <h1>Destinations</h1>
-                <br/>
+                {this._renderPageHeader()}
                 {this._renderTable()}
                 {this._renderModal()}
               </div>

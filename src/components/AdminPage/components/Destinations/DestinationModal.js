@@ -30,7 +30,7 @@ class Destination extends Component {
   constructor(props, context) {
     super(props, context);
 
-    this.state = _.pick(props.destination, ['primary', 'city', 'country', 'countryShort', 'type']);
+    this.state = _.pick(props.destination, ['city', 'country', 'countryShort', 'type']);
   }
 
   _handleInputChange(field, value) {
@@ -48,20 +48,12 @@ class Destination extends Component {
     this.context.onSetTitle(title);
 
     return (
-      <form onSubmit={this._handleSubmit}>
+      <form id="Destination" onSubmit={this._handleSubmit}>
         <div>
           <div>
-            <h4>Destination</h4>
+            <h1>Destination</h1>
+            <br/>
             <div>
-              <div>
-                <label forHtml="destination[primary]">Primary</label>
-                <input
-                  type="checkbox"
-                  id="destination[primary]"
-                  checked={this.state.primary}
-                  onChange={() => this._handleInputChange('primary', !this.state.primary)}
-                />
-              </div>
               <div>
                 <label forHtml="destination[city]">City</label>
                 <input
@@ -111,10 +103,10 @@ class Destination extends Component {
                 <p className="help-block">Please enter destination type.</p>
               </div>
             </div>
-            <div>
-              <button type="button" className="btn small color" onClick={this.props.onClose}>Close</button>
-              <span> | </span>
-              <button type="submit" className="btn small color">Save</button>
+            <div className="right">
+              <button type="submit" className="btn medium color">Save</button>
+              <span> </span>
+              <button type="button" className="btn medium" onClick={this.props.onClose}>Close</button>
             </div>
           </div>
         </div>
