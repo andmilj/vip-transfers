@@ -30,6 +30,10 @@ class VehicleResults extends Component {
     this.setState({ persons: e.target.value });
   }
 
+  _handleDateChange = (date) => {
+    this.setState({ date });
+  }
+
   _handleSubmit = () => {
     const {from, to, persons, date} = this.state;
 

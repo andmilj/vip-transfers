@@ -3,11 +3,18 @@ import Intro from '../Intro/Intro.react';
 import Services from '../Services/Services.react';
 import AdvancedSearch from '../AdvancedSearch/AdvancedSearch.react';
 import Link from '../Link';
+import VehicleInfo from './VehicleInfo.react';
 import { initScroll } from '../App/style/js/scripts';
+
 
 class MainPage extends Component {
   static propTypes = {
     destinations: PropTypes.array,
+    vehicles: PropTypes.arrayOf(PropTypes.shape({
+      type: PropTypes.string,
+      persons: PropTypes.string,
+      pictureName: PropTypes.string,
+    })),
   };
 
   static contextTypes = {
@@ -86,6 +93,7 @@ class MainPage extends Component {
           onDropoffChange={this._handleSecondarySelection}
           onSubmit={this._handleSubmit} />
         <Services />
+        <VehicleInfo vehicles={this.props.vehicles}/>
       </main>
     );
   }

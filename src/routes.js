@@ -32,9 +32,13 @@ const router = new Router(on => {
   });
 
   on('*', async () => {
-    const response = await fetch('/api/destinations');
-    const destinations = await response.json();
-    return <MainPage destinations={destinations}/>;
+    const respones = await Promise.all([
+      fetch('/api/vehicles'),
+      fetch('/api/destinations'),
+    ]);
+    const vehicles = await respones[0].json();
+    const destinations = await respones[1].json();
+    return <MainPage destinations={destinations} vehicles={vehicles}/>;
   });
 
   on('error', (state, error) => state.statusCode === 404 ?
