@@ -6,7 +6,7 @@ class VehicleInfo extends Component {
   static propTypes = {
     vehicles: PropTypes.arrayOf(PropTypes.shape({
       type: PropTypes.string,
-      persons: PropTypes.string,
+      persons: PropTypes.any,
       pictureName: PropTypes.string,
     })),
   };
@@ -17,7 +17,7 @@ class VehicleInfo extends Component {
 
   renderElements = () => {
     return map(this.props.vehicles, vehicle => {
-      return (<VehicleElement className="one-fifth" {...vehicle}/>);
+      return (<VehicleElement key={vehicle.type} className="one-fifth" {...vehicle}/>);
     });
   }
 
