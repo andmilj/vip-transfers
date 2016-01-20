@@ -81,13 +81,31 @@ export function seedDatabase(drop) {
 
   vehicle.find({}, (error, vehicles) => {
     if (vehicles.length === 0) {
-      _.forIn(vehicleTypes, value => {
-        vehicle({
-          type: value,
-          persons: 3,
-          pictureName: 'car.jpg',
-        }).save();
-      });
+      vehicle({
+        type: vehicleTypes.STANDARD,
+        persons: 3,
+        pictureName: 'car.jpg',
+      }).save();
+      vehicle({
+        type: vehicleTypes.STANDARD_VIP,
+        persons: 3,
+        pictureName: 'car.jpg',
+      }).save();
+      vehicle({
+        type: vehicleTypes.KOMBI_VIP,
+        persons: 3,
+        pictureName: 'kombi.jpg',
+      }).save();
+      vehicle({
+        type: vehicleTypes.KOMBI,
+        persons: 3,
+        pictureName: 'kombi.jpg',
+      }).save();
+      vehicle({
+        type: vehicleTypes.MINIBUS,
+        persons: 3,
+        pictureName: 'van.jpg',
+      }).save();
       console.log('Vehicles seeded!');
     }
   });

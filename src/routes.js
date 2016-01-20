@@ -9,6 +9,7 @@ import ErrorPage from './components/ErrorPage';
 import MainPage from './components/MainPage';
 import AdminPage from './components/AdminPage';
 import ResultsPage from './components/ResultsPage';
+import VehiclePage from './components/VehiclePage';
 import Location from './core/Location';
 
 const router = new Router(on => {
@@ -22,15 +23,29 @@ const router = new Router(on => {
   on('/admin/destinations', async () => <AdminPage />);
 
   on('/results', async state => {
-    const response = await fetch(Location.createHref('/api/prices', state.query));
-    const {prices, vehicles} = await response.json();
-    return <ResultsPage query={state.query} prices={prices} vehicles={vehicles}/>;
+    const responses = await Promise.all([
+      fetch(Location.createHref('/api/prices', state.query)),
+      fetch('/api/destinations'),
+    ]);
+    const {prices, vehicles} = await responses[0].json();
+    const destinations = await responses[1].json();
+    return <ResultsPage query={state.query} prices={prices} vehicles={vehicles} destinations={destinations}/>;
+  });
+
+  on('/vehicles', async () => {
+    const response = await fetch('/api/vehicles');
+    const vehicles = await response.json();
+    return <VehiclePage vehicles={vehicles} />;
   });
 
   on('*', async () => {
-    const response = await fetch('/api/destinations');
-    const destinations = await response.json();
-    return <MainPage destinations={destinations}/>;
+    const responses = await Promise.all([
+      fetch('/api/vehicles'),
+      fetch('/api/destinations'),
+    ]);
+    const vehicles = await responses[0].json();
+    const destinations = await responses[1].json();
+    return <MainPage destinations={destinations} vehicles={vehicles}/>;
   });
 
   on('error', (state, error) => state.statusCode === 404 ?

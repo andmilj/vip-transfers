@@ -1,5 +1,5 @@
 @import '../../../node_modules/normalize.css/normalize.css';
-@import './style/css/bootstrap.css';
-@import './style/style.css';
-@import './style/css/color/blue.css';
-@import './style/type/fontello.css';
+@import './style/css/theme-dblue.css';
+@import './style/css/style.css';
+@import './style/css/animate.css';
+@import './style/css/responsive-tables.css';

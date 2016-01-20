@@ -1,49 +1,245 @@
 import React, { PropTypes, Component } from 'react';
-import Parallax from '../Shared/Parallax.react';
-import VehicleColumn from '../VehicleColumn';
-import {map, findWhere, get} from 'lodash';
+import Extras from './Extras.react';
+import ExtrasJson from '../../constants/Extras';
+import PassengerDetails from './PassengerDetails.react';
+import VehicleResults from './VehicleResults.react';
+import Summary from './Summary.react';
+
+import { findDOMNode } from 'react-dom';
+
+import { assign, values, filter, isEmpty, reduce, defaults, find } from 'lodash';
 
 class ResultsPage extends Component {
-  static propTypes = {
-    query: PropTypes.object,
-    prices: PropTypes.array,
-    vehicles: PropTypes.array,
-  }
-
   static defaultProps = {
     prices: [],
   }
 
-  _renderVehicles = () => {
-    const { prices, vehicles } = this.props;
-    return map(vehicles, ({type, persons, pictureName}) => {
-      const price = findWhere(prices, {vehicleType: type});
+  constructor(props) {
+    super(props);
 
-      return (<VehicleColumn key={type}
-                             vehicleType={type}
-                             persons={persons}
-                             pictureName={pictureName}
-                             price={get(price, 'price')}/>);
+    this.state = {
+      bookingStep: 1,
+      extrasDeparture: {},
+      extrasReturn: {},
+      lastStep: false,
+      returnEnabled: false,
+      vehicleType: null,
+      vehicleOneWayPrice: null,
+      returnDate: null,
+      passengerDetails: {
+        name: null,
+        number: null,
+        email: null,
+        country: null,
+        city: null,
+      },
+      price: 0,
+    };
+  }
+
+  getChildContext() {
+    return {
+      extras: ExtrasJson,
+      extrasDeparture: this.state.extrasDeparture,
+      extrasReturn: this.state.extrasReturn,
+      lastStep: this.state.lastStep,
+      onDepartureValueChange: this.handleDepartureValueChange,
+      onPassengerDetailsChange: this.handlePassengerDetailsChange,
+      onStepBack: this.handleStepBack,
+      onStepForward: this.handleStepForward,
+      onReturnDateChange: this.handleReturnDateChange,
+      onReturnToggle: this.handleReturnToggle,
+      onReturnValueChange: this.handleReturnValueChange,
+      onVehicleTypeSelect: this.handleVehicleTypeSelect,
+      passengerDetails: this.state.passengerDetails,
+      price: this.state.price,
+      returnEnabled: this.state.returnEnabled,
+      query: this.props.query,
+      returnDate: this.state.returnDate,
+      vehicleType: this.state.vehicleType,
+      vehicleOneWayPrice: this.state.vehicleOneWayPrice,
+    };
+  }
+
+  componentDidMount() {
+    $('body').removeClass();
+  }
+
+  getPrice = ({ extrasDeparture, extrasReturn, vehicleOneWayPrice }) => {
+    const priceDeparture = this.reducePriceFromExtras(extrasDeparture);
+    const priceReturn = this.reducePriceFromExtras(extrasReturn);
+    return vehicleOneWayPrice + priceDeparture + priceReturn;
+  }
+
+  reducePriceFromExtras = (extraType) => {
+    return reduce(extraType, (result, value, name) => {
+      return result + find(ExtrasJson, { name }).price * value;
+    }, 0);
+  }
+
+  validate() {
+    switch (this.state.bookingStep) {
+    case 3:
+      return isEmpty(filter(values(this.state.passengerDetails), value => !value));
+    default:
+      return true;
+    }
+  }
+
+  handleReturnToggle = () => {
+    this.setState({
+      returnEnabled: !this.state.returnEnabled,
+    });
+  }
+
+  handleVehicleTypeSelect = (type, vehicleOneWayPrice) => {
+    const price = this.getPrice(defaults({ vehicleOneWayPrice }, this.state));
+    this.handleStepForward({
+      vehicleType: type,
+      vehicleOneWayPrice,
+      price,
+    });
+  }
+
+  handleStepBack = () => {
+    findDOMNode(this).scrollIntoView();
+    this.setState({
+      bookingStep: this.state.bookingStep - 1,
+      lastStep: (this.state.bookingStep + 1) === 4,
+    });
+  }
+
+  handleStepForward = (additionalState = {}) => {
+    if (this.validate()) {
+      findDOMNode(this).scrollIntoView();
+      this.setState(assign({}, {
+        bookingStep: this.state.bookingStep + 1,
+        lastStep: (this.state.bookingStep + 1) === 4,
+      }, additionalState));
+    }
+  }
+
+  handleDepartureValueChange = (name, count) => {
+    const extrasDeparture = assign({}, this.state.extrasDeparture, {
+      [name]: count,
+    });
+    const price = this.getPrice(defaults({ extrasDeparture }, this.state));
+
+    this.setState({
+      extrasDeparture,
+      price,
+    });
+  }
+
+  handleReturnValueChange = (name, count) => {
+    const extrasReturn = assign({}, this.state.extrasReturn, {
+      [name]: count,
+    });
+    const price = this.getPrice(defaults({ extrasReturn }, this.state));
+
+    this.setState({
+      extrasReturn,
+      price,
+    });
+  }
+
+  handleReturnDateChange = (returnDate) => {
+    this.setState({
+      returnDate,
+    });
+  }
+
+  handlePassengerDetailsChange = (field, value) => {
+    this.setState({
+      passengerDetails: assign({}, this.state.passengerDetails, {
+        [field]: value,
+      }),
     });
   }
 
   render() {
-    return (
-      <div>
-          <Parallax ordinal={1} />
-          <div className="section anchor">
-            <div className="light-wrapper">
-              <div className="container inner">
-                <div className="row pricing">
-                  {this._renderVehicles()}
-                </div>
-              </div>
-            </div>
-          </div>
-          <Parallax ordinal={1} />
-      </div>
-    );
+    const { bookingStep } = this.state;
+
+    if (bookingStep === 1) {
+      return (
+        <VehicleResults {...this.props}/>
+      );
+    }
+
+    if (bookingStep === 2) {
+      return (
+        <Extras />
+      );
+    }
+
+    if (bookingStep === 3) {
+      return (
+        <PassengerDetails />
+      );
+    }
+
+    if (bookingStep === 4) {
+      return (
+        <Summary />
+      );
+    }
   }
 }
+
+const queryShape = PropTypes.shape({
+  from: PropTypes.string,
+  to: PropTypes.string,
+  persons: PropTypes.string,
+  date: PropTypes.string,
+});
+
+ResultsPage.propTypes = {
+  query: queryShape,
+  prices: PropTypes.arrayOf(PropTypes.shape({
+    price: PropTypes.any,
+    vehicleType: PropTypes.string,
+  })),
+  vehicles: PropTypes.arrayOf(PropTypes.shape({
+    type: PropTypes.string,
+    persons: PropTypes.string,
+    pictureName: PropTypes.string,
+  })),
+  destinations: PropTypes.arrayOf(PropTypes.shape({
+    city: PropTypes.string,
+    primary: PropTypes.bool,
+  })),
+};
+
+ResultsPage.childContextTypes = {
+  extras: PropTypes.arrayOf(PropTypes.shape({
+    info: PropTypes.string,
+    name: PropTypes.string,
+    price: PropTypes.number,
+  })).isRequired,
+  extrasDeparture: PropTypes.object,
+  extrasReturn: PropTypes.object,
+  lastStep: PropTypes.bool,
+  passengerDetails: PropTypes.shape({
+    name: PropTypes.string,
+    number: PropTypes.string,
+    email: PropTypes.string,
+    country: PropTypes.string,
+    city: PropTypes.string,
+  }),
+  price: PropTypes.number.isRequired,
+  onDepartureValueChange: PropTypes.func.isRequired,
+  onPassengerDetailsChange: PropTypes.func.isRequired,
+  onStepBack: PropTypes.func.isRequired,
+  onStepForward: PropTypes.func.isRequired,
+  onReturnDateChange: PropTypes.func,
+  onReturnToggle: PropTypes.func,
+  onReturnValueChange: PropTypes.func.isRequired,
+  onVehicleTypeSelect: PropTypes.func.isRequired,
+  returnEnabled: PropTypes.bool,
+  returnDate: PropTypes.instanceOf(Date),
+  query: queryShape,
+  vehicleType: PropTypes.string,
+  vehicleOneWayPrice: PropTypes.number,
+};
 
 export default ResultsPage;

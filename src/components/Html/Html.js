@@ -38,11 +38,15 @@ class Html extends Component {
         <meta name="description" content={this.props.description} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-        <link href="http://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700,800,900" rel="stylesheet" type="text/css" />
+        <link href="http://fonts.googleapis.com/css?family=Raleway:400,500,600,700|Montserrat:400,700" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="/app.css" />
         <style id="css" dangerouslySetInnerHTML={{__html: this.props.css}} />
       </head>
       <body>
         <div id="app" dangerouslySetInnerHTML={{__html: this.props.body}} />
+        <script src="jquery.min.js"></script>
+        <script src="jquery.uniform.min.js"></script>
+        <script src="jquery.datetimepicker.js"></script>
         <script src="/app.js"></script>
         <script dangerouslySetInnerHTML={this.trackingCode()} />
       </body>

@@ -10,6 +10,7 @@
 import path from 'path';
 import webpack from 'webpack';
 import merge from 'lodash.merge';
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
 const DEBUG = !process.argv.includes('--release');
 const VERBOSE = process.argv.includes('--verbose');
@@ -76,17 +77,11 @@ const config = {
         test: /\.json$/,
         loader: 'json-loader',
       }, {
-        test: /\.txt$/,
-        loader: 'raw-loader',
-      }, {
         test: /\.(png|jpg|jpeg|gif|svg|woff|woff2)$/,
         loader: 'url-loader?limit=10000',
       }, {
-        test: /\.(eot|ttf|wav|mp3)$/,
-        loader: 'file-loader',
-      }, {
         test: /\.css$/,
-        loader: 'style-loader/useable!css-loader!postcss-loader',
+        loader: ExtractTextPlugin.extract('style-loader/useable', 'css-loader!postcss-loader'),
       },
       {
         test: /\.scss$/,
@@ -125,6 +120,7 @@ const appConfig = merge({}, config, {
   devtool: DEBUG ? 'cheap-module-eval-source-map' : false,
   plugins: [
     new webpack.DefinePlugin(GLOBALS),
+    new ExtractTextPlugin('app.css'),
     ...(!DEBUG ? [
       new webpack.optimize.DedupePlugin(),
       new webpack.optimize.UglifyJsPlugin({
@@ -196,6 +192,7 @@ const serverConfig = merge({}, config, {
   devtool: 'source-map',
   plugins: [
     new webpack.DefinePlugin(GLOBALS),
+    new ExtractTextPlugin('app.css'),
     new webpack.BannerPlugin('require("source-map-support").install();',
       { raw: true, entryOnly: false }),
   ],

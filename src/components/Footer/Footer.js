@@ -1,25 +1,47 @@
 import React, { Component } from 'react';
-// import withViewport from '../../decorators/withViewport';
-// import Link from '../Link';
 
-// @withViewport
 class Footer extends Component {
   render() {
     return (
-        <footer className="footer">
-          <div className="container inner">
-            <p className="pull-left">© 2014 Frost. All rights reserved. Theme by <a href="http://elemisfreebies.com">elemis</a>.</p>
-            <ul className="social pull-right">
-              <li><a href="#"><i className="icon-s-rss"></i></a></li>
-              <li><a href="#"><i className="icon-s-twitter"></i></a></li>
-              <li><a href="#"><i className="icon-s-facebook"></i></a></li>
-              <li><a href="#"><i className="icon-s-dribbble"></i></a></li>
-              <li><a href="#"><i className="icon-s-pinterest"></i></a></li>
-              <li><a href="#"><i className="icon-s-instagram"></i></a></li>
-              <li><a href="#"><i className="icon-s-vimeo"></i></a></li>
-            </ul>
+      <footer className="footer black" role="contentinfo">
+        <div className="wrap">
+          <div className="row">
+            <article className="one-half">
+              <h6>About us</h6>
+              <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy.</p>
+            </article>
+            <article className="one-fourth">
+              <h6>Need help?</h6>
+              <p>Contact us via phone or email:</p>
+              <p className="contact-data"><span className="ico phone"></span> +385 91 123 456</p>
+              <p className="contact-data"><span className="ico email"></span> <a href="mailto:help@transfers.com">help@vip-transfers.com</a></p>
+            </article>
+            <article className="one-fourth">
+              <h6>Follow us</h6>
+              <ul className="social">
+                <li className="facebook"><a href="#" title="facebook">facebook</a></li>
+                <li className="twitter"><a href="#" title="twitter">twitter</a></li>
+                <li className="gplus"><a href="#" title="gplus">google plus</a></li>
+                <li className="linkedin"><a href="#" title="linkedin">linkedin</a></li>
+              </ul>
+            </article>
           </div>
-        </footer>
+
+          <div className="copy">
+            <p>Copyright 2014, Vip transfers. All rights reserved. </p>
+
+            <nav role="navigation" className="foot-nav">
+              <ul>
+                <li><a href="#" title="Home">Home</a></li>
+                <li><a href="#" title="About us">About us</a></li>
+                <li><a href="#" title="Contact us">Contact us</a></li>
+                <li><a href="#" title="Terms of use">Terms of use</a></li>
+                <li><a href="#" title="Help">Help</a></li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </footer>
     );
   }
 
