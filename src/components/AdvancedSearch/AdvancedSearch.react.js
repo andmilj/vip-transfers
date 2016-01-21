@@ -1,8 +1,13 @@
 import React, { PropTypes, Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import SearchRow from './SearchRow.react';
+import DateTimePicker from './DateTimePicker.react';
+import withStyles from '../../decorators/withStyles';
 import { initUniform } from '../App/style/js/scripts';
+import style from './style.scss';
+import classNames from 'classnames';
 
+@withStyles(style)
 class AdvancedSearch extends Component {
   static propTypes = {
     from: PropTypes.string,
@@ -54,14 +59,32 @@ class AdvancedSearch extends Component {
   }
 
   _renderReturnSearchRow() {
-    if (!this.context.returnEnabled) {
+    if (!this.props.twoWayEnabled) {
       return null;
     }
-    return (<SearchRow dateTimeLabel="RETURN DATE AND TIME"
-                       destinations={this.props.destinations}
-                       from={this.props.to}
-                       to={this.props.from}
-                       onDateChange={this.context.onReturnDateChange}/>);
+    const datepicker = !this.context.returnEnabled ? null : (
+      <div className="form-group datepicker one-third">
+        <label htmlFor="dep-date">RETURN DATE AND TIME</label>
+        <DateTimePicker onDateTimeChange={this.context.onReturnDateChange} />
+      </div>
+    );
+    const c = classNames('form-group datepicker', {
+      'one-third': this.context.returnEnabled,
+      'two-third': !this.context.returnEnabled,
+    });
+    return (
+      <div className="advanced-search black">
+        <div className="wrap">
+            <div className="f-row">
+              {this._renderRadioButtons()}
+              <div className={c}>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              </div>
+              {datepicker}
+            </div>
+        </div>
+      </div>
+    );
   }
 
   _renderRadioButtons() {
@@ -70,7 +93,7 @@ class AdvancedSearch extends Component {
     }
 
     return (
-      <div className="form-group radios">
+      <div className="form-group radios one-third">
         <div>
           <input type="radio"
             name="radio"
@@ -93,29 +116,30 @@ class AdvancedSearch extends Component {
 
   render() {
     return (
-      <div className="advanced-search color" ref="advancedSearch" id="booking">
-        <div className="wrap">
-          <form role="form" action="/results" method="GET" onSubmit={this._handleSubmit}>
-          <SearchRow {...this.props} />
-          {this._renderReturnSearchRow()}
-          <div className="f-row">
-            <div className="form-group spinner">
-            <label htmlFor="people">How many people <small>(including children)</small>?</label>
-            <input type="number"
-                    value={this.props.persons}
-                    onChange={this.props.onPersonChange}
-                    id="people"
-                    min="1" />
+      <div id="advancedSearch" ref="advancedSearch">
+        <div id="booking" className="advanced-search color">
+          <div className="wrap">
+            <form role="form" action="/results" method="GET" onSubmit={this._handleSubmit}>
+            <SearchRow {...this.props} />
+            <div className="f-row">
+              <div className="form-group spinner">
+                <label htmlFor="people">How many people <small>(including children)</small>?</label>
+                <input type="number"
+                        value={this.props.persons}
+                        onChange={this.props.onPersonChange}
+                        id="people"
+                        min="1" />
+              </div>
+              <div className="form-group right">
+                <button type="submit" className="btn large black">
+                  Find a transfer
+                </button>
+              </div>
             </div>
-            {this._renderRadioButtons()}
-            <div className="form-group right">
-              <button type="submit" className="btn large black">
-                Find a transfer
-              </button>
-            </div>
+            </form>
           </div>
-          </form>
         </div>
+        {this._renderReturnSearchRow()}
       </div>
     );
   }

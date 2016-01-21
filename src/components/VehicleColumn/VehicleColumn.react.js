@@ -10,6 +10,7 @@ class VehicleColumn extends Component {
 
   static contextTypes = {
     onVehicleTypeSelect: PropTypes.func,
+    returnEnabled: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -49,6 +50,20 @@ class VehicleColumn extends Component {
     );
   }
 
+  _renderReturnPrice = () => {
+    if (this.props.price === '-') {
+      return '- USD';
+    }
+
+    if (this.context.returnEnabled) {
+      const price = parseInt(this.props.price, 10);
+      const newPrice = price - price / 100 * 5;
+      return `+ ${newPrice} USD`;
+    }
+
+    return 'no return trip';
+  }
+
   handleVehicleTypeSelect = () => {
     this.context.onVehicleTypeSelect(this.props.vehicleType, parseInt(this.props.price, 10));
   }
@@ -84,7 +99,7 @@ class VehicleColumn extends Component {
         <div className="one-fourth heightfix">
           <div>
             <div className="price">{this.props.price} <small>USD</small></div>
-            <span className="meta">per passenger</span>
+            <span className="meta">{this._renderReturnPrice()}</span>
             <button className="btn grey large"
                     onClick={this.handleVehicleTypeSelect}>select</button>
           </div>
