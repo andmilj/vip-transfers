@@ -15,7 +15,13 @@ class AdvancedSearch extends Component {
     persons: PropTypes.any,
     date: PropTypes.instanceOf(Date),
     twoWayEnabled: PropTypes.bool,
-    destinations: PropTypes.array,
+    destinations: PropTypes.arrayOf(PropTypes.shape({
+      city: PropTypes.string,
+      primary: PropTypes.bool,
+      type: PropTypes.oneOf(
+        ['CITY', 'AIRPORT']
+      ),
+    })),
     onDateChange: PropTypes.func,
     onReturnDateChange: PropTypes.func,
     onPersonChange: PropTypes.func,
@@ -27,6 +33,7 @@ class AdvancedSearch extends Component {
   static contextTypes = {
     onReturnToggle: PropTypes.func,
     returnEnabled: PropTypes.bool,
+    returnDate: PropTypes.instanceOf(Date),
     onReturnDateChange: PropTypes.func,
   }
 
@@ -65,7 +72,8 @@ class AdvancedSearch extends Component {
     const datepicker = !this.context.returnEnabled ? null : (
       <div className="form-group datepicker one-third">
         <label htmlFor="dep-date">RETURN DATE AND TIME</label>
-        <DateTimePicker onDateTimeChange={this.context.onReturnDateChange} />
+        <DateTimePicker onDateTimeChange={this.context.onReturnDateChange}
+                        date={this.context.returnDate}/>
       </div>
     );
     const c = classNames('form-group datepicker', {

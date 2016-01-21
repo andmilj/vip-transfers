@@ -76,7 +76,7 @@ class VehicleColumn extends Component {
   _renderButton = () => {
     if (!this.props.price) {
       return (
-        <button className="btn grey large"
+        <button className="btn color large"
                 onClick={this.handleVehicleTypeSelect}>send inquiry</button>
       );
     }

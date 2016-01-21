@@ -4,7 +4,13 @@ import DateTimePicker from './DateTimePicker.react';
 
 class SearchRow extends Component {
   static propTypes = {
-    destinations: PropTypes.array.isRequired,
+    destinations: PropTypes.arrayOf(PropTypes.shape({
+      city: PropTypes.string,
+      primary: PropTypes.bool,
+      type: PropTypes.oneOf(
+        ['CITY', 'AIRPORT']
+      ),
+    })).isRequired,
     date: PropTypes.instanceOf(Date),
     from: PropTypes.string,
     to: PropTypes.string,
@@ -31,7 +37,7 @@ class SearchRow extends Component {
   }
 
   renderOptions() {
-    return map(this.props.destinations, ({ city }) => {
+    return map(this.props.destinations, ({ city, type }) => {
       return (
         <option key={city} value={city}>
           {city}

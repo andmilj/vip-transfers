@@ -84,6 +84,8 @@ class ResultsPage extends Component {
 
   validate() {
     switch (this.state.bookingStep) {
+    case 1:
+      return !this.state.returnEnabled || !!this.state.returnDate;
     case 3:
       return isEmpty(filter(values(this.state.passengerDetails), value => !value));
     default:
