@@ -4,6 +4,7 @@ import ExtrasJson from '../../constants/Extras';
 import PassengerDetails from './PassengerDetails.react';
 import VehicleResults from './VehicleResults.react';
 import Summary from './Summary.react';
+import Utils from '../../utils/Price.utils';
 
 import { findDOMNode } from 'react-dom';
 
@@ -25,6 +26,7 @@ class ResultsPage extends Component {
       returnEnabled: false,
       vehicleType: null,
       vehicleOneWayPrice: null,
+      vehicleReturnPrice: null,
       returnDate: null,
       passengerDetails: {
         name: null,
@@ -66,9 +68,12 @@ class ResultsPage extends Component {
   }
 
   getPrice = ({ extrasDeparture, extrasReturn, vehicleOneWayPrice }) => {
-    const priceDeparture = this.reducePriceFromExtras(extrasDeparture);
-    const priceReturn = this.reducePriceFromExtras(extrasReturn);
-    return vehicleOneWayPrice + priceDeparture + priceReturn;
+    const priceExDeparture = this.reducePriceFromExtras(extrasDeparture);
+    const priceExReturn = this.reducePriceFromExtras(extrasReturn);
+
+    const priceReturn = this.state.returnEnabled ? (Utils.getReturnPrice(vehicleOneWayPrice) + priceExReturn) : 0;
+
+    return vehicleOneWayPrice + priceReturn + priceExDeparture;
   }
 
   reducePriceFromExtras = (extraType) => {
@@ -96,6 +101,7 @@ class ResultsPage extends Component {
     const price = this.getPrice(defaults({ vehicleOneWayPrice }, this.state));
     this.handleStepForward({
       vehicleType: type,
+      vehicleReturnPrice: Utils.getReturnPrice(vehicleOneWayPrice),
       vehicleOneWayPrice,
       price,
     });
