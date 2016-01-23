@@ -1,14 +1,16 @@
 import React, { PropTypes, Component } from 'react';
+
 import Extras from './Extras.react';
 import ExtrasJson from '../../constants/Extras';
 import PassengerDetails from './PassengerDetails.react';
-import VehicleResults from './VehicleResults.react';
 import Summary from './Summary.react';
 import Utils from '../../utils/Price.utils';
+import VehicleResults from './VehicleResults.react';
 
 import { findDOMNode } from 'react-dom';
 
-import { assign, values, filter, isEmpty, reduce, defaults, find } from 'lodash';
+import { assign, values, filter, omit,
+  isEmpty, reduce, defaults, find } from 'lodash';
 
 class ResultsPage extends Component {
   static defaultProps = {
@@ -34,6 +36,10 @@ class ResultsPage extends Component {
         email: null,
         country: null,
         city: null,
+        departureAddress: null,
+        departureFlightNumber: null,
+        returnAddress: null,
+        returnFlightNumber: null,
       },
       price: 0,
     };
@@ -82,12 +88,18 @@ class ResultsPage extends Component {
     }, 0);
   }
 
+  validatePassengerDetails() {
+    const mainDetail = omit(this.state.passengerDetails, 'departureAddress', 'departureFlightNumber',
+                    'returnAddress', 'returnFlightNumber');
+    return isEmpty(filter(values(mainDetail), value => !value));
+  }
+
   validate() {
     switch (this.state.bookingStep) {
     case 1:
       return !this.state.returnEnabled || !!this.state.returnDate;
     case 3:
-      return isEmpty(filter(values(this.state.passengerDetails), value => !value));
+      return this.validatePassengerDetails();
     default:
       return true;
     }
@@ -233,6 +245,10 @@ ResultsPage.childContextTypes = {
     email: PropTypes.string,
     country: PropTypes.string,
     city: PropTypes.string,
+    departureAddress: PropTypes.string,
+    departureFlightNumber: PropTypes.string,
+    returnAddress: PropTypes.string,
+    returnFlightNumber: PropTypes.string,
   }),
   price: PropTypes.number.isRequired,
   onDepartureValueChange: PropTypes.func.isRequired,
