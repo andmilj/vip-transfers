@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
-import { map, noop } from 'lodash';
+import { map, sortByOrder, filter } from 'lodash';
 import DateTimePicker from './DateTimePicker.react';
+import FormatUtils from '../../utils/Format.utils';
 
 class SearchRow extends Component {
   static propTypes = {
@@ -36,11 +37,12 @@ class SearchRow extends Component {
     };
   }
 
-  renderOptions() {
-    return map(this.props.destinations, ({ city, type }) => {
+  renderOptions(_primary = false) {
+    const filtered = filter(this.props.destinations, ({ primary }) => primary === _primary);
+    return map(sortByOrder(filtered, ['city', 'type']), ({ city, type }) => {
       return (
-        <option key={city} value={city}>
-          {city}
+        <option key={city + '_' + type} value={city + '_' + type}>
+          {FormatUtils.cityName(city, type)}
         </option>
       );
     });
@@ -59,7 +61,10 @@ class SearchRow extends Component {
                   disabled={this.state.selectsDisabled}
                   value={this.props.from}>
             <option value="">&nbsp;</option>
-            <optgroup label="Croatia">
+            <optgroup label="Main">
+              {this.renderOptions(true)}
+            </optgroup>
+            <optgroup label="Secondary">
               {this.renderOptions()}
             </optgroup>
           </select>
@@ -70,7 +75,10 @@ class SearchRow extends Component {
                   disabled={this.state.selectsDisabled}
                   value={this.props.to}>
             <option value="">&nbsp;</option>
-            <optgroup label="Croatia">
+            <optgroup label="Main">
+              {this.renderOptions(true)}
+            </optgroup>
+            <optgroup label="Secondary">
               {this.renderOptions()}
             </optgroup>
           </select>

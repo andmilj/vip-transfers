@@ -1,0 +1,16 @@
+import cityTypes from '../db/constants/cityTypes';
+
+export default {
+  cityName(_city, _type) {
+    let city = _city;
+    let type = _type;
+
+    if (!type) {
+      city = _city.split('_')[0];
+      type = _city.split('_')[1];
+    }
+
+    const suffix = type === cityTypes.AIRPORT ? ' ' + cityTypes.AIRPORT : '';
+    return city + suffix;
+  },
+};

@@ -14,13 +14,13 @@ function createUsers(users) {
   });
 }
 
-function createCroatianDestinations(cityNames) {
+function createCroatianDestinations(cityNames, type) {
   _.forEach(cityNames, name => {
     destination({
       city: name,
       country: 'Croatia',
       countryShort: 'Cro',
-      type: cityTypes.CITY,
+      type: type || cityTypes.CITY,
       // schema will alter this value before save
       primary: false,
     }).save();
@@ -69,6 +69,7 @@ export function seedDatabase(drop) {
     if (destinations.length === 0) {
       createCroatianDestinations([
         'Split', 'Rijeka', 'Zagreb', 'Pula', 'Dubrovnik', 'Vodice', 'Trogir']);
+      createCroatianDestinations(['Split', 'Zagreb'], cityTypes.AIRPORT);
       console.log('Destinastions seeded!');
     }
   });
