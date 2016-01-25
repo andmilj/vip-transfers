@@ -36,10 +36,18 @@ class ResultsPage extends Component {
         email: null,
         country: null,
         city: null,
-        departureAddress: null,
+      },
+      oneWayAddressDetails: {
+        pickUpAddress: null,
+        dropOffAddress: null,
+        arrivalFlightNumber: null,
         departureFlightNumber: null,
-        returnAddress: null,
-        returnFlightNumber: null,
+      },
+      returnWayAddressDetails: {
+        pickUpAddress: null,
+        dropOffAddress: null,
+        arrivalFlightNumber: null,
+        departureFlightNumber: null,
       },
       price: 0,
     };
@@ -52,7 +60,7 @@ class ResultsPage extends Component {
       extrasReturn: this.state.extrasReturn,
       lastStep: this.state.lastStep,
       onDepartureValueChange: this.handleDepartureValueChange,
-      onPassengerDetailsChange: this.handlePassengerDetailsChange,
+      onDetailsChange: this.handleDetailsChange,
       onStepBack: this.handleStepBack,
       onStepForward: this.handleStepForward,
       onReturnDateChange: this.handleReturnDateChange,
@@ -66,6 +74,8 @@ class ResultsPage extends Component {
       returnDate: this.state.returnDate,
       vehicleType: this.state.vehicleType,
       vehicleOneWayPrice: this.state.vehicleOneWayPrice,
+      oneWayAddressDetails: this.state.oneWayAddressDetails,
+      returnWayAddressDetails: this.state.returnWayAddressDetails,
     };
   }
 
@@ -169,9 +179,9 @@ class ResultsPage extends Component {
     });
   }
 
-  handlePassengerDetailsChange = (field, value) => {
+  handleDetailsChange = (field, value, fieldToChange = 'passengerDetails') => {
     this.setState({
-      passengerDetails: assign({}, this.state.passengerDetails, {
+      [fieldToChange]: assign({}, this.state[fieldToChange], {
         [field]: value,
       }),
     });
@@ -245,14 +255,22 @@ ResultsPage.childContextTypes = {
     email: PropTypes.string,
     country: PropTypes.string,
     city: PropTypes.string,
-    departureAddress: PropTypes.string,
+  }),
+  oneWayAddressDetails: PropTypes.shape({
+    pickUpAddress: PropTypes.string,
+    dropOffAddress: PropTypes.string,
+    arrivalFlightNumber: PropTypes.string,
     departureFlightNumber: PropTypes.string,
-    returnAddress: PropTypes.string,
-    returnFlightNumber: PropTypes.string,
+  }),
+  returnWayAddressDetails: PropTypes.shape({
+    pickUpAddress: PropTypes.string,
+    dropOffAddress: PropTypes.string,
+    arrivalFlightNumber: PropTypes.string,
+    departureFlightNumber: PropTypes.string,
   }),
   price: PropTypes.number.isRequired,
   onDepartureValueChange: PropTypes.func.isRequired,
-  onPassengerDetailsChange: PropTypes.func.isRequired,
+  onDetailsChange: PropTypes.func.isRequired,
   onStepBack: PropTypes.func.isRequired,
   onStepForward: PropTypes.func.isRequired,
   onReturnDateChange: PropTypes.func,

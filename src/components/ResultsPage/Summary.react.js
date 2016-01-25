@@ -20,7 +20,18 @@ class Summary extends Component {
       country: PropTypes.string,
       city: PropTypes.string,
     }).isRequired,
-    onPassengerDetailsChange: PropTypes.func.isRequired,
+    oneWayAddressDetails: PropTypes.shape({
+      pickUpAddress: PropTypes.string,
+      dropOffAddress: PropTypes.string,
+      arrivalFlightNumber: PropTypes.string,
+      departureFlightNumber: PropTypes.string,
+    }),
+    returnWayAddressDetails: PropTypes.shape({
+      pickUpAddress: PropTypes.string,
+      dropOffAddress: PropTypes.string,
+      arrivalFlightNumber: PropTypes.string,
+      departureFlightNumber: PropTypes.string,
+    }),
     price: PropTypes.number.isRequired,
     query: queryShape.isRequired,
     returnEnabled: PropTypes.bool,
@@ -29,7 +40,7 @@ class Summary extends Component {
   }
 
   renderReturn = () => {
-    const { returnDate, query, vehicleType } = this.context;
+    const { returnDate, query, vehicleType, returnWayAddressDetails } = this.context;
     const _date = moment(returnDate).format('DD.MM.YYYY HH:mm');
 
     if (!this.context.returnEnabled) {
@@ -43,7 +54,19 @@ class Summary extends Component {
         </h3>
         <SummaryRow label="Date" value={_date} />
         <SummaryRow label="From" value={query.to} />
+        {returnWayAddressDetails.pickUpAddress ? (
+          <SummaryRow label="Drop off address" value={returnWayAddressDetails.pickUpAddress} />
+          ) : (
+          <SummaryRow label="Arrival flight number" value={returnWayAddressDetails.arrivalFlightNumber} />
+          )
+        }
         <SummaryRow label="To" value={query.from} />
+        {returnWayAddressDetails.dropOffAddress ? (
+          <SummaryRow label="Drop off address" value={returnWayAddressDetails.dropOffAddress} />
+          ) : (
+          <SummaryRow label="Departure flight number" value={returnWayAddressDetails.departureFlightNumber} />
+          )
+        }
         <SummaryRow label="Vehicle" value={vehicleType} />
         <SummaryRow label="Extras" value={_date} />
       </div>
@@ -51,7 +74,7 @@ class Summary extends Component {
   }
 
   render() {
-    const { passengerDetails, query, vehicleType } = this.context;
+    const { passengerDetails, query, vehicleType, oneWayAddressDetails } = this.context;
     const _date = moment(parseInt(query.date, 10)).format('DD.MM.YYYY HH:mm');
     return (
     <div>
@@ -73,10 +96,22 @@ class Summary extends Component {
               <SummaryRow label="City" value={passengerDetails.city} />
               <SummaryRow label="Country" value={passengerDetails.country} />
 
-              <h3>Departure Transfer details</h3>
+              <h3>First way transfer details</h3>
               <SummaryRow label="Date" value={_date} />
-              <SummaryRow label="From" value={query.from} />
-              <SummaryRow label="To" value={query.to} />
+                <SummaryRow label="From" value={query.from} />
+                {oneWayAddressDetails.pickUpAddress ? (
+                  <SummaryRow label="Drop off address" value={oneWayAddressDetails.pickUpAddress} />
+                  ) : (
+                  <SummaryRow label="Arrival flight number" value={oneWayAddressDetails.arrivalFlightNumber} />
+                  )
+                }
+                <SummaryRow label="To" value={query.to} />
+                {oneWayAddressDetails.dropOffAddress ? (
+                  <SummaryRow label="Drop off address" value={oneWayAddressDetails.dropOffAddress} />
+                  ) : (
+                  <SummaryRow label="Departure flight number" value={oneWayAddressDetails.departureFlightNumber} />
+                  )
+                }
               <SummaryRow label="Vehicle" value={vehicleType} />
               <SummaryRow label="Extras" value={_date} />
 

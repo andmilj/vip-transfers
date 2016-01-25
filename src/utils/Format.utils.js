@@ -13,4 +13,14 @@ export default {
     const suffix = type === cityTypes.AIRPORT ? ' ' + cityTypes.AIRPORT : '';
     return city + suffix;
   },
+
+  isAirport(_city, _type) {
+    let type = _type;
+
+    if (!type) {
+      type = _city.split('_')[1];
+    }
+
+    return type === cityTypes.AIRPORT;
+  },
 };
