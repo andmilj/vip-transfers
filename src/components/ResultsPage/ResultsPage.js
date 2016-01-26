@@ -100,8 +100,8 @@ class ResultsPage extends Component {
     }, 0);
   }
 
-  validatePassengerDetails() {
-    return map(keys(omit(this.state.passengerDetails, value => !!value)), invalidProp => {
+  validatePassengerDetails({ passengerDetails }) {
+    return map(keys(omit(passengerDetails, value => !!value)), invalidProp => {
       return 'passengerDetails.' + invalidProp;
     });
   }
@@ -118,7 +118,7 @@ class ResultsPage extends Component {
     case 1:
       return this.validateReturnDate();
     case 3:
-      return this.validatePassengerDetails();
+      return this.validatePassengerDetails(this.state);
     default:
       return [];
     }
@@ -195,12 +195,14 @@ class ResultsPage extends Component {
   }
 
   handleDetailsChange = (field, value, fieldToChange = 'passengerDetails') => {
-    this.setState({
+    const newState = {
       [fieldToChange]: assign({}, this.state[fieldToChange], {
         [field]: value,
       }),
-      errors: without(this.state.errors, fieldToChange + '.' + field),
-    });
+    };
+    this.setState(assign(newState, {
+      errors: this.validatePassengerDetails(newState),
+    }));
   }
 
   render() {
