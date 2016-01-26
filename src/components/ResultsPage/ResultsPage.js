@@ -4,13 +4,14 @@ import Extras from './Extras.react';
 import ExtrasJson from '../../constants/Extras';
 import PassengerDetails from './PassengerDetails.react';
 import Summary from './Summary.react';
-import Utils from '../../utils/Price.utils';
 import VehicleResults from './VehicleResults.react';
+import PriceUtils from '../../utils/Price.utils';
 import ValidationUtil from '../../utils/Validation.utils';
+import FormatUtils from '../../utils/Format.utils';
 import { findDOMNode } from 'react-dom';
 
-import { assign, omit, without, map,
-  isEmpty, reduce, defaults, find, keys } from 'lodash';
+import { assign, without,
+  isEmpty, reduce, defaults, find } from 'lodash';
 
 class ResultsPage extends Component {
   static defaultProps = {
@@ -89,7 +90,7 @@ class ResultsPage extends Component {
     const priceExDeparture = this.reducePriceFromExtras(extrasDeparture);
     const priceExReturn = this.reducePriceFromExtras(extrasReturn);
 
-    const priceReturn = this.state.returnEnabled ? (Utils.getReturnPrice(vehicleOneWayPrice) + priceExReturn) : 0;
+    const priceReturn = this.state.returnEnabled ? (PriceUtils.getReturnPrice(vehicleOneWayPrice) + priceExReturn) : 0;
 
     return vehicleOneWayPrice + priceReturn + priceExDeparture;
   }
@@ -98,12 +99,6 @@ class ResultsPage extends Component {
     return reduce(extraType, (result, value, name) => {
       return result + find(ExtrasJson, { name }).price * value;
     }, 0);
-  }
-
-  validatePassengerDetails({ passengerDetails }) {
-    return map(keys(omit(passengerDetails, value => !!value)), invalidProp => {
-      return 'passengerDetails.' + invalidProp;
-    });
   }
 
   validateReturnDate() {
@@ -118,7 +113,7 @@ class ResultsPage extends Component {
     case 1:
       return this.validateReturnDate();
     case 3:
-      return this.validatePassengerDetails(this.state);
+      return ValidationUtil.validateDetails(this.state, this.props.query, this.state.returnEnabled);
     default:
       return [];
     }
@@ -127,6 +122,13 @@ class ResultsPage extends Component {
   handleReturnToggle = () => {
     this.setState({
       returnEnabled: !this.state.returnEnabled,
+      errors: [],
+      returnWayAddressDetails: {
+        pickUpAddress: null,
+        dropOffAddress: null,
+        arrivalFlightNumber: null,
+        departureFlightNumber: null,
+      },
     });
   }
 
@@ -134,7 +136,7 @@ class ResultsPage extends Component {
     const price = this.getPrice(defaults({ vehicleOneWayPrice }, this.state));
     this.handleStepForward({
       vehicleType: type,
-      vehicleReturnPrice: Utils.getReturnPrice(vehicleOneWayPrice),
+      vehicleReturnPrice: PriceUtils.getReturnPrice(vehicleOneWayPrice),
       vehicleOneWayPrice,
       price,
     });
@@ -201,7 +203,11 @@ class ResultsPage extends Component {
       }),
     };
     this.setState(assign(newState, {
-      errors: this.validatePassengerDetails(newState),
+      errors: ValidationUtil.validateDetails(
+          defaults(newState, FormatUtils.pickDetails(this.state)),
+          this.props.query,
+          this.state.returnEnabled
+        ),
     }));
   }
 

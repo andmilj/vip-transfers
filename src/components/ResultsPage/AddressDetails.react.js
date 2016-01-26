@@ -18,8 +18,8 @@ class AddressDetails extends Component {
   }
 
   render() {
-    const isAirportFrom = FormatUtils.isAirport(this.props.to);
-    const isAirportTo = FormatUtils.isAirport(this.props.from);
+    const isAirportFrom = FormatUtils.isAirport(this.props.from);
+    const isAirportTo = FormatUtils.isAirport(this.props.to);
     return (
         <div className="f-row">
           {isAirportFrom ? (

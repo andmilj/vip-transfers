@@ -1,4 +1,5 @@
 import cityTypes from '../db/constants/cityTypes';
+import { pick } from 'lodash';
 
 export default {
   cityName(_city, _type) {
@@ -22,5 +23,9 @@ export default {
     }
 
     return type === cityTypes.AIRPORT;
+  },
+
+  pickDetails(state) {
+    return pick(state, 'passengerDetails', 'oneWayAddressDetails', 'returnWayAddressDetails');
   },
 };
