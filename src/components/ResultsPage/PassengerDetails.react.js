@@ -4,12 +4,14 @@ import DestinationSummary from './DestinationSummary.react';
 import BookingActions from './BookingActions.react';
 import withStyles from '../../decorators/withStyles';
 import AddressDetails from './AddressDetails.react';
-import _, { partial } from 'lodash';
+import FormElement from './FormElement.react';
+import _, { partial, includes } from 'lodash';
 import styles from './styles';
 
 @withStyles(styles)
 class PassengerDetails extends Component {
   static contextTypes = {
+    errors: PropTypes.arrayOf(PropTypes.string),
     passengerDetails: PropTypes.shape({
       name: PropTypes.string,
       number: PropTypes.string,
@@ -39,6 +41,10 @@ class PassengerDetails extends Component {
     returnEnabled: PropTypes.bool,
   }
 
+  hasError = (id) => {
+    return includes(this.context.errors, 'passengerDetails.' + id);
+  }
+
   handleChange = ({ target }, fieldToChange = 'passengerDetails') => {
     this.context.onDetailsChange(target.id, target.value, fieldToChange);
   }
@@ -51,7 +57,7 @@ class PassengerDetails extends Component {
     return (
       <div>
         <div className="content">
-          <h2>Retrun way destinastion details</h2>
+          <h2>Return way destinastion details</h2>
           <p>All fields are required.</p>
         </div>
         <form className="address-details">
@@ -72,7 +78,7 @@ class PassengerDetails extends Component {
         <div className="row">
           <div className="three-fourth">
             <div className="content">
-              <h2>One way destinastion details</h2>
+              <h2>First way destinastion details</h2>
               <p>Please ensure all of the required fields are completed at the time of booking. This information is imperative to ensure a smooth journey.<br />All fields are required.</p>
             </div>
             <form className="address-details">
@@ -88,48 +94,46 @@ class PassengerDetails extends Component {
             </div>
             <form>
               <div className="f-row">
-                <div className="one-half">
-                  <label htmlFor="name">Name and surname</label>
-                  <input value={this.context.passengerDetails.name}
-                         onChange={this.handleChange}
-                         type="text"
-                         id="name" />
-                </div>
-                <div className="one-half">
-                  <label htmlFor="number">Mobile number</label>
-                  <input value={this.context.passengerDetails.number}
-                         onChange={this.handleChange}
-                         type="number"
-                         id="number" />
-                </div>
+                <FormElement className="one-half"
+                             id="name"
+                             error={this.hasError('name')}
+                             label="Name and surname"
+                             onChange={this.handleChange}
+                             value={this.context.passengerDetails.name}/>
+                <FormElement className="one-half"
+                             id="number"
+                             error={this.hasError('number')}
+                             type="number"
+                             label="Mobile number"
+                             onChange={this.handleChange}
+                             value={this.context.passengerDetails.number}/>
               </div>
               <div className="f-row">
-                <div className="one-half">
-                  <label htmlFor="email">Email address</label>
-                  <input value={this.context.passengerDetails.email}
-                         onChange={this.handleChange}
-                          type="email" id="email" />
-                </div>
+                <FormElement className="one-half"
+                             id="email"
+                             type="email"
+                             error={this.hasError('email')}
+                             label="Email address"
+                             onChange={this.handleChange}
+                             value={this.context.passengerDetails.email}/>
                 <div className="one-half">
                   <label htmlFor="email2">Confirm email address</label>
                   <input type="email" id="email2" />
                 </div>
               </div>
               <div className="f-row">
-                <div className="one-half">
-                  <label htmlFor="country">Country</label>
-                  <input value={this.context.passengerDetails.country}
-                         onChange={this.handleChange}
-                         type="text"
-                         id="country" />
-                </div>
-                <div className="one-half">
-                  <label htmlFor="city">City</label>
-                  <input value={this.context.passengerDetails.city}
-                         onChange={this.handleChange}
-                         type="text"
-                         id="city" />
-                </div>
+                <FormElement className="one-half"
+                             id="country"
+                             error={this.hasError('country')}
+                             label="Country"
+                             onChange={this.handleChange}
+                             value={this.context.passengerDetails.country}/>
+                <FormElement className="one-half"
+                             id="city"
+                             error={this.hasError('city')}
+                             label="City"
+                             onChange={this.handleChange}
+                             value={this.context.passengerDetails.city}/>
               </div>
               <BookingActions />
             </form>

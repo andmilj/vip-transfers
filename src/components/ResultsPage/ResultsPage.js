@@ -6,11 +6,11 @@ import PassengerDetails from './PassengerDetails.react';
 import Summary from './Summary.react';
 import Utils from '../../utils/Price.utils';
 import VehicleResults from './VehicleResults.react';
-
+import ValidationUtil from '../../utils/Validation.utils';
 import { findDOMNode } from 'react-dom';
 
-import { assign, values, filter, omit,
-  isEmpty, reduce, defaults, find } from 'lodash';
+import { assign, omit, without, map,
+  isEmpty, reduce, defaults, find, keys } from 'lodash';
 
 class ResultsPage extends Component {
   static defaultProps = {
@@ -21,6 +21,7 @@ class ResultsPage extends Component {
     super(props);
 
     this.state = {
+      errors: [],
       bookingStep: 1,
       extrasDeparture: {},
       extrasReturn: {},
@@ -55,6 +56,7 @@ class ResultsPage extends Component {
 
   getChildContext() {
     return {
+      errors: this.state.errors,
       extras: ExtrasJson,
       extrasDeparture: this.state.extrasDeparture,
       extrasReturn: this.state.extrasReturn,
@@ -99,19 +101,26 @@ class ResultsPage extends Component {
   }
 
   validatePassengerDetails() {
-    const mainDetail = omit(this.state.passengerDetails, 'departureAddress', 'departureFlightNumber',
-                    'returnAddress', 'returnFlightNumber');
-    return isEmpty(filter(values(mainDetail), value => !value));
+    return map(keys(omit(this.state.passengerDetails, value => !!value)), invalidProp => {
+      return 'passengerDetails.' + invalidProp;
+    });
+  }
+
+  validateReturnDate() {
+    if (this.state.returnEnabled && !this.state.returnDate) {
+      return ['returnDate'];
+    }
+    return [];
   }
 
   validate() {
     switch (this.state.bookingStep) {
     case 1:
-      return !this.state.returnEnabled || !!this.state.returnDate;
+      return this.validateReturnDate();
     case 3:
       return this.validatePassengerDetails();
     default:
-      return true;
+      return [];
     }
   }
 
@@ -140,12 +149,17 @@ class ResultsPage extends Component {
   }
 
   handleStepForward = (additionalState = {}) => {
-    if (this.validate()) {
+    const validationArray = this.validate();
+    if (isEmpty(validationArray)) {
       findDOMNode(this).scrollIntoView();
       this.setState(assign({}, {
         bookingStep: this.state.bookingStep + 1,
         lastStep: (this.state.bookingStep + 1) === 4,
       }, additionalState));
+    } else {
+      this.setState({
+        errors: validationArray,
+      });
     }
   }
 
@@ -176,6 +190,7 @@ class ResultsPage extends Component {
   handleReturnDateChange = (returnDate) => {
     this.setState({
       returnDate,
+      errors: without(this.state.errors, 'returnDate'),
     });
   }
 
@@ -184,6 +199,7 @@ class ResultsPage extends Component {
       [fieldToChange]: assign({}, this.state[fieldToChange], {
         [field]: value,
       }),
+      errors: without(this.state.errors, fieldToChange + '.' + field),
     });
   }
 
@@ -241,6 +257,7 @@ ResultsPage.propTypes = {
 };
 
 ResultsPage.childContextTypes = {
+  errors: PropTypes.arrayOf(PropTypes.string),
   extras: PropTypes.arrayOf(PropTypes.shape({
     info: PropTypes.string,
     name: PropTypes.string,

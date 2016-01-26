@@ -33,7 +33,7 @@ class BookingSummary extends Component {
   renderExtras = (extras) => {
     return map(pick(extras, value => !!value), (times, name) => {
       return (
-        <span>
+        <span key={name}>
           <dt>Extras</dt>
           <dd>{times} x {name}</dd>
         </span>

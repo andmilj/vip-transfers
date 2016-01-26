@@ -86,7 +86,7 @@ class AdvancedSearch extends Component {
             <div className="f-row">
               {this._renderRadioButtons()}
               <div className={c}>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                <p>We are offering a 5% return discount</p>
               </div>
               {datepicker}
             </div>
