@@ -6,6 +6,7 @@ import withStyles from '../../decorators/withStyles';
 import AddressDetails from './AddressDetails.react';
 import FormElement from './FormElement.react';
 import _, { partial, includes } from 'lodash';
+import { getAddressErrors } from '../../utils/Validation.utils';
 import styles from './styles';
 
 @withStyles(styles)
@@ -53,6 +54,7 @@ class PassengerDetails extends Component {
     if (!this.context.returnEnabled) {
       return null;
     }
+    const errors = getAddressErrors(this.context.errors, 'returnWayAddressDetails');
 
     return (
       <div>
@@ -64,6 +66,7 @@ class PassengerDetails extends Component {
           <AddressDetails {...this.context.returnWayAddressDetails}
                           from={this.context.query.to}
                           to={this.context.query.from}
+                          errors={errors}
                           onDetailsChange={partial(this.handleChange, _, 'returnWayAddressDetails')} />
         </form>
       </div>
@@ -71,6 +74,8 @@ class PassengerDetails extends Component {
   }
 
   render() {
+    const errors = getAddressErrors(this.context.errors);
+
     return (
     <div>
       <DestinationSummary />
@@ -85,6 +90,7 @@ class PassengerDetails extends Component {
               <AddressDetails {...this.context.oneWayAddressDetails}
                               from={this.context.query.from}
                               to={this.context.query.to}
+                              errors={errors}
                               onDetailsChange={partial(this.handleChange, _, 'oneWayAddressDetails')} />
             </form>
             {this.renderReturnAddressDetails()}

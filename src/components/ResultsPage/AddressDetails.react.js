@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import FormatUtils from '../../utils/Format.utils';
+import FormElement from './FormElement.react';
+import { includes } from 'lodash';
 
 class AddressDetails extends Component {
   static propTypes = {
@@ -11,6 +13,15 @@ class AddressDetails extends Component {
     to: PropTypes.string,
     onDetailsChange: PropTypes.func.isRequired,
     returnEnabled: PropTypes.bool,
+    errors: PropTypes.arrayOf(PropTypes.string),
+  }
+
+  static defaultProps = {
+    errors: [],
+  }
+
+  hasError = (id) => {
+    return includes(this.props.errors, id);
   }
 
   handleChange = (event) => {
@@ -23,38 +34,34 @@ class AddressDetails extends Component {
     return (
         <div className="f-row">
           {isAirportFrom ? (
-              <div className="one-half">
-                <label htmlFor="arrivalFlightNumber">Arrival flight number</label>
-                <input value={this.props.arrivalFlightNumber}
-                       onChange={this.handleChange}
-                       type="text"
-                       id="arrivalFlightNumber" />
-              </div>
+            <FormElement className="one-half"
+                         id="arrivalFlightNumber"
+                         error={this.hasError('arrivalFlightNumber')}
+                         label="Arrival flight number"
+                         onChange={this.handleChange}
+                         value={this.props.arrivalFlightNumber}/>
             ) : (
-              <div className="one-half">
-                <label htmlFor="pickUpAddress">Pick up Address</label>
-                <input value={this.props.pickUpAddress}
-                       onChange={this.handleChange}
-                       type="text"
-                       id="pickUpAddress" />
-              </div>
+            <FormElement className="one-half"
+                         id="pickUpAddress"
+                         error={this.hasError('pickUpAddress')}
+                         label="Pick up Address"
+                         onChange={this.handleChange}
+                         value={this.props.pickUpAddress}/>
             )}
           {isAirportTo ? (
-              <div className="one-half">
-                <label htmlFor="departureFlightNumber">Departure flight number</label>
-                <input value={this.props.departureFlightNumber}
-                       onChange={this.handleChange}
-                       type="text"
-                       id="departureFlightNumber" />
-              </div>
+            <FormElement className="one-half"
+                         id="departureFlightNumber"
+                         error={this.hasError('departureFlightNumber')}
+                         label="Departure flight number"
+                         onChange={this.handleChange}
+                         value={this.props.departureFlightNumber}/>
             ) : (
-              <div className="one-half">
-                <label htmlFor="dropOffAddress">Drop off Address</label>
-                <input value={this.props.dropOffAddress}
-                       onChange={this.handleChange}
-                       type="text"
-                       id="dropOffAddress" />
-              </div>
+              <FormElement className="one-half"
+                           id="dropOffAddress"
+                           error={this.hasError('dropOffAddress')}
+                           label="Drop off Address"
+                           onChange={this.handleChange}
+                           value={this.props.dropOffAddress}/>
             )}
         </div>
     );

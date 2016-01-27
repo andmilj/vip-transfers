@@ -1,4 +1,5 @@
-import { omit, keys, map, union, without, intersection } from 'lodash';
+import { omit, keys, map, union, without,
+  intersection, includes, filter } from 'lodash';
 import FormatUtils from './Format.utils';
 
 function getInvalidPropKeys(_object) {
@@ -29,6 +30,14 @@ function forAddressDetails(invalidPropKeys, from, to) {
 
 function withReturn(returnInvalids, returnEnabled) {
   return returnEnabled ? returnInvalids : [];
+}
+
+export function getAddressErrors(errorsArray, typeOfAddress = 'oneWayAddressDetails') {
+  const errors = filter(errorsArray, error => {
+    return includes(error, typeOfAddress);
+  });
+
+  return map(errors, error => error.replace(typeOfAddress + '.', ''));
 }
 
 export default {
