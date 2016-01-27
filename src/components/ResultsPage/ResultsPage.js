@@ -6,7 +6,7 @@ import PassengerDetails from './PassengerDetails.react';
 import Summary from './Summary.react';
 import VehicleResults from './VehicleResults.react';
 import PriceUtils from '../../utils/Price.utils';
-import ValidationUtil from '../../utils/Validation.utils';
+import { validateDetails, validateReturnDate} from '../../utils/Validation.utils';
 import FormatUtils from '../../utils/Format.utils';
 import { findDOMNode } from 'react-dom';
 
@@ -101,19 +101,12 @@ class ResultsPage extends Component {
     }, 0);
   }
 
-  validateReturnDate() {
-    if (this.state.returnEnabled && !this.state.returnDate) {
-      return ['returnDate'];
-    }
-    return [];
-  }
-
   validate() {
     switch (this.state.bookingStep) {
     case 1:
-      return this.validateReturnDate();
+      return validateReturnDate(this.state.returnEnabled, this.state.returnDate);
     case 3:
-      return ValidationUtil.validateDetails(this.state, this.props.query, this.state.returnEnabled);
+      return validateDetails(this.state, this.props.query, this.state.returnEnabled);
     default:
       return [];
     }
@@ -203,7 +196,7 @@ class ResultsPage extends Component {
       }),
     };
     this.setState(assign(newState, {
-      errors: ValidationUtil.validateDetails(
+      errors: validateDetails(
           defaults(newState, FormatUtils.pickDetails(this.state)),
           this.props.query,
           this.state.returnEnabled

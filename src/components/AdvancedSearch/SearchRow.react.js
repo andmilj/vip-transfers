@@ -51,10 +51,11 @@ class SearchRow extends Component {
   render() {
     return (
       <div className="f-row">
-        <div className="form-group datepicker one-third">
-          <label htmlFor="dep-date">{this.props.dateTimeLabel}</label>
-          <DateTimePicker onDateTimeChange={this.props.onDateChange} date={this.props.date}/>
-        </div>
+          <DateTimePicker className="one-third"
+                          id="dep-date"
+                          onDateTimeChange={this.props.onDateChange}
+                          date={this.props.date}
+                          label={this.props.dateTimeLabel}/>
         <div className="form-group select one-third">
           <label>Pick up location</label>
           <select onChange={this.props.onPickupChange}

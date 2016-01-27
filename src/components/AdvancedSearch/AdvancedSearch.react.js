@@ -4,6 +4,7 @@ import SearchRow from './SearchRow.react';
 import DateTimePicker from './DateTimePicker.react';
 import withStyles from '../../decorators/withStyles';
 import { initUniform } from '../App/style/js/scripts';
+import { includes } from 'lodash';
 import style from './style.scss';
 import classNames from 'classnames';
 
@@ -35,6 +36,7 @@ class AdvancedSearch extends Component {
     returnEnabled: PropTypes.bool,
     returnDate: PropTypes.instanceOf(Date),
     onReturnDateChange: PropTypes.func,
+    errors: PropTypes.arrayOf(PropTypes.string),
   }
 
   static defaultProps = {
@@ -70,11 +72,12 @@ class AdvancedSearch extends Component {
       return null;
     }
     const datepicker = !this.context.returnEnabled ? null : (
-      <div className="form-group datepicker one-third">
-        <label htmlFor="dep-date">RETURN DATE AND TIME</label>
-        <DateTimePicker onDateTimeChange={this.context.onReturnDateChange}
-                        date={this.context.returnDate}/>
-      </div>
+      <DateTimePicker className="one-third"
+                      id="ret-date"
+                      error={includes(this.context.errors, 'returnDate')}
+                      onDateTimeChange={this.context.onReturnDateChange}
+                      date={this.context.returnDate}
+                      label="RETURN DATE AND TIME"/>
     );
     const c = classNames('form-group datepicker', {
       'one-third': this.context.returnEnabled,

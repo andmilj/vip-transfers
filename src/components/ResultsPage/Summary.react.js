@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import BookingActions from './BookingActions.react';
 import BookingHelp from './BookingHelp.react';
+import FormatUtils from '../../utils/Format.utils';
 import SummaryRow from './SummaryRow.react';
 import moment from 'moment';
 
@@ -53,14 +54,14 @@ class Summary extends Component {
           Return Transfer details
         </h3>
         <SummaryRow label="Date" value={_date} />
-        <SummaryRow label="From" value={query.to} />
+        <SummaryRow label="From" value={FormatUtils.cityName(query.to)} />
         {returnWayAddressDetails.pickUpAddress ? (
           <SummaryRow label="Drop off address" value={returnWayAddressDetails.pickUpAddress} />
           ) : (
           <SummaryRow label="Arrival flight number" value={returnWayAddressDetails.arrivalFlightNumber} />
           )
         }
-        <SummaryRow label="To" value={query.from} />
+        <SummaryRow label="To" value={FormatUtils.cityName(query.from)} />
         {returnWayAddressDetails.dropOffAddress ? (
           <SummaryRow label="Drop off address" value={returnWayAddressDetails.dropOffAddress} />
           ) : (
@@ -98,14 +99,14 @@ class Summary extends Component {
 
               <h3>First way transfer details</h3>
               <SummaryRow label="Date" value={_date} />
-                <SummaryRow label="From" value={query.from} />
+                <SummaryRow label="From" value={FormatUtils.cityName(query.from)} />
                 {oneWayAddressDetails.pickUpAddress ? (
                   <SummaryRow label="Drop off address" value={oneWayAddressDetails.pickUpAddress} />
                   ) : (
                   <SummaryRow label="Arrival flight number" value={oneWayAddressDetails.arrivalFlightNumber} />
                   )
                 }
-                <SummaryRow label="To" value={query.to} />
+                <SummaryRow label="To" value={FormatUtils.cityName(query.to)} />
                 {oneWayAddressDetails.dropOffAddress ? (
                   <SummaryRow label="Drop off address" value={oneWayAddressDetails.dropOffAddress} />
                   ) : (

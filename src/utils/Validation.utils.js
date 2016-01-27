@@ -40,14 +40,19 @@ export function getAddressErrors(errorsArray, typeOfAddress = 'oneWayAddressDeta
   return map(errors, error => error.replace(typeOfAddress + '.', ''));
 }
 
-export default {
-  validateDetails({ passengerDetails = {}, oneWayAddressDetails = {}, returnWayAddressDetails = {} }, { from, to }, returnEnabled) {
-    return union(
-      errorMap(getInvalidPropKeys(passengerDetails), 'passengerDetails'),
-      errorMap(forAddressDetails(getInvalidPropKeys(oneWayAddressDetails), from, to),
-        'oneWayAddressDetails'),
-      errorMap(forAddressDetails(withReturn(getInvalidPropKeys(returnWayAddressDetails), returnEnabled), to, from),
-        'returnWayAddressDetails')
-    );
-  },
-};
+export function validateReturnDate(returnEnabled, returnDate) {
+  if (returnEnabled && !returnDate) {
+    return ['returnDate'];
+  }
+  return [];
+}
+
+export function validateDetails({ passengerDetails = {}, oneWayAddressDetails = {}, returnWayAddressDetails = {} }, { from, to }, returnEnabled) {
+  return union(
+    errorMap(getInvalidPropKeys(passengerDetails), 'passengerDetails'),
+    errorMap(forAddressDetails(getInvalidPropKeys(oneWayAddressDetails), from, to),
+      'oneWayAddressDetails'),
+    errorMap(forAddressDetails(withReturn(getInvalidPropKeys(returnWayAddressDetails), returnEnabled), to, from),
+      'returnWayAddressDetails')
+  );
+}
