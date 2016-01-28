@@ -198,6 +198,7 @@ class ResultsPage extends Component {
     };
     const removedErrors = without(this.state.errors, fieldToChange + '.' + field);
     this.setState(assign(newState, {
+      // email2 not checked
       errors: union(getErrorsForInvalidKeys(detailsObject, fieldToChange), removedErrors),
     }));
   }

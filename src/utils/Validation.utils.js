@@ -1,4 +1,4 @@
-import { omit, keys, map, union, without,
+import { omit, keys, map, union, without, curry,
   intersection, includes, filter } from 'lodash';
 import FormatUtils from './Format.utils';
 
@@ -6,15 +6,15 @@ function getInvalidPropKeys(_object) {
   return keys(omit(_object, value => !!value));
 }
 
-function errorMap(array, suffix) {
+const errorMap = curry((suffix, array) => {
   return map(array, invalidProp => suffix + '.' + invalidProp);
-}
+});
 
 export function getErrorsForInvalidKeys(_object, suffix) {
-  return errorMap(getInvalidPropKeys(_object), suffix);
+  return errorMap(suffix, getInvalidPropKeys(_object));
 }
 
-function forAddressDetails(invalidPropKeys, from, to) {
+const filterAddressDetails = curry((from, to, invalidPropKeys) => {
   let invalids = [];
   let returnInvalids = [];
   if (FormatUtils.isAirport(from)) {
@@ -30,7 +30,7 @@ function forAddressDetails(invalidPropKeys, from, to) {
   }
 
   return intersection(invalids, returnInvalids);
-}
+});
 
 function withReturn(returnInvalids, returnEnabled) {
   return returnEnabled ? returnInvalids : [];
@@ -55,15 +55,20 @@ function checkEmails({ email, email2 }) {
   return email === email2 ? [] : ['email2'];
 }
 
+
 export function validateDetails({ passengerDetails = {}, oneWayAddressDetails = {}, returnWayAddressDetails = {} }, { from, to }, returnEnabled) {
+  const errorMapForPassenger = errorMap('passengerDetails');
+  const errorMapForAddress = errorMap('oneWayAddressDetails');
+  const errorMapForReturnAddress = errorMap('returnWayAddressDetails');
+
+  const filterFirstWayDetails = filterAddressDetails(from, to);
+  const filterReturnDetails = filterAddressDetails(to, from);
+
   return union(
-    errorMap(checkEmails(passengerDetails),
-      'passengerDetails'),
-    errorMap(getInvalidPropKeys(omit(passengerDetails, 'email2')),
-      'passengerDetails'),
-    errorMap(forAddressDetails(getInvalidPropKeys(oneWayAddressDetails), from, to),
-      'oneWayAddressDetails'),
-    errorMap(forAddressDetails(withReturn(getInvalidPropKeys(returnWayAddressDetails), returnEnabled), to, from),
-      'returnWayAddressDetails')
+    errorMapForPassenger(checkEmails(passengerDetails)),
+    errorMapForPassenger(getInvalidPropKeys(omit(passengerDetails, 'email2'))),
+    errorMapForAddress(filterFirstWayDetails(getInvalidPropKeys(oneWayAddressDetails))),
+    errorMapForReturnAddress(
+      filterReturnDetails(withReturn(getInvalidPropKeys(returnWayAddressDetails), returnEnabled)))
   );
 }
