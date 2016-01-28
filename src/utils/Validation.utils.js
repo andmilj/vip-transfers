@@ -10,6 +10,10 @@ function errorMap(array, suffix) {
   return map(array, invalidProp => suffix + '.' + invalidProp);
 }
 
+export function getErrorsForInvalidKeys(_object, suffix) {
+  return errorMap(getInvalidPropKeys(_object), suffix);
+}
+
 function forAddressDetails(invalidPropKeys, from, to) {
   let invalids = [];
   let returnInvalids = [];
@@ -47,9 +51,16 @@ export function validateReturnDate(returnEnabled, returnDate) {
   return [];
 }
 
+function checkEmails({ email, email2 }) {
+  return email === email2 ? [] : ['email2'];
+}
+
 export function validateDetails({ passengerDetails = {}, oneWayAddressDetails = {}, returnWayAddressDetails = {} }, { from, to }, returnEnabled) {
   return union(
-    errorMap(getInvalidPropKeys(passengerDetails), 'passengerDetails'),
+    errorMap(checkEmails(passengerDetails),
+      'passengerDetails'),
+    errorMap(getInvalidPropKeys(omit(passengerDetails, 'email2')),
+      'passengerDetails'),
     errorMap(forAddressDetails(getInvalidPropKeys(oneWayAddressDetails), from, to),
       'oneWayAddressDetails'),
     errorMap(forAddressDetails(withReturn(getInvalidPropKeys(returnWayAddressDetails), returnEnabled), to, from),

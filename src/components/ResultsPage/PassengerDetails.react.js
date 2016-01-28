@@ -86,7 +86,7 @@ class PassengerDetails extends Component {
               <h2>First way destinastion details</h2>
               <p>Please ensure all of the required fields are completed at the time of booking. This information is imperative to ensure a smooth journey.<br />All fields are required.</p>
             </div>
-            <form className="address-details">
+            <form className="address-details" ref="addressDetails1Form">
               <AddressDetails {...this.context.oneWayAddressDetails}
                               from={this.context.query.from}
                               to={this.context.query.to}
@@ -98,7 +98,7 @@ class PassengerDetails extends Component {
               <h2>Passenger details</h2>
               <p>All fields are required.</p>
             </div>
-            <form>
+            <form ref="passengerDetailsForm">
               <div className="f-row">
                 <FormElement className="one-half"
                              id="name"
@@ -122,10 +122,13 @@ class PassengerDetails extends Component {
                              label="Email address"
                              onChange={this.handleChange}
                              value={this.context.passengerDetails.email}/>
-                <div className="one-half">
-                  <label htmlFor="email2">Confirm email address</label>
-                  <input type="email" id="email2" />
-                </div>
+                 <FormElement className="one-half"
+                              id="email2"
+                              type="email"
+                              error={this.hasError('email2')}
+                              label="Confirm email address"
+                              onChange={this.handleChange}
+                              value={this.context.passengerDetails.email2}/>
               </div>
               <div className="f-row">
                 <FormElement className="one-half"

@@ -6,11 +6,10 @@ import PassengerDetails from './PassengerDetails.react';
 import Summary from './Summary.react';
 import VehicleResults from './VehicleResults.react';
 import PriceUtils from '../../utils/Price.utils';
-import { validateDetails, validateReturnDate} from '../../utils/Validation.utils';
-import FormatUtils from '../../utils/Format.utils';
+import { validateDetails, validateReturnDate, getErrorsForInvalidKeys} from '../../utils/Validation.utils';
 import { findDOMNode } from 'react-dom';
 
-import { assign, without,
+import { assign, without, union,
   isEmpty, reduce, defaults, find } from 'lodash';
 
 class ResultsPage extends Component {
@@ -36,6 +35,7 @@ class ResultsPage extends Component {
         name: null,
         number: null,
         email: null,
+        email2: null,
         country: null,
         city: null,
       },
@@ -190,17 +190,15 @@ class ResultsPage extends Component {
   }
 
   handleDetailsChange = (field, value, fieldToChange = 'passengerDetails') => {
-    const newState = {
-      [fieldToChange]: assign({}, this.state[fieldToChange], {
-        [field]: value,
-      }),
+    const detailsObject = {
+      [field]: value,
     };
+    const newState = {
+      [fieldToChange]: assign({}, this.state[fieldToChange], detailsObject),
+    };
+    const removedErrors = without(this.state.errors, fieldToChange + '.' + field);
     this.setState(assign(newState, {
-      errors: validateDetails(
-          defaults(newState, FormatUtils.pickDetails(this.state)),
-          this.props.query,
-          this.state.returnEnabled
-        ),
+      errors: union(getErrorsForInvalidKeys(detailsObject, fieldToChange), removedErrors),
     }));
   }
 
