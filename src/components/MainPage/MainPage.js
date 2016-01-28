@@ -12,7 +12,7 @@ class MainPage extends Component {
     destinations: PropTypes.array,
     vehicles: PropTypes.arrayOf(PropTypes.shape({
       type: PropTypes.string,
-      persons: PropTypes.string,
+      persons: PropTypes.any,
       pictureName: PropTypes.string,
     })),
   };
