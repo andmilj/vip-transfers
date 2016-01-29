@@ -1,15 +1,21 @@
 import React, { PropTypes, Component } from 'react';
+import classNames from 'classnames';
 import { findDOMNode } from 'react-dom';
 import { noop } from 'lodash';
 
 class DateTimePicker extends Component {
   static propTypes = {
+    id: PropTypes.string.isRequired,
     onDateTimeChange: PropTypes.func,
     date: PropTypes.instanceOf(Date),
+    label: PropTypes.string.isRequired,
+    className: PropTypes.string,
+    error: PropTypes.bool,
   }
 
   static defaultProps = {
     onDateTimeChange: noop,
+    error: false,
   }
 
   componentDidMount() {
@@ -23,8 +29,16 @@ class DateTimePicker extends Component {
   }
 
   render() {
+    const cl = classNames(this.props.className, {
+      'form-group': true,
+      'datepicker': true,
+      'form-error': this.props.error,
+    });
     return (
-      <input type="text" ref="dateTime"/>
+      <div className={cl}>
+        <label htmlFor={this.props.id}>{this.props.label}</label>
+        <input type="text" ref="dateTime" id={this.props.id}/>
+      </div>
     );
   }
 }

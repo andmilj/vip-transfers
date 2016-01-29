@@ -3,3 +3,11 @@
 @import './style/css/style.css';
 @import './style/css/animate.css';
 @import './style/css/responsive-tables.css';
+
+.form-error label{
+  color: #F44336 !important;
+}
+
+.form-error input {
+  border: 1px solid #F44336 !important;
+}

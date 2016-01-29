@@ -1,4 +1,5 @@
 import React, {PropTypes, Component} from 'react';
+import Utils from '../../utils/Price.utils';
 
 class VehicleColumn extends Component {
   static propTypes = {
@@ -10,10 +11,11 @@ class VehicleColumn extends Component {
 
   static contextTypes = {
     onVehicleTypeSelect: PropTypes.func,
+    returnEnabled: PropTypes.bool,
   };
 
   static defaultProps = {
-    price: '-',
+    price: null,
     pictureName: 'car.jpg',
   };
 
@@ -33,6 +35,11 @@ class VehicleColumn extends Component {
     });
   }
 
+  handleVehicleTypeSelect = () => {
+    const { price } = this.props;
+    this.context.onVehicleTypeSelect(this.props.vehicleType, parseInt(this.props.price, 10), Utils.getReturnPrice(price));
+  }
+
   _renderInformation() {
     if (!this.state.showInformation) {
       return null;
@@ -49,8 +56,35 @@ class VehicleColumn extends Component {
     );
   }
 
-  handleVehicleTypeSelect = () => {
-    this.context.onVehicleTypeSelect(this.props.vehicleType, parseInt(this.props.price, 10));
+  _renderReturnPrice = () => {
+    const { price } = this.props;
+    if (!price) {
+      return '- USD';
+    }
+
+    if (this.context.returnEnabled) {
+      return `+ ${Utils.getReturnPrice(price)} USD`;
+    }
+
+    return 'no return trip';
+  }
+
+  _renderPrice() {
+    return this.props.price || '-';
+  }
+
+  _renderButton = () => {
+    if (!this.props.price) {
+      return (
+        <button className="btn color large"
+                onClick={this.handleVehicleTypeSelect}>send inquiry</button>
+      );
+    }
+
+    return (
+      <button className="btn grey large"
+              onClick={this.handleVehicleTypeSelect}>select</button>
+    );
   }
 
   render() {
@@ -83,10 +117,9 @@ class VehicleColumn extends Component {
         </div>
         <div className="one-fourth heightfix">
           <div>
-            <div className="price">{this.props.price} <small>USD</small></div>
-            <span className="meta">per passenger</span>
-            <button className="btn grey large"
-                    onClick={this.handleVehicleTypeSelect}>select</button>
+            <div className="price">{this._renderPrice()} <small>USD</small></div>
+            <span className="meta">{this._renderReturnPrice()}</span>
+            {this._renderButton()}
           </div>
         </div>
         {this._renderInformation()}

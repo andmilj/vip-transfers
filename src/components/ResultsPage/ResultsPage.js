@@ -1,13 +1,16 @@
 import React, { PropTypes, Component } from 'react';
+
 import Extras from './Extras.react';
 import ExtrasJson from '../../constants/Extras';
 import PassengerDetails from './PassengerDetails.react';
-import VehicleResults from './VehicleResults.react';
 import Summary from './Summary.react';
-
+import VehicleResults from './VehicleResults.react';
+import PriceUtils from '../../utils/Price.utils';
+import { validateDetails, validateReturnDate, getErrorsForInvalidKeys} from '../../utils/Validation.utils';
 import { findDOMNode } from 'react-dom';
 
-import { assign, values, filter, isEmpty, reduce, defaults, find } from 'lodash';
+import { assign, without, union,
+  isEmpty, reduce, defaults, find } from 'lodash';
 
 class ResultsPage extends Component {
   static defaultProps = {
@@ -18,6 +21,7 @@ class ResultsPage extends Component {
     super(props);
 
     this.state = {
+      errors: [],
       bookingStep: 1,
       extrasDeparture: {},
       extrasReturn: {},
@@ -25,13 +29,27 @@ class ResultsPage extends Component {
       returnEnabled: false,
       vehicleType: null,
       vehicleOneWayPrice: null,
+      vehicleReturnPrice: null,
       returnDate: null,
       passengerDetails: {
         name: null,
         number: null,
         email: null,
+        email2: null,
         country: null,
         city: null,
+      },
+      oneWayAddressDetails: {
+        pickUpAddress: null,
+        dropOffAddress: null,
+        arrivalFlightNumber: null,
+        departureFlightNumber: null,
+      },
+      returnWayAddressDetails: {
+        pickUpAddress: null,
+        dropOffAddress: null,
+        arrivalFlightNumber: null,
+        departureFlightNumber: null,
       },
       price: 0,
     };
@@ -39,12 +57,13 @@ class ResultsPage extends Component {
 
   getChildContext() {
     return {
+      errors: this.state.errors,
       extras: ExtrasJson,
       extrasDeparture: this.state.extrasDeparture,
       extrasReturn: this.state.extrasReturn,
       lastStep: this.state.lastStep,
       onDepartureValueChange: this.handleDepartureValueChange,
-      onPassengerDetailsChange: this.handlePassengerDetailsChange,
+      onDetailsChange: this.handleDetailsChange,
       onStepBack: this.handleStepBack,
       onStepForward: this.handleStepForward,
       onReturnDateChange: this.handleReturnDateChange,
@@ -58,6 +77,8 @@ class ResultsPage extends Component {
       returnDate: this.state.returnDate,
       vehicleType: this.state.vehicleType,
       vehicleOneWayPrice: this.state.vehicleOneWayPrice,
+      oneWayAddressDetails: this.state.oneWayAddressDetails,
+      returnWayAddressDetails: this.state.returnWayAddressDetails,
     };
   }
 
@@ -66,9 +87,12 @@ class ResultsPage extends Component {
   }
 
   getPrice = ({ extrasDeparture, extrasReturn, vehicleOneWayPrice }) => {
-    const priceDeparture = this.reducePriceFromExtras(extrasDeparture);
-    const priceReturn = this.reducePriceFromExtras(extrasReturn);
-    return vehicleOneWayPrice + priceDeparture + priceReturn;
+    const priceExDeparture = this.reducePriceFromExtras(extrasDeparture);
+    const priceExReturn = this.reducePriceFromExtras(extrasReturn);
+
+    const priceReturn = this.state.returnEnabled ? (PriceUtils.getReturnPrice(vehicleOneWayPrice) + priceExReturn) : 0;
+
+    return vehicleOneWayPrice + priceReturn + priceExDeparture;
   }
 
   reducePriceFromExtras = (extraType) => {
@@ -79,16 +103,25 @@ class ResultsPage extends Component {
 
   validate() {
     switch (this.state.bookingStep) {
+    case 1:
+      return validateReturnDate(this.state.returnEnabled, this.state.returnDate);
     case 3:
-      return isEmpty(filter(values(this.state.passengerDetails), value => !value));
+      return validateDetails(this.state, this.props.query, this.state.returnEnabled);
     default:
-      return true;
+      return [];
     }
   }
 
   handleReturnToggle = () => {
     this.setState({
       returnEnabled: !this.state.returnEnabled,
+      errors: [],
+      returnWayAddressDetails: {
+        pickUpAddress: null,
+        dropOffAddress: null,
+        arrivalFlightNumber: null,
+        departureFlightNumber: null,
+      },
     });
   }
 
@@ -96,6 +129,7 @@ class ResultsPage extends Component {
     const price = this.getPrice(defaults({ vehicleOneWayPrice }, this.state));
     this.handleStepForward({
       vehicleType: type,
+      vehicleReturnPrice: PriceUtils.getReturnPrice(vehicleOneWayPrice),
       vehicleOneWayPrice,
       price,
     });
@@ -110,12 +144,17 @@ class ResultsPage extends Component {
   }
 
   handleStepForward = (additionalState = {}) => {
-    if (this.validate()) {
+    const validationArray = this.validate();
+    if (isEmpty(validationArray)) {
       findDOMNode(this).scrollIntoView();
       this.setState(assign({}, {
         bookingStep: this.state.bookingStep + 1,
         lastStep: (this.state.bookingStep + 1) === 4,
       }, additionalState));
+    } else {
+      this.setState({
+        errors: validationArray,
+      });
     }
   }
 
@@ -146,15 +185,22 @@ class ResultsPage extends Component {
   handleReturnDateChange = (returnDate) => {
     this.setState({
       returnDate,
+      errors: without(this.state.errors, 'returnDate'),
     });
   }
 
-  handlePassengerDetailsChange = (field, value) => {
-    this.setState({
-      passengerDetails: assign({}, this.state.passengerDetails, {
-        [field]: value,
-      }),
-    });
+  handleDetailsChange = (field, value, fieldToChange = 'passengerDetails') => {
+    const detailsObject = {
+      [field]: value,
+    };
+    const newState = {
+      [fieldToChange]: assign({}, this.state[fieldToChange], detailsObject),
+    };
+    const removedErrors = without(this.state.errors, fieldToChange + '.' + field);
+    this.setState(assign(newState, {
+      // email2 not checked
+      errors: union(getErrorsForInvalidKeys(detailsObject, fieldToChange), removedErrors),
+    }));
   }
 
   render() {
@@ -211,6 +257,7 @@ ResultsPage.propTypes = {
 };
 
 ResultsPage.childContextTypes = {
+  errors: PropTypes.arrayOf(PropTypes.string),
   extras: PropTypes.arrayOf(PropTypes.shape({
     info: PropTypes.string,
     name: PropTypes.string,
@@ -226,9 +273,21 @@ ResultsPage.childContextTypes = {
     country: PropTypes.string,
     city: PropTypes.string,
   }),
+  oneWayAddressDetails: PropTypes.shape({
+    pickUpAddress: PropTypes.string,
+    dropOffAddress: PropTypes.string,
+    arrivalFlightNumber: PropTypes.string,
+    departureFlightNumber: PropTypes.string,
+  }),
+  returnWayAddressDetails: PropTypes.shape({
+    pickUpAddress: PropTypes.string,
+    dropOffAddress: PropTypes.string,
+    arrivalFlightNumber: PropTypes.string,
+    departureFlightNumber: PropTypes.string,
+  }),
   price: PropTypes.number.isRequired,
   onDepartureValueChange: PropTypes.func.isRequired,
-  onPassengerDetailsChange: PropTypes.func.isRequired,
+  onDetailsChange: PropTypes.func.isRequired,
   onStepBack: PropTypes.func.isRequired,
   onStepForward: PropTypes.func.isRequired,
   onReturnDateChange: PropTypes.func,
