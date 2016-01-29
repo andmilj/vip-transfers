@@ -6,9 +6,13 @@ const router = new Router();
 
 router.get('/', async (req, res, next) => {
   try {
+    const from = req.query.from.split('_');
+    const to = req.query.to.split('_');
     const query = {$and: [
-      {'destinations.city': req.query.from},
-      {'destinations.city': req.query.to},
+      {'destinations.city': from[0]},
+      {'destinations.city': to[0]},
+      {'destinations.type': from[1]},
+      {'destinations.type': to[1]},
       {'persons': req.query.persons}]};
 
     price.find(query, (err, prices) => {

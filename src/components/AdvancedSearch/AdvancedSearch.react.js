@@ -1,8 +1,14 @@
 import React, { PropTypes, Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import SearchRow from './SearchRow.react';
+import DateTimePicker from './DateTimePicker.react';
+import withStyles from '../../decorators/withStyles';
 import { initUniform } from '../App/style/js/scripts';
+import { includes } from 'lodash';
+import style from './style.scss';
+import classNames from 'classnames';
 
+@withStyles(style)
 class AdvancedSearch extends Component {
   static propTypes = {
     from: PropTypes.string,
@@ -10,7 +16,13 @@ class AdvancedSearch extends Component {
     persons: PropTypes.any,
     date: PropTypes.instanceOf(Date),
     twoWayEnabled: PropTypes.bool,
-    destinations: PropTypes.array,
+    destinations: PropTypes.arrayOf(PropTypes.shape({
+      city: PropTypes.string,
+      primary: PropTypes.bool,
+      type: PropTypes.oneOf(
+        ['CITY', 'AIRPORT']
+      ),
+    })),
     onDateChange: PropTypes.func,
     onReturnDateChange: PropTypes.func,
     onPersonChange: PropTypes.func,
@@ -22,7 +34,9 @@ class AdvancedSearch extends Component {
   static contextTypes = {
     onReturnToggle: PropTypes.func,
     returnEnabled: PropTypes.bool,
+    returnDate: PropTypes.instanceOf(Date),
     onReturnDateChange: PropTypes.func,
+    errors: PropTypes.arrayOf(PropTypes.string),
   }
 
   static defaultProps = {
@@ -54,14 +68,34 @@ class AdvancedSearch extends Component {
   }
 
   _renderReturnSearchRow() {
-    if (!this.context.returnEnabled) {
+    if (!this.props.twoWayEnabled) {
       return null;
     }
-    return (<SearchRow dateTimeLabel="RETURN DATE AND TIME"
-                       destinations={this.props.destinations}
-                       from={this.props.to}
-                       to={this.props.from}
-                       onDateChange={this.context.onReturnDateChange}/>);
+    const datepicker = !this.context.returnEnabled ? null : (
+      <DateTimePicker className="one-third"
+                      id="ret-date"
+                      error={includes(this.context.errors, 'returnDate')}
+                      onDateTimeChange={this.context.onReturnDateChange}
+                      date={this.context.returnDate}
+                      label="RETURN DATE AND TIME"/>
+    );
+    const c = classNames('form-group datepicker', {
+      'one-third': this.context.returnEnabled,
+      'two-third': !this.context.returnEnabled,
+    });
+    return (
+      <div className="advanced-search black">
+        <div className="wrap">
+            <div className="f-row">
+              {this._renderRadioButtons()}
+              <div className={c}>
+                <p>We are offering a 5% return discount</p>
+              </div>
+              {datepicker}
+            </div>
+        </div>
+      </div>
+    );
   }
 
   _renderRadioButtons() {
@@ -70,7 +104,7 @@ class AdvancedSearch extends Component {
     }
 
     return (
-      <div className="form-group radios">
+      <div className="form-group radios one-third">
         <div>
           <input type="radio"
             name="radio"
@@ -93,29 +127,30 @@ class AdvancedSearch extends Component {
 
   render() {
     return (
-      <div className="advanced-search color" ref="advancedSearch" id="booking">
-        <div className="wrap">
-          <form role="form" action="/results" method="GET" onSubmit={this._handleSubmit}>
-          <SearchRow {...this.props} />
-          {this._renderReturnSearchRow()}
-          <div className="f-row">
-            <div className="form-group spinner">
-            <label htmlFor="people">How many people <small>(including children)</small>?</label>
-            <input type="number"
-                    value={this.props.persons}
-                    onChange={this.props.onPersonChange}
-                    id="people"
-                    min="1" />
+      <div id="advancedSearch" ref="advancedSearch">
+        <div id="booking" className="advanced-search color">
+          <div className="wrap">
+            <form role="form" action="/results" method="GET" onSubmit={this._handleSubmit}>
+            <SearchRow {...this.props} />
+            <div className="f-row">
+              <div className="form-group spinner">
+                <label htmlFor="people">How many people <small>(including children)</small>?</label>
+                <input type="number"
+                        value={this.props.persons}
+                        onChange={this.props.onPersonChange}
+                        id="people"
+                        min="1" />
+              </div>
+              <div className="form-group right">
+                <button type="submit" className="btn large black">
+                  Find a transfer
+                </button>
+              </div>
             </div>
-            {this._renderRadioButtons()}
-            <div className="form-group right">
-              <button type="submit" className="btn large black">
-                Find a transfer
-              </button>
-            </div>
+            </form>
           </div>
-          </form>
         </div>
+        {this._renderReturnSearchRow()}
       </div>
     );
   }
