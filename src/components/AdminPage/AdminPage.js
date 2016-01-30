@@ -8,6 +8,7 @@ import Link from '../Link';
 import Dashboard from './components/Dashboard';
 import Destinations from './components/Destinations';
 import Vehicles from './components/Vehicles';
+import Prices from './components/Prices';
 import LoginForm from './components/LoginForm';
 
 import styles from './AdminPage.scss';
@@ -75,6 +76,10 @@ class AdminPage extends Component {
         pageTitle = 'Vehicles';
         pageContent = <Vehicles/>;
         break;
+      case 'prices':
+        pageTitle = 'Prices';
+        pageContent = <Prices/>;
+        break;
       default:
         pageTitle = 'Dashboard';
         pageContent = <Dashboard/>;
@@ -96,6 +101,7 @@ class AdminPage extends Component {
                     <li><Link to="/admin/dashboard">Dashboard</Link></li>
                     <li><Link to="/admin/destinations">Destinations</Link></li>
                     <li><Link to="/admin/vehicles">Vehicles</Link></li>
+                    <li><Link to="/admin/prices">Prices</Link></li>
                     <li><a href="#" onClick={this._handleLogout.bind(this)}>Logout</a></li>
                     <li>{user.firstName}</li>
                   </ul>
