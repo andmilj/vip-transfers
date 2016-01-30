@@ -12,6 +12,7 @@ class Navigation extends Component {
       <nav role="navigation" className="main-nav">
         <ul>
           <li className="active"><a href="/" onClick={Link.handleClick} title="Home Page">Home</a></li>
+          <li><a href="/contact" onClick={Link.handleClick}>Contact</a></li>
           <li><a href="/admin" onClick={Link.handleClick}>Admin</a></li>
         </ul>
       </nav>

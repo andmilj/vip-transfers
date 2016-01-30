@@ -10,6 +10,7 @@ import MainPage from './components/MainPage';
 import AdminPage from './components/AdminPage';
 import ResultsPage from './components/ResultsPage';
 import VehiclePage from './components/VehiclePage';
+import Contact from './components/Contact';
 import Location from './core/Location';
 
 const router = new Router(on => {
@@ -39,6 +40,8 @@ const router = new Router(on => {
     const vehicles = await response.json();
     return <VehiclePage vehicles={vehicles} />;
   });
+
+  on('/contact', async () => <Contact />);
 
   on('*', async () => {
     const responses = await Promise.all([
