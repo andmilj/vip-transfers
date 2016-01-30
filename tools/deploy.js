@@ -9,14 +9,12 @@
 
 import GitRepo from 'git-repository';
 import run from './run';
-import fetch from './lib/fetch';
 
 // TODO: Update deployment URL
 // For more information visit http://gitolite.com/deploy.html
 const getRemote = (slot) => ({
   name: slot ? slot : 'production',
-  url: `https://example${slot ? '-' + slot : ''}.scm.azurewebsites.net:443/example.git`,
-  website: `http://example${slot ? '-' + slot : ''}.azurewebsites.net`,
+  url: `git@bitbucket.org:andmilj/vip-transfers-build${slot ? '-' + slot : ''}.git`,
 });
 
 /**
@@ -50,8 +48,8 @@ async function deploy() {
   await repo.push(remote.name, 'master');
 
   // Check if the site was successfully deployed
-  const response = await fetch(remote.website);
-  console.log(`${remote.website} -> ${response.statusCode}`);
+  // const response = await fetch(remote.website);
+  // console.log(`${remote.website} -> ${response.statusCode}`);
 }
 
 export default deploy;
