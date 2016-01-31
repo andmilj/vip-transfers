@@ -28,4 +28,9 @@ export default {
   pickDetails(state) {
     return pick(state, 'passengerDetails', 'oneWayAddressDetails', 'returnWayAddressDetails');
   },
+
+  constructReservation({ passengerDetails, oneWayAddressDetails, returnWayAddressDetails,
+    price, returnDate, extrasReturn, extrasDeparture}, {from, to, persons}, destinations, prices) {
+    console.log(prices);
+  },
 };

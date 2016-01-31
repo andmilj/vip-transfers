@@ -35,6 +35,7 @@ server.use('/api/content', require('./api/content'));
 server.use('/api/destinations', require('./api/destinations'));
 server.use('/api/prices', require('./api/prices'));
 server.use('/api/vehicles', require('./api/vehicles'));
+server.use('/api/reservation', require('./api/reservation'));
 
 //
 // Register server-side rendering middleware

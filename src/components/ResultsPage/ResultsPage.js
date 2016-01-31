@@ -32,24 +32,24 @@ class ResultsPage extends Component {
       vehicleReturnPrice: null,
       returnDate: null,
       passengerDetails: {
-        name: null,
-        number: null,
-        email: null,
-        email2: null,
-        country: null,
-        city: null,
+        name: 'aaaaa',
+        number: '555',
+        email: 'aaaaa',
+        email2: 'aaaaa',
+        country: 'aaaaa',
+        city: 'aaaaa',
       },
       oneWayAddressDetails: {
-        pickUpAddress: null,
-        dropOffAddress: null,
-        arrivalFlightNumber: null,
-        departureFlightNumber: null,
+        pickUpAddress: 'aaaaa',
+        dropOffAddress: 'aaaaa',
+        arrivalFlightNumber: 'aaaaa',
+        departureFlightNumber: 'aaaaa',
       },
       returnWayAddressDetails: {
-        pickUpAddress: null,
-        dropOffAddress: null,
-        arrivalFlightNumber: null,
-        departureFlightNumber: null,
+        pickUpAddress: 'aaaaa',
+        dropOffAddress: 'aaaaa',
+        arrivalFlightNumber: 'aaaaa',
+        departureFlightNumber: 'aaaaa',
       },
       price: 0,
     };
@@ -145,15 +145,21 @@ class ResultsPage extends Component {
 
   handleStepForward = (additionalState = {}) => {
     const validationArray = this.validate();
-    if (isEmpty(validationArray)) {
-      findDOMNode(this).scrollIntoView();
-      this.setState(assign({}, {
-        bookingStep: this.state.bookingStep + 1,
-        lastStep: (this.state.bookingStep + 1) === 4,
-      }, additionalState));
+    if (!this.state.lastStep) {
+      if (isEmpty(validationArray)) {
+        findDOMNode(this).scrollIntoView();
+        this.setState(assign({}, {
+          bookingStep: this.state.bookingStep + 1,
+          lastStep: (this.state.bookingStep + 1) === 4,
+        }, additionalState));
+      } else {
+        this.setState({
+          errors: validationArray,
+        });
+      }
     } else {
-      this.setState({
-        errors: validationArray,
+      $.post('/api/reservation', (data) => {
+        console.log(data);
       });
     }
   }

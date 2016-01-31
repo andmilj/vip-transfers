@@ -109,7 +109,6 @@ class PassengerDetails extends Component {
                 <FormElement className="one-half"
                              id="number"
                              error={this.hasError('number')}
-                             type="number"
                              label="Mobile number"
                              onChange={this.handleChange}
                              value={this.context.passengerDetails.number}/>

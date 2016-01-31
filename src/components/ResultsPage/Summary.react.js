@@ -38,6 +38,8 @@ class Summary extends Component {
     returnEnabled: PropTypes.bool,
     returnDate: PropTypes.instanceOf(Date),
     vehicleType: PropTypes.string.isRequired,
+    extrasDeparture: PropTypes.object,
+    extrasReturn: PropTypes.object,
   }
 
   renderReturn = () => {
@@ -69,7 +71,7 @@ class Summary extends Component {
           )
         }
         <SummaryRow label="Vehicle" value={vehicleType} />
-        <SummaryRow label="Extras" value={_date} />
+        <SummaryRow label="Date" value={_date} />
       </div>
     );
   }
@@ -114,7 +116,7 @@ class Summary extends Component {
                   )
                 }
               <SummaryRow label="Vehicle" value={vehicleType} />
-              <SummaryRow label="Extras" value={_date} />
+              <SummaryRow label="Date" value={_date} />
 
               {this.renderReturn()}
 
