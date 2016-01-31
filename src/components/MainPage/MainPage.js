@@ -39,7 +39,7 @@ class MainPage extends Component {
   }
 
   componentDidMount() {
-    $('body').removeClass().addClass('home');
+    $('body').removeClass(); // .addClass('home');
     initScroll();
   }
 
