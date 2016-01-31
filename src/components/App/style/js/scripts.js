@@ -39,3 +39,78 @@ export function initUniform(nodes) {
     .find('input[type=radio], input[type=checkbox],input[type=number], select')
     .uniform();
 }
+
+export function initSlickNav() {
+  $('.main-nav').slicknav({
+    prependTo: '.header .wrap',
+    label: '',
+  });
+}
+
+export function initResponsiveTables() {
+  let switched = false;
+
+  function setCellHeights(original, copy) {
+    const tr = original.find('tr');
+    const trCopy = copy.find('tr');
+    const heights = [];
+
+    tr.each(function(index) {
+      const self = $(this);
+      const tx = self.find('th, td');
+
+      tx.each(function() {
+        const height = $(this).outerHeight(true);
+        heights[index] = heights[index] || 0;
+        if (height > heights[index]) heights[index] = height;
+      });
+    });
+
+    trCopy.each(function(index) {
+      $(this).height(heights[index]);
+    });
+  }
+
+  function splitTable(original) {
+    original.wrap('<div class="table-wrapper" />');
+
+    const copy = original.clone();
+    copy.find('td:not(:first-child), th:not(:first-child)').css('display', 'none');
+    copy.removeClass('responsive');
+
+    original.closest('.table-wrapper').append(copy);
+    copy.wrap('<div class="pinned" />');
+    original.wrap('<div class="scrollable" />');
+
+    setCellHeights(original, copy);
+  }
+
+  function unsplitTable(original) {
+    original.closest('.table-wrapper').find('.pinned').remove();
+    original.unwrap();
+    original.unwrap();
+  }
+
+  const updateTables = function() {
+    if (($(window).width() < 767) && !switched ) {
+      switched = true;
+      $('table.responsive').each(function(i, element) {
+        splitTable($(element));
+      });
+      return true;
+    } else if (switched && ($(window).width() > 767)) {
+      switched = false;
+      $('table.responsive').each(function(i, element) {
+        unsplitTable($(element));
+      });
+    }
+  };
+
+  $(window).on('redraw', function() {
+    switched = false;
+    updateTables();
+  }); // An event to listen for
+  $(window).on('resize', updateTables);
+
+  updateTables();
+}

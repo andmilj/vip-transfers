@@ -2,13 +2,11 @@
 
 import React, { PropTypes, Component } from 'react';
 import withContext from '../../decorators/withContext';
-// import withStyles from '../../decorators/withStyles';
 import Header from '../Header';
 import Footer from '../Footer';
-// import themeJs from './style/js/theme.js';
+import { initSlickNav, initResponsiveTables } from './style/js/scripts';
 
 import './App.css';
-// import toolboxCommonStyles from '../ToolBox/commons';
 
 @withContext
 // @withStyles(toolboxCommonStyles)
@@ -19,11 +17,8 @@ class App extends Component {
   };
 
   componentDidMount() {
-    // theme.js is using jQuery and is interacting with document
-    // which is not available when server-side rendering occurres.
-    // componentDidMount is postponing the script execution when
-    // the componen has access to document
-    // themeJs();
+    initSlickNav();
+    initResponsiveTables();
   }
 
   render() {
