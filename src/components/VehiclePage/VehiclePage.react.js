@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
+import VehicleTypes from '../../db/constants/vehicleTypes';
 import { initTabs } from '../App/style/js/scripts';
-import { map } from 'lodash';
+import { map, values, includes } from 'lodash';
 
 class VehiclePage extends Component {
   static propTypes = {
@@ -9,6 +10,7 @@ class VehiclePage extends Component {
       persons: PropTypes.number,
       pictureName: PropTypes.string,
     })),
+    activeVehicleType: PropTypes.string,
   };
 
   static contextTypes = {
@@ -16,6 +18,7 @@ class VehiclePage extends Component {
   };
 
   static defaultProps = {
+    activeVehicleType: VehicleTypes.STANDARD,
   };
 
   componentDidMount() {
@@ -23,10 +26,14 @@ class VehiclePage extends Component {
   }
 
   renderTabOptions = () => {
-    return map(this.props.vehicles, ({ type }, index) => {
-      const activeClass = !index ? 'active' : '';
+    const { vehicles, activeVehicleType } = this.props;
+    const _avt = includes(values(VehicleTypes), activeVehicleType) ? activeVehicleType : VehicleTypes.STANDARD;
+    return map(vehicles, ({ type }, index) => {
+      const activeClass = type === _avt ? 'active' : '';
       return (
-        <li className={activeClass}><a href={`#tab${index}`}>{type}</a></li>
+        <li className={activeClass} key={type}>
+          <a href={`#tab${index}`}>{type}</a>
+        </li>
       );
     });
   }
@@ -34,7 +41,7 @@ class VehiclePage extends Component {
   renderTabContent = () => {
     return map(this.props.vehicles, ({ type }, index) => {
       return (
-        <article className="single hentry" id={`tab${index}`}>
+        <article key={type} className="single hentry" id={`tab${index}`}>
           <div className="entry-featured">
             <img src="http://placehold.it/1024x768" alt="" />
           </div>

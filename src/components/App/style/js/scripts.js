@@ -22,13 +22,14 @@ export function initScroll() {
 
 export function initTabs() {
   $('.single').hide().first().show();
-  $('.categories li:first').addClass('active');
 
   $('.categories a').on('click', function (e) {
     e.preventDefault();
     $(this).closest('li').addClass('active').siblings().removeClass('active');
     $($(this).attr('href')).show().siblings('.single').hide();
   });
+
+  $('.categories li.active a').trigger('click');
 
   const hash = $.trim( window.location.hash );
   if (hash) $('.categories a[href$="' + hash + '"]').trigger('click');
