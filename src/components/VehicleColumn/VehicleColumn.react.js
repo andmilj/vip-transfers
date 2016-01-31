@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import Utils from '../../utils/Price.utils';
+import { getReturnPrice } from '../../utils/Price.utils';
 
 class VehicleColumn extends Component {
   static propTypes = {
@@ -37,7 +37,7 @@ class VehicleColumn extends Component {
 
   handleVehicleTypeSelect = () => {
     const { price } = this.props;
-    this.context.onVehicleTypeSelect(this.props.vehicleType, parseInt(this.props.price, 10), Utils.getReturnPrice(price));
+    this.context.onVehicleTypeSelect(this.props.vehicleType, parseInt(this.props.price, 10), getReturnPrice(price));
   }
 
   _renderInformation() {
@@ -63,7 +63,7 @@ class VehicleColumn extends Component {
     }
 
     if (this.context.returnEnabled) {
-      return `+ ${Utils.getReturnPrice(price)} USD`;
+      return `+ ${getReturnPrice(price)} USD`;
     }
 
     return 'no return trip';
