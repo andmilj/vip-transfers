@@ -102,23 +102,30 @@ class ResultsPage extends Component {
   }
 
   createReservation = () => {
-    // this.setState({
-    //   loading: true,
-    // });
+    this.setState({
+      loading: true,
+    });
 
     const reservation = constructReservation(this.state,
       this.props.query, this.props.destinations, this.props.prices);
-    console.log(reservation);
-    // setTimeout(() => {
-    //   $.post('/api/reservation', (data) => {
-    //     console.log(data);
-    //   }).always(() => {
-    //     this.setState({
-    //       loading: false,
-    //       bookingStep: this.state.bookingStep + 1,
-    //     });
-    //   });
-    // }, 2000);
+    setTimeout(() => {
+      $.ajax({
+        type: 'POST',
+        url: '/api/reservation',
+        processData: false,
+        contentType: 'application/json',
+        data: JSON.stringify(reservation),
+      })
+      .then(data => {
+        console.log(data);
+      })
+      .always(() => {
+        this.setState({
+          loading: false,
+          bookingStep: this.state.bookingStep + 1,
+        });
+      });
+    }, 2000);
   }
 
   handleReturnToggle = () => {

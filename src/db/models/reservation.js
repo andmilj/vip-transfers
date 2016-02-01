@@ -12,11 +12,11 @@ const ReservationSchema = new mongoose.Schema({
   returnDate: Date,
   from: {
     city: String,
-    type: String,
+    type: {type: String},
   },
   to: {
     city: String,
-    type: String,
+    type: {type: String},
   },
   addressDetailsOneWay: {
     pickUpAddress: String,
@@ -39,4 +39,4 @@ const ReservationSchema = new mongoose.Schema({
   totalPrice: Number,
 });
 
-export default mongoose.model('Price', ReservationSchema);
+export default mongoose.model('Reservation', ReservationSchema);
