@@ -2,7 +2,7 @@ import '../src/db/start';
 import { seedDatabase } from '../src/db/seed';
 
 async function seeder() {
-  seedDatabase(true);
+  seedDatabase();
 }
 
 export default seeder;
