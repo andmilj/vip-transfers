@@ -85,26 +85,39 @@ export function seedDatabase(drop) {
       vehicle({
         type: vehicleTypes.STANDARD,
         persons: 3,
+        textMain: `Standard vehicle are up to 3 persons, includes 1 hand baggage up to
+          5kg, and 1 baggage up to 15kg per person.
+          ( Škoda Octavia, VW Passat, WV caddy, Opel Insignia...depends
+          on vehicles availability )`,
         pictureName: 'car.jpg',
       }).save();
       vehicle({
         type: vehicleTypes.STANDARD_VIP,
         persons: 3,
+        textMain: `Standard VIP vehicle are up to 3 persons, includes 1 hand baggage up to 5kg,
+          and 1 baggage up to 15kg per person, free wi-fi, highway fees, one bottle of
+          water per person. (Mercedes benz E classe, Bmw 5 series, Audi A6..depends on
+          vehicle availability.)`,
         pictureName: 'car.jpg',
       }).save();
       vehicle({
         type: vehicleTypes.KOMBI_VIP,
         persons: 3,
+        textMain: `No Details`,
         pictureName: 'kombi.jpg',
       }).save();
       vehicle({
         type: vehicleTypes.KOMBI,
         persons: 3,
+        textMain: `No Details`,
         pictureName: 'kombi.jpg',
       }).save();
       vehicle({
         type: vehicleTypes.MINIBUS,
         persons: 3,
+        textMain: `Minibus vehicles are up to 8 persons, includes 1 hand baggage up to 5kg, and
+          1 baggage up to 15kg per person. (Opel Vivaro, Renault Trafic, Peugeot Boxer...depends
+          on vehicle availability.)`,
         pictureName: 'van.jpg',
       }).save();
       console.log('Vehicles seeded!');

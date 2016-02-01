@@ -280,6 +280,7 @@ ResultsPage.propTypes = {
     type: PropTypes.string,
     persons: PropTypes.string,
     pictureName: PropTypes.string,
+    textMain: PropTypes.string,
   })),
   destinations: PropTypes.arrayOf(PropTypes.shape({
     city: PropTypes.string,
