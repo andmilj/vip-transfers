@@ -1,6 +1,4 @@
 import mongoose from 'mongoose';
-import destinationSchema from './destination';
-import priceSchema from './price';
 
 const ReservationSchema = new mongoose.Schema({
   passengerDetails: {
@@ -12,9 +10,15 @@ const ReservationSchema = new mongoose.Schema({
   persons: Number,
   date: Date,
   returnDate: Date,
-  from: destinationSchema,
-  to: destinationSchema,
-  addressDetailsDeparture: {
+  from: {
+    city: String,
+    type: String,
+  },
+  to: {
+    city: String,
+    type: String,
+  },
+  addressDetailsOneWay: {
     pickUpAddress: String,
     dropOffAddress: String,
     arrivalFlightNumber: String,
@@ -26,7 +30,10 @@ const ReservationSchema = new mongoose.Schema({
     arrivalFlightNumber: String,
     departureFlightNumber: String,
   },
-  price: priceSchema,
+  price: {
+    price: String,
+    vehicleType: String,
+  },
   extrasDeparture: [{ name: String, price: Number }],
   extrasReturn: [{ name: String, price: Number }],
   totalPrice: Number,

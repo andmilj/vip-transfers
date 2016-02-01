@@ -9,6 +9,7 @@ import Summary from './Summary.react';
 import VehicleResults from './VehicleResults.react';
 import { getPrice, getReturnPrice } from '../../utils/Price.utils';
 import { validateDetails, validateReturnDate, getErrorsForInvalidKeys} from '../../utils/Validation.utils';
+import { constructReservation } from '../../utils/Format.utils';
 import { findDOMNode } from 'react-dom';
 
 import { assign, without, union,
@@ -42,13 +43,13 @@ class ResultsPage extends Component {
         country: 'aaaaa',
         city: 'aaaaa',
       },
-      oneWayAddressDetails: {
+      addressDetailsOneWay: {
         pickUpAddress: 'Adresa Neka 13',
         dropOffAddress: 'Adresa Neka 14',
         arrivalFlightNumber: 'aaaaa',
         departureFlightNumber: 'aaaaa',
       },
-      returnWayAddressDetails: {
+      addressDetailsReturn: {
         pickUpAddress: null,
         dropOffAddress: null,
         arrivalFlightNumber: null,
@@ -80,8 +81,8 @@ class ResultsPage extends Component {
       returnDate: this.state.returnDate,
       vehicleType: this.state.vehicleType,
       vehicleOneWayPrice: this.state.vehicleOneWayPrice,
-      oneWayAddressDetails: this.state.oneWayAddressDetails,
-      returnWayAddressDetails: this.state.returnWayAddressDetails,
+      addressDetailsOneWay: this.state.addressDetailsOneWay,
+      addressDetailsReturn: this.state.addressDetailsReturn,
     };
   }
 
@@ -101,27 +102,30 @@ class ResultsPage extends Component {
   }
 
   createReservation = () => {
-    this.setState({
-      loading: true,
-    });
+    // this.setState({
+    //   loading: true,
+    // });
 
-    setTimeout(() => {
-      $.post('/api/reservation', (data) => {
-        console.log(data);
-      }).always(() => {
-        this.setState({
-          loading: false,
-          bookingStep: this.state.bookingStep + 1,
-        });
-      });
-    }, 2000);
+    const reservation = constructReservation(this.state,
+      this.props.query, this.props.destinations, this.props.prices);
+    console.log(reservation);
+    // setTimeout(() => {
+    //   $.post('/api/reservation', (data) => {
+    //     console.log(data);
+    //   }).always(() => {
+    //     this.setState({
+    //       loading: false,
+    //       bookingStep: this.state.bookingStep + 1,
+    //     });
+    //   });
+    // }, 2000);
   }
 
   handleReturnToggle = () => {
     this.setState({
       returnEnabled: !this.state.returnEnabled,
       errors: [],
-      returnWayAddressDetails: {
+      addressDetailsReturn: {
         pickUpAddress: null,
         dropOffAddress: null,
         arrivalFlightNumber: null,
@@ -293,13 +297,13 @@ ResultsPage.childContextTypes = {
     country: PropTypes.string,
     city: PropTypes.string,
   }),
-  oneWayAddressDetails: PropTypes.shape({
+  addressDetailsOneWay: PropTypes.shape({
     pickUpAddress: PropTypes.string,
     dropOffAddress: PropTypes.string,
     arrivalFlightNumber: PropTypes.string,
     departureFlightNumber: PropTypes.string,
   }),
-  returnWayAddressDetails: PropTypes.shape({
+  addressDetailsReturn: PropTypes.shape({
     pickUpAddress: PropTypes.string,
     dropOffAddress: PropTypes.string,
     arrivalFlightNumber: PropTypes.string,

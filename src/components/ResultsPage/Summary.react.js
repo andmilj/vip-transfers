@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import BookingActions from './BookingActions.react';
 import BookingHelp from './BookingHelp.react';
-import FormatUtils from '../../utils/Format.utils';
+import { cityName } from '../../utils/Format.utils';
 import SummaryRow from './SummaryRow.react';
 import moment from 'moment';
 
@@ -21,13 +21,13 @@ class Summary extends Component {
       country: PropTypes.string,
       city: PropTypes.string,
     }).isRequired,
-    oneWayAddressDetails: PropTypes.shape({
+    addressDetailsOneWay: PropTypes.shape({
       pickUpAddress: PropTypes.string,
       dropOffAddress: PropTypes.string,
       arrivalFlightNumber: PropTypes.string,
       departureFlightNumber: PropTypes.string,
     }),
-    returnWayAddressDetails: PropTypes.shape({
+    addressDetailsReturn: PropTypes.shape({
       pickUpAddress: PropTypes.string,
       dropOffAddress: PropTypes.string,
       arrivalFlightNumber: PropTypes.string,
@@ -43,7 +43,7 @@ class Summary extends Component {
   }
 
   renderReturn = () => {
-    const { returnDate, query, vehicleType, returnWayAddressDetails } = this.context;
+    const { returnDate, query, vehicleType, addressDetailsReturn } = this.context;
     const _date = moment(returnDate).format('DD.MM.YYYY HH:mm');
 
     if (!this.context.returnEnabled) {
@@ -56,18 +56,18 @@ class Summary extends Component {
           Return Transfer details
         </h3>
         <SummaryRow label="Date" value={_date} />
-        <SummaryRow label="From" value={FormatUtils.cityName(query.to)} />
-        {returnWayAddressDetails.pickUpAddress ? (
-          <SummaryRow label="Drop off address" value={returnWayAddressDetails.pickUpAddress} />
+        <SummaryRow label="From" value={cityName(query.to)} />
+        {addressDetailsReturn.pickUpAddress ? (
+          <SummaryRow label="Drop off address" value={addressDetailsReturn.pickUpAddress} />
           ) : (
-          <SummaryRow label="Arrival flight number" value={returnWayAddressDetails.arrivalFlightNumber} />
+          <SummaryRow label="Arrival flight number" value={addressDetailsReturn.arrivalFlightNumber} />
           )
         }
-        <SummaryRow label="To" value={FormatUtils.cityName(query.from)} />
-        {returnWayAddressDetails.dropOffAddress ? (
-          <SummaryRow label="Drop off address" value={returnWayAddressDetails.dropOffAddress} />
+        <SummaryRow label="To" value={cityName(query.from)} />
+        {addressDetailsReturn.dropOffAddress ? (
+          <SummaryRow label="Drop off address" value={addressDetailsReturn.dropOffAddress} />
           ) : (
-          <SummaryRow label="Departure flight number" value={returnWayAddressDetails.departureFlightNumber} />
+          <SummaryRow label="Departure flight number" value={addressDetailsReturn.departureFlightNumber} />
           )
         }
         <SummaryRow label="Vehicle" value={vehicleType} />
@@ -77,7 +77,7 @@ class Summary extends Component {
   }
 
   render() {
-    const { passengerDetails, query, vehicleType, oneWayAddressDetails } = this.context;
+    const { passengerDetails, query, vehicleType, addressDetailsOneWay } = this.context;
     const _date = moment(parseInt(query.date, 10)).format('DD.MM.YYYY HH:mm');
     return (
     <div>
@@ -101,18 +101,18 @@ class Summary extends Component {
 
               <h3>First way transfer details</h3>
               <SummaryRow label="Date" value={_date} />
-                <SummaryRow label="From" value={FormatUtils.cityName(query.from)} />
-                {oneWayAddressDetails.pickUpAddress ? (
-                  <SummaryRow label="Drop off address" value={oneWayAddressDetails.pickUpAddress} />
+                <SummaryRow label="From" value={cityName(query.from)} />
+                {addressDetailsOneWay.pickUpAddress ? (
+                  <SummaryRow label="Drop off address" value={addressDetailsOneWay.pickUpAddress} />
                   ) : (
-                  <SummaryRow label="Arrival flight number" value={oneWayAddressDetails.arrivalFlightNumber} />
+                  <SummaryRow label="Arrival flight number" value={addressDetailsOneWay.arrivalFlightNumber} />
                   )
                 }
-                <SummaryRow label="To" value={FormatUtils.cityName(query.to)} />
-                {oneWayAddressDetails.dropOffAddress ? (
-                  <SummaryRow label="Drop off address" value={oneWayAddressDetails.dropOffAddress} />
+                <SummaryRow label="To" value={cityName(query.to)} />
+                {addressDetailsOneWay.dropOffAddress ? (
+                  <SummaryRow label="Drop off address" value={addressDetailsOneWay.dropOffAddress} />
                   ) : (
-                  <SummaryRow label="Departure flight number" value={oneWayAddressDetails.departureFlightNumber} />
+                  <SummaryRow label="Departure flight number" value={addressDetailsOneWay.departureFlightNumber} />
                   )
                 }
               <SummaryRow label="Vehicle" value={vehicleType} />

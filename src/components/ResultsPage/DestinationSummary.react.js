@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import classNames from 'classnames';
 import DestinationSummaryElement from './DestinationSummaryElement.react';
-import FormatUtils from '../../utils/Format.utils';
+import { cityName } from '../../utils/Format.utils';
 
 const queryShape = PropTypes.shape({
   from: PropTypes.string,
@@ -26,8 +26,8 @@ class DestinationSummary extends Component {
     }
 
     return (
-      <DestinationSummaryElement from={FormatUtils.cityName(this.context.query.to)}
-                                 to={FormatUtils.cityName(this.context.query.from)}
+      <DestinationSummaryElement from={cityName(this.context.query.to)}
+                                 to={cityName(this.context.query.from)}
                                  date={_date}/>
     );
   }
@@ -40,8 +40,8 @@ class DestinationSummary extends Component {
     return (
         <div className={c}>
           <div className="wrap">
-            <DestinationSummaryElement from={FormatUtils.cityName(this.context.query.from)}
-                                       to={FormatUtils.cityName(this.context.query.to)}
+            <DestinationSummaryElement from={cityName(this.context.query.from)}
+                                       to={cityName(this.context.query.to)}
                                        date={_date}/>
             {this.renderReturnSummary()}
           </div>
