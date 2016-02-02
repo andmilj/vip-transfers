@@ -26,13 +26,13 @@ class PassengerDetails extends Component {
       persons: PropTypes.string,
       date: PropTypes.string,
     }),
-    oneWayAddressDetails: PropTypes.shape({
+    addressDetailsOneWay: PropTypes.shape({
       pickUpAddress: PropTypes.string,
       dropOffAddress: PropTypes.string,
       arrivalFlightNumber: PropTypes.string,
       departureFlightNumber: PropTypes.string,
     }),
-    returnWayAddressDetails: PropTypes.shape({
+    addressDetailsReturn: PropTypes.shape({
       pickUpAddress: PropTypes.string,
       dropOffAddress: PropTypes.string,
       arrivalFlightNumber: PropTypes.string,
@@ -54,7 +54,7 @@ class PassengerDetails extends Component {
     if (!this.context.returnEnabled) {
       return null;
     }
-    const errors = getAddressErrors(this.context.errors, 'returnWayAddressDetails');
+    const errors = getAddressErrors(this.context.errors, 'addressDetailsReturn');
 
     return (
       <div>
@@ -63,11 +63,11 @@ class PassengerDetails extends Component {
           <p>All fields are required.</p>
         </div>
         <form className="address-details">
-          <AddressDetails {...this.context.returnWayAddressDetails}
+          <AddressDetails {...this.context.addressDetailsReturn}
                           from={this.context.query.to}
                           to={this.context.query.from}
                           errors={errors}
-                          onDetailsChange={partial(this.handleChange, _, 'returnWayAddressDetails')} />
+                          onDetailsChange={partial(this.handleChange, _, 'addressDetailsReturn')} />
         </form>
       </div>
     );
@@ -87,11 +87,11 @@ class PassengerDetails extends Component {
               <p>Please ensure all of the required fields are completed at the time of booking. This information is imperative to ensure a smooth journey.<br />All fields are required.</p>
             </div>
             <form className="address-details" ref="addressDetails1Form">
-              <AddressDetails {...this.context.oneWayAddressDetails}
+              <AddressDetails {...this.context.addressDetailsOneWay}
                               from={this.context.query.from}
                               to={this.context.query.to}
                               errors={errors}
-                              onDetailsChange={partial(this.handleChange, _, 'oneWayAddressDetails')} />
+                              onDetailsChange={partial(this.handleChange, _, 'addressDetailsOneWay')} />
             </form>
             {this.renderReturnAddressDetails()}
             <div className="content">
@@ -109,7 +109,6 @@ class PassengerDetails extends Component {
                 <FormElement className="one-half"
                              id="number"
                              error={this.hasError('number')}
-                             type="number"
                              label="Mobile number"
                              onChange={this.handleChange}
                              value={this.context.passengerDetails.number}/>

@@ -2,15 +2,18 @@ import React, { PropTypes, Component } from 'react';
 
 import Extras from './Extras.react';
 import ExtrasJson from '../../constants/Extras';
+import Loader from '../Loader';
 import PassengerDetails from './PassengerDetails.react';
+import Success from './Success.react';
 import Summary from './Summary.react';
 import VehicleResults from './VehicleResults.react';
-import PriceUtils from '../../utils/Price.utils';
+import { getPrice, getReturnPrice } from '../../utils/Price.utils';
 import { validateDetails, validateReturnDate, getErrorsForInvalidKeys} from '../../utils/Validation.utils';
+import { constructReservation } from '../../utils/Format.utils';
 import { findDOMNode } from 'react-dom';
 
 import { assign, without, union,
-  isEmpty, reduce, defaults, find } from 'lodash';
+  isEmpty, defaults } from 'lodash';
 
 class ResultsPage extends Component {
   static defaultProps = {
@@ -26,26 +29,27 @@ class ResultsPage extends Component {
       extrasDeparture: {},
       extrasReturn: {},
       lastStep: false,
+      loading: false,
       returnEnabled: false,
       vehicleType: null,
       vehicleOneWayPrice: null,
       vehicleReturnPrice: null,
       returnDate: null,
       passengerDetails: {
-        name: null,
-        number: null,
-        email: null,
-        email2: null,
-        country: null,
-        city: null,
+        name: 'Andrej Miljus',
+        number: '091 888 888',
+        email: 'aaaaa@aaa.com',
+        email2: 'aaaaa@aaa.com',
+        country: 'aaaaa',
+        city: 'aaaaa',
       },
-      oneWayAddressDetails: {
-        pickUpAddress: null,
-        dropOffAddress: null,
-        arrivalFlightNumber: null,
-        departureFlightNumber: null,
+      addressDetailsOneWay: {
+        pickUpAddress: 'Adresa Neka 13',
+        dropOffAddress: 'Adresa Neka 14',
+        arrivalFlightNumber: 'aaaaa',
+        departureFlightNumber: 'aaaaa',
       },
-      returnWayAddressDetails: {
+      addressDetailsReturn: {
         pickUpAddress: null,
         dropOffAddress: null,
         arrivalFlightNumber: null,
@@ -77,28 +81,13 @@ class ResultsPage extends Component {
       returnDate: this.state.returnDate,
       vehicleType: this.state.vehicleType,
       vehicleOneWayPrice: this.state.vehicleOneWayPrice,
-      oneWayAddressDetails: this.state.oneWayAddressDetails,
-      returnWayAddressDetails: this.state.returnWayAddressDetails,
+      addressDetailsOneWay: this.state.addressDetailsOneWay,
+      addressDetailsReturn: this.state.addressDetailsReturn,
     };
   }
 
   componentDidMount() {
     $('body').removeClass();
-  }
-
-  getPrice = ({ extrasDeparture, extrasReturn, vehicleOneWayPrice }) => {
-    const priceExDeparture = this.reducePriceFromExtras(extrasDeparture);
-    const priceExReturn = this.reducePriceFromExtras(extrasReturn);
-
-    const priceReturn = this.state.returnEnabled ? (PriceUtils.getReturnPrice(vehicleOneWayPrice) + priceExReturn) : 0;
-
-    return vehicleOneWayPrice + priceReturn + priceExDeparture;
-  }
-
-  reducePriceFromExtras = (extraType) => {
-    return reduce(extraType, (result, value, name) => {
-      return result + find(ExtrasJson, { name }).price * value;
-    }, 0);
   }
 
   validate() {
@@ -112,11 +101,38 @@ class ResultsPage extends Component {
     }
   }
 
+  createReservation = () => {
+    this.setState({
+      loading: true,
+    });
+
+    const reservation = constructReservation(this.state,
+      this.props.query, this.props.destinations, this.props.prices);
+    setTimeout(() => {
+      $.ajax({
+        type: 'POST',
+        url: '/api/reservation',
+        processData: false,
+        contentType: 'application/json',
+        data: JSON.stringify(reservation),
+      })
+      .then(data => {
+        console.log(data);
+      })
+      .always(() => {
+        this.setState({
+          loading: false,
+          bookingStep: this.state.bookingStep + 1,
+        });
+      });
+    }, 2000);
+  }
+
   handleReturnToggle = () => {
     this.setState({
       returnEnabled: !this.state.returnEnabled,
       errors: [],
-      returnWayAddressDetails: {
+      addressDetailsReturn: {
         pickUpAddress: null,
         dropOffAddress: null,
         arrivalFlightNumber: null,
@@ -126,10 +142,10 @@ class ResultsPage extends Component {
   }
 
   handleVehicleTypeSelect = (type, vehicleOneWayPrice) => {
-    const price = this.getPrice(defaults({ vehicleOneWayPrice }, this.state));
+    const price = getPrice(defaults({ vehicleOneWayPrice }, this.state), this.state.returnEnabled);
     this.handleStepForward({
       vehicleType: type,
-      vehicleReturnPrice: PriceUtils.getReturnPrice(vehicleOneWayPrice),
+      vehicleReturnPrice: getReturnPrice(vehicleOneWayPrice),
       vehicleOneWayPrice,
       price,
     });
@@ -139,22 +155,26 @@ class ResultsPage extends Component {
     findDOMNode(this).scrollIntoView();
     this.setState({
       bookingStep: this.state.bookingStep - 1,
-      lastStep: (this.state.bookingStep + 1) === 4,
+      lastStep: this.state.bookingStep - 1 === 4,
     });
   }
 
   handleStepForward = (additionalState = {}) => {
     const validationArray = this.validate();
-    if (isEmpty(validationArray)) {
-      findDOMNode(this).scrollIntoView();
-      this.setState(assign({}, {
-        bookingStep: this.state.bookingStep + 1,
-        lastStep: (this.state.bookingStep + 1) === 4,
-      }, additionalState));
+    if (!this.state.lastStep) {
+      if (isEmpty(validationArray)) {
+        findDOMNode(this).scrollIntoView();
+        this.setState(assign({}, {
+          bookingStep: this.state.bookingStep + 1,
+          lastStep: (this.state.bookingStep + 1) === 4,
+        }, additionalState));
+      } else {
+        this.setState({
+          errors: validationArray,
+        });
+      }
     } else {
-      this.setState({
-        errors: validationArray,
-      });
+      this.createReservation();
     }
   }
 
@@ -162,7 +182,7 @@ class ResultsPage extends Component {
     const extrasDeparture = assign({}, this.state.extrasDeparture, {
       [name]: count,
     });
-    const price = this.getPrice(defaults({ extrasDeparture }, this.state));
+    const price = getPrice(defaults({ extrasDeparture }, this.state), this.state.returnEnabled);
 
     this.setState({
       extrasDeparture,
@@ -174,7 +194,7 @@ class ResultsPage extends Component {
     const extrasReturn = assign({}, this.state.extrasReturn, {
       [name]: count,
     });
-    const price = this.getPrice(defaults({ extrasReturn }, this.state));
+    const price = getPrice(defaults({ extrasReturn }, this.state), this.state.returnEnabled);
 
     this.setState({
       extrasReturn,
@@ -204,7 +224,12 @@ class ResultsPage extends Component {
   }
 
   render() {
-    const { bookingStep } = this.state;
+    const { bookingStep, loading } = this.state;
+    if (loading) {
+      return (
+        <Loader />
+      );
+    }
 
     if (bookingStep === 1) {
       return (
@@ -229,6 +254,12 @@ class ResultsPage extends Component {
         <Summary />
       );
     }
+
+    if (bookingStep === 5) {
+      return (
+        <Success />
+      );
+    }
   }
 }
 
@@ -249,6 +280,7 @@ ResultsPage.propTypes = {
     type: PropTypes.string,
     persons: PropTypes.string,
     pictureName: PropTypes.string,
+    textMain: PropTypes.string,
   })),
   destinations: PropTypes.arrayOf(PropTypes.shape({
     city: PropTypes.string,
@@ -273,13 +305,13 @@ ResultsPage.childContextTypes = {
     country: PropTypes.string,
     city: PropTypes.string,
   }),
-  oneWayAddressDetails: PropTypes.shape({
+  addressDetailsOneWay: PropTypes.shape({
     pickUpAddress: PropTypes.string,
     dropOffAddress: PropTypes.string,
     arrivalFlightNumber: PropTypes.string,
     departureFlightNumber: PropTypes.string,
   }),
-  returnWayAddressDetails: PropTypes.shape({
+  addressDetailsReturn: PropTypes.shape({
     pickUpAddress: PropTypes.string,
     dropOffAddress: PropTypes.string,
     arrivalFlightNumber: PropTypes.string,

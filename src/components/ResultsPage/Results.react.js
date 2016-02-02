@@ -12,6 +12,7 @@ class ResultsPage extends Component {
       type: PropTypes.string,
       persons: PropTypes.string,
       pictureName: PropTypes.string,
+      textMain: PropTypes.string,
     })),
     onVehicleTypeSelect: PropTypes.func,
   }
@@ -26,13 +27,14 @@ class ResultsPage extends Component {
 
   _renderVehicles = () => {
     const { prices, vehicles } = this.props;
-    return map(vehicles, ({type, persons, pictureName}) => {
+    return map(vehicles, ({type, persons, pictureName, textMain}) => {
       const price = findWhere(prices, {vehicleType: type});
 
       return (<VehicleColumn key={type}
                              vehicleType={type}
                              persons={persons}
                              pictureName={pictureName}
+                             textMain={textMain}
                              price={get(price, 'price')}/>);
     });
   }

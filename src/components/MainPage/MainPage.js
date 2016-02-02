@@ -14,6 +14,7 @@ class MainPage extends Component {
       type: PropTypes.string,
       persons: PropTypes.any,
       pictureName: PropTypes.string,
+      textMain: PropTypes.string,
     })),
   };
 

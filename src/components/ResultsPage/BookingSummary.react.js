@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import { pick, map } from 'lodash';
-import FormatUtils from '../../utils/Format.utils';
+import { cityName } from '../../utils/Format.utils';
 
 const queryShape = PropTypes.shape({
   from: PropTypes.string,
@@ -53,9 +53,9 @@ class BookingSummary extends Component {
           <dt>Date</dt>
           <dd>{_date.format('DD.MM.YYYY HH:mm')}</dd>
           <dt>From</dt>
-          <dd>{FormatUtils.cityName(this.context.query.to)}</dd>
+          <dd>{cityName(this.context.query.to)}</dd>
           <dt>To</dt>
-          <dd>{FormatUtils.cityName(this.context.query.from)}</dd>
+          <dd>{cityName(this.context.query.from)}</dd>
           <dt>Vehicle</dt>
           <dd>{this.context.vehicleType}</dd>
           {this.renderExtras(this.context.extrasReturn)}
@@ -76,9 +76,9 @@ class BookingSummary extends Component {
               <dt>Date</dt>
               <dd>{_date.format('DD.MM.YYYY HH:mm')}</dd>
               <dt>From</dt>
-              <dd>{FormatUtils.cityName(this.context.query.from)}</dd>
+              <dd>{cityName(this.context.query.from)}</dd>
               <dt>To</dt>
-              <dd>{FormatUtils.cityName(this.context.query.to)}</dd>
+              <dd>{cityName(this.context.query.to)}</dd>
               <dt>Vehicle</dt>
               <dd>{this.context.vehicleType}</dd>
               {this.renderExtras(this.context.extrasDeparture)}

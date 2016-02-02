@@ -9,55 +9,37 @@ class Services extends Component {
             <div className="one-third wow fadeIn">
               <span className="circle"><span className="ico pig"></span></span>
               <h3>Fixed rates</h3>
-              <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy  tinc dolore magna.</p>
+              <p>Prices are fixed and cannot be negotiable.</p>
             </div>
 
             <div className="one-third wow fadeIn" data-wow-delay=".2s">
               <span className="circle"><span className="ico lock"></span></span>
               <h3>Reliable transfers</h3>
-              <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy  tinc dolore magna.</p>
+              <p>Every transfer is reliable and secure.</p>
             </div>
 
             <div className="one-third wow fadeIn" data-wow-delay=".4s">
               <span className="circle"><span className="ico wallet"></span></span>
               <h3>No booking fees</h3>
-              <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy  tinc dolore magna.</p>
+              <p>All booking costs are free.</p>
             </div>
 
             <div className="one-third wow fadeIn">
               <span className="circle"><span className="ico heart"></span></span>
               <h3>Free cancellation</h3>
-              <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy  tinc dolore magna.</p>
-            </div>
-
-            <div className="one-third wow fadeIn" data-wow-delay=".2s">
-              <span className="circle"><span className="ico wand"></span></span>
-              <h3>Booking flexibility</h3>
-              <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy  tinc dolore magna.</p>
+              <p>Reserved transfers can be canceled 24h before transfer with no extra costs.</p>
             </div>
 
             <div className="one-third wow fadeIn" data-wow-delay=".4s">
               <span className="circle"><span className="ico telephone"></span></span>
               <h3>24h customer service</h3>
-              <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy  tinc dolore magna.</p>
-            </div>
-
-            <div className="one-third wow fadeIn">
-              <span className="circle"><span className="ico award"></span></span>
-              <h3>Award winning service</h3>
-              <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy  tinc dolore magna.</p>
-            </div>
-
-            <div className="one-third wow fadeIn" data-wow-delay=".2s">
-              <span className="circle"><span className="ico clip"></span></span>
-              <h3>Benefits for partners</h3>
-              <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy  tinc dolore magna.</p>
+              <p>All our cars are available 0/24 during all year.</p>
             </div>
 
             <div className="one-third wow fadeIn" data-wow-delay=".4s">
               <span className="circle"><span className="ico shuttle"></span></span>
               <h3>Quality vehicles</h3>
-              <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy  tinc dolore magna.</p>
+              <p>Vehicles are up to 5 years old and fully reliable.</p>
             </div>
           </div>
         </div>

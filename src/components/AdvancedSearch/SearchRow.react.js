@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { map, sortByOrder, filter } from 'lodash';
 import DateTimePicker from './DateTimePicker.react';
-import FormatUtils from '../../utils/Format.utils';
+import { cityName } from '../../utils/Format.utils';
 
 class SearchRow extends Component {
   static propTypes = {
@@ -42,7 +42,7 @@ class SearchRow extends Component {
     return map(sortByOrder(filtered, ['city', 'type']), ({ city, type }) => {
       return (
         <option key={city + '_' + type} value={city + '_' + type}>
-          {FormatUtils.cityName(city, type)}
+          {cityName(city, type)}
         </option>
       );
     });

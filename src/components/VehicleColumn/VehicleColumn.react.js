@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import Utils from '../../utils/Price.utils';
+import { getReturnPrice } from '../../utils/Price.utils';
 
 class VehicleColumn extends Component {
   static propTypes = {
@@ -7,6 +7,7 @@ class VehicleColumn extends Component {
     pictureName: PropTypes.string,
     price: PropTypes.string,
     vehicleType: PropTypes.string.isRequired,
+    textMain: PropTypes.string,
   };
 
   static contextTypes = {
@@ -17,6 +18,7 @@ class VehicleColumn extends Component {
   static defaultProps = {
     price: null,
     pictureName: 'car.jpg',
+    textMain: 'No Data',
   };
 
 
@@ -37,7 +39,7 @@ class VehicleColumn extends Component {
 
   handleVehicleTypeSelect = () => {
     const { price } = this.props;
-    this.context.onVehicleTypeSelect(this.props.vehicleType, parseInt(this.props.price, 10), Utils.getReturnPrice(price));
+    this.context.onVehicleTypeSelect(this.props.vehicleType, parseInt(this.props.price, 10), getReturnPrice(price));
   }
 
   _renderInformation() {
@@ -51,7 +53,7 @@ class VehicleColumn extends Component {
           className="close color"
           title="Close"
           onClick={this.toggleInformation}>x</a>
-        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+        <p>{this.props.textMain}</p>
       </div>
     );
   }
@@ -63,7 +65,7 @@ class VehicleColumn extends Component {
     }
 
     if (this.context.returnEnabled) {
-      return `+ ${Utils.getReturnPrice(price)} USD`;
+      return `+ ${getReturnPrice(price)} USD`;
     }
 
     return 'no return trip';
