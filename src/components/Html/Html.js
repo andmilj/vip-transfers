@@ -47,6 +47,7 @@ class Html extends Component {
         <script src="jquery.min.js"></script>
         <script src="jquery.uniform.min.js"></script>
         <script src="jquery.datetimepicker.js"></script>
+        <script src="jquery.slicknav.min.js"></script>
         <script src="/app.js"></script>
         <script dangerouslySetInnerHTML={this.trackingCode()} />
       </body>

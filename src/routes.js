@@ -35,10 +35,10 @@ const router = new Router(on => {
     return <ResultsPage query={state.query} prices={prices} vehicles={vehicles} destinations={destinations}/>;
   });
 
-  on('/vehicles', async () => {
+  on('/vehicles', async state => {
     const response = await fetch('/api/vehicles');
     const vehicles = await response.json();
-    return <VehiclePage vehicles={vehicles} />;
+    return <VehiclePage vehicles={vehicles} activeVehicleType={state.query.type}/>;
   });
 
   on('/contact', async () => <Contact />);
