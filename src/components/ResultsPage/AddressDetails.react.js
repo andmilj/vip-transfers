@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import FormatUtils from '../../utils/Format.utils';
+import { isAirport } from '../../utils/Format.utils';
 import FormElement from './FormElement.react';
 import { includes } from 'lodash';
 
@@ -29,8 +29,8 @@ class AddressDetails extends Component {
   }
 
   render() {
-    const isAirportFrom = FormatUtils.isAirport(this.props.from);
-    const isAirportTo = FormatUtils.isAirport(this.props.to);
+    const isAirportFrom = isAirport(this.props.from);
+    const isAirportTo = isAirport(this.props.to);
     return (
         <div className="f-row">
           {isAirportFrom ? (

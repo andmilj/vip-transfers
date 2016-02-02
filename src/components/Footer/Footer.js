@@ -8,7 +8,8 @@ class Footer extends Component {
           <div className="row">
             <article className="one-half">
               <h6>About us</h6>
-              <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy.</p>
+              <p>we are company with headquarters in Split, Croatia. Long-time experienced,
+                profesional drivers will make your journey safe and comfortable.</p>
             </article>
             <article className="one-fourth">
               <h6>Need help?</h6>

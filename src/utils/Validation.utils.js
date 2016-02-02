@@ -1,6 +1,6 @@
 import { omit, keys, map, union, without, curry,
   intersection, includes, filter } from 'lodash';
-import FormatUtils from './Format.utils';
+import { isAirport } from './Format.utils';
 
 function getInvalidPropKeys(_object) {
   return keys(omit(_object, value => !!value));
@@ -17,13 +17,13 @@ export function getErrorsForInvalidKeys(_object, suffix) {
 const filterAddressDetails = curry((from, to, invalidPropKeys) => {
   let invalids = [];
   let returnInvalids = [];
-  if (FormatUtils.isAirport(from)) {
+  if (isAirport(from)) {
     invalids = without(invalidPropKeys, 'pickUpAddress');
   } else {
     invalids = without(invalidPropKeys, 'arrivalFlightNumber');
   }
 
-  if (FormatUtils.isAirport(to)) {
+  if (isAirport(to)) {
     returnInvalids = without(invalidPropKeys, 'dropOffAddress');
   } else {
     returnInvalids = without(invalidPropKeys, 'departureFlightNumber');
@@ -36,7 +36,7 @@ function withReturn(returnInvalids, returnEnabled) {
   return returnEnabled ? returnInvalids : [];
 }
 
-export function getAddressErrors(errorsArray, typeOfAddress = 'oneWayAddressDetails') {
+export function getAddressErrors(errorsArray, typeOfAddress = 'addressDetailsOneWay') {
   const errors = filter(errorsArray, error => {
     return includes(error, typeOfAddress);
   });
@@ -56,10 +56,10 @@ function checkEmails({ email, email2 }) {
 }
 
 
-export function validateDetails({ passengerDetails = {}, oneWayAddressDetails = {}, returnWayAddressDetails = {} }, { from, to }, returnEnabled) {
+export function validateDetails({ passengerDetails = {}, addressDetailsOneWay = {}, addressDetailsReturn = {} }, { from, to }, returnEnabled) {
   const errorMapForPassenger = errorMap('passengerDetails');
-  const errorMapForAddress = errorMap('oneWayAddressDetails');
-  const errorMapForReturnAddress = errorMap('returnWayAddressDetails');
+  const errorMapForAddress = errorMap('addressDetailsOneWay');
+  const errorMapForReturnAddress = errorMap('addressDetailsReturn');
 
   const filterFirstWayDetails = filterAddressDetails(from, to);
   const filterReturnDetails = filterAddressDetails(to, from);
@@ -67,8 +67,8 @@ export function validateDetails({ passengerDetails = {}, oneWayAddressDetails = 
   return union(
     errorMapForPassenger(checkEmails(passengerDetails)),
     errorMapForPassenger(getInvalidPropKeys(omit(passengerDetails, 'email2'))),
-    errorMapForAddress(filterFirstWayDetails(getInvalidPropKeys(oneWayAddressDetails))),
+    errorMapForAddress(filterFirstWayDetails(getInvalidPropKeys(addressDetailsOneWay))),
     errorMapForReturnAddress(
-      filterReturnDetails(withReturn(getInvalidPropKeys(returnWayAddressDetails), returnEnabled)))
+      filterReturnDetails(withReturn(getInvalidPropKeys(addressDetailsReturn), returnEnabled)))
   );
 }
