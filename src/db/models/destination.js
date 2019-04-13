@@ -8,14 +8,14 @@ export const destinationSchema = new mongoose.Schema({
   primary: Boolean,
 });
 
-destinationSchema.pre('save', function(next) {
-  this.primary = false;
+// destinationSchema.pre('save', next => {
+//   this.primary = false;
 
-  if (/split/i.test(this.city)) {
-    this.primary = true;
-  }
+//   if (/split/i.test(this.city)) {
+//     this.primary = true;
+//   }
 
-  next();
-});
+//   next();
+// });
 
 export default mongoose.model('Destination', destinationSchema);
